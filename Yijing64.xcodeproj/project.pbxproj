@@ -1,0 +1,720 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		14C9EEA33846E17575F043BC /* CastResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD8C8437B93097B59A4588 /* CastResult.swift */; };
+		1C41A21BE60868D9A4F88E68 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7620CA75872C9BC7ADA48849 /* RootTabView.swift */; };
+		1DBA5919CBD6FBCC5F2DFB0D /* HexagramDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 061159FE95A10A0ACE4B5066 /* HexagramDrawing.swift */; };
+		1FF758BA9097B13617B68315 /* LineType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FA7A14C7D9F8BFE074F4CF /* LineType.swift */; };
+		3CAABB51C1A0C2935A92DD62 /* Yijing64App.swift in Sources */ = {isa = PBXBuildFile; fileRef = F159539638046310ECBAB5A3 /* Yijing64App.swift */; };
+		40A8ACEF5B3B5C0061589080 /* YijingCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		42267A0C459A89D63577B96D /* HexagramDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192DD225A6CC0CC3299C3F04 /* HexagramDataTests.swift */; };
+		4DE38CBEADAB9CD1C44AFB8C /* HexagramData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9106E4F877B8D9465F0EBFB1 /* HexagramData.swift */; };
+		4EC32125C940EFCDB80343D5 /* Hexagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8611C6F9C5733B029E8A2147 /* Hexagram.swift */; };
+		5382E99B9697B6EDC0075CFC /* LibraryTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D836249D8DF0EED6AF21450F /* LibraryTabView.swift */; };
+		556A7695C2B03C90B440FDB9 /* CastResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0743E11D4E50D9B6280E5A8 /* CastResultView.swift */; };
+		5E1DE283FF030A3D727A9D41 /* YijingCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5F621418A002282B1147A712 /* YijingCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */; };
+		623CFB552D193B378778A707 /* YijingCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */; };
+		6A889DC22F9A24ECC086B8AE /* AboutTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F7BA416C024218F142A964 /* AboutTabView.swift */; };
+		8DCBD4A0F8489DBA3722FFD9 /* Palace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5E6C556D9907A026195BC5 /* Palace.swift */; };
+		9FD98B3869AEE6DE6E02AB68 /* PlumBlossomCasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1818089970E588725225B7 /* PlumBlossomCasterTests.swift */; };
+		A37B778F5AADCE7BB2B9E865 /* DivinationTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4730CBF8C0CE6BD17718467 /* DivinationTabView.swift */; };
+		A7DA1C6F81A7EBBC35B5CE81 /* CoinCasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FEEACC49E3FCCA65408BD0 /* CoinCasterTests.swift */; };
+		AF50CE6D98295ED05833759F /* CoinCaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABED39358FBE9D636E7D7E6 /* CoinCaster.swift */; };
+		B1E99E3208E4AACFCEFFF0B4 /* CastMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = F636093CB3345AEAD3134B84 /* CastMethod.swift */; };
+		D237384A5D113D263CF8852E /* Trigram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB127ABBAA888BCE6F7F82F /* Trigram.swift */; };
+		D4B29B2ED3BD7D74700AB73A /* CastingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A00BC786ACECC490F584AF /* CastingViewModel.swift */; };
+		D82D1BCFD3D419E2DDEAF9E2 /* PlumBlossomCaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */; };
+		DDCC7052DE056569DCD43D5A /* HexagramDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB19640CDA7BB190772AC0A /* HexagramDetailView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8EB226352B19A7C8309CE275 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0C4E70B2933C9769F2CD527D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 73B1DDCABB1434C343425E84;
+			remoteInfo = YijingCore;
+		};
+		CBED54C0B8BE20754C01306B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0C4E70B2933C9769F2CD527D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 73B1DDCABB1434C343425E84;
+			remoteInfo = YijingCore;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		04C26083D5B2A21B4E37BB17 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5E1DE283FF030A3D727A9D41 /* YijingCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4460C109D98C840794623ED7 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				40A8ACEF5B3B5C0061589080 /* YijingCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		061159FE95A10A0ACE4B5066 /* HexagramDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramDrawing.swift; sourceTree = "<group>"; };
+		192DD225A6CC0CC3299C3F04 /* HexagramDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramDataTests.swift; sourceTree = "<group>"; };
+		19B38EA3FC32DF7DAD628F05 /* Yijing64.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Yijing64.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5ABED39358FBE9D636E7D7E6 /* CoinCaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCaster.swift; sourceTree = "<group>"; };
+		5EB19640CDA7BB190772AC0A /* HexagramDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramDetailView.swift; sourceTree = "<group>"; };
+		6B5E6C556D9907A026195BC5 /* Palace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palace.swift; sourceTree = "<group>"; };
+		71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlumBlossomCaster.swift; sourceTree = "<group>"; };
+		7620CA75872C9BC7ADA48849 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		8611C6F9C5733B029E8A2147 /* Hexagram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexagram.swift; sourceTree = "<group>"; };
+		8DCD8C8437B93097B59A4588 /* CastResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastResult.swift; sourceTree = "<group>"; };
+		9106E4F877B8D9465F0EBFB1 /* HexagramData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramData.swift; sourceTree = "<group>"; };
+		9A1818089970E588725225B7 /* PlumBlossomCasterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlumBlossomCasterTests.swift; sourceTree = "<group>"; };
+		9AB127ABBAA888BCE6F7F82F /* Trigram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trigram.swift; sourceTree = "<group>"; };
+		A0743E11D4E50D9B6280E5A8 /* CastResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastResultView.swift; sourceTree = "<group>"; };
+		A0FA7A14C7D9F8BFE074F4CF /* LineType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineType.swift; sourceTree = "<group>"; };
+		A4730CBF8C0CE6BD17718467 /* DivinationTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivinationTabView.swift; sourceTree = "<group>"; };
+		B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YijingCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9F7BA416C024218F142A964 /* AboutTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutTabView.swift; sourceTree = "<group>"; };
+		D836249D8DF0EED6AF21450F /* LibraryTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTabView.swift; sourceTree = "<group>"; };
+		E6A00BC786ACECC490F584AF /* CastingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastingViewModel.swift; sourceTree = "<group>"; };
+		E85E1CD34C9C9B13C5F1C97B /* YijingCoreTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = YijingCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F159539638046310ECBAB5A3 /* Yijing64App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Yijing64App.swift; sourceTree = "<group>"; };
+		F5FEEACC49E3FCCA65408BD0 /* CoinCasterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCasterTests.swift; sourceTree = "<group>"; };
+		F636093CB3345AEAD3134B84 /* CastMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastMethod.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6FC5D562810C12D3F75C8D39 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				623CFB552D193B378778A707 /* YijingCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D913275ECE41B9D3FB3BD765 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5F621418A002282B1147A712 /* YijingCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0056D7A7A600C91C0642876E /* YijingCore */ = {
+			isa = PBXGroup;
+			children = (
+				46B222C29D2606F5CF35DAB8 /* Models */,
+				9A5211B944E589DEDD0CB55C /* Services */,
+			);
+			path = YijingCore;
+			sourceTree = "<group>";
+		};
+		15042F12F5AE5735147F0F26 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				19B38EA3FC32DF7DAD628F05 /* Yijing64.app */,
+				B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */,
+				E85E1CD34C9C9B13C5F1C97B /* YijingCoreTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2099FBA2F7C938D2C979A6AF /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				061159FE95A10A0ACE4B5066 /* HexagramDrawing.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		22E6EE4BF83CF2AE2BC87380 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A2EFBA7094F06B0005872776 /* YijingCoreTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		2A5C50104DECBBB7CE7BE548 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				E6A00BC786ACECC490F584AF /* CastingViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		2B7E69ADA8BC28461515FDDF /* Divination */ = {
+			isa = PBXGroup;
+			children = (
+				A0743E11D4E50D9B6280E5A8 /* CastResultView.swift */,
+				A4730CBF8C0CE6BD17718467 /* DivinationTabView.swift */,
+			);
+			path = Divination;
+			sourceTree = "<group>";
+		};
+		46B222C29D2606F5CF35DAB8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F636093CB3345AEAD3134B84 /* CastMethod.swift */,
+				8DCD8C8437B93097B59A4588 /* CastResult.swift */,
+				8611C6F9C5733B029E8A2147 /* Hexagram.swift */,
+				9106E4F877B8D9465F0EBFB1 /* HexagramData.swift */,
+				A0FA7A14C7D9F8BFE074F4CF /* LineType.swift */,
+				6B5E6C556D9907A026195BC5 /* Palace.swift */,
+				9AB127ABBAA888BCE6F7F82F /* Trigram.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9A5211B944E589DEDD0CB55C /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5ABED39358FBE9D636E7D7E6 /* CoinCaster.swift */,
+				71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		9FD605D872AB5DEFDE04149F /* YijingCore */ = {
+			isa = PBXGroup;
+			children = (
+				B6EF952F9246A46D52081B5D /* Sources */,
+				22E6EE4BF83CF2AE2BC87380 /* Tests */,
+			);
+			path = YijingCore;
+			sourceTree = "<group>";
+		};
+		A01457450E3FE02D96A0CB1D /* Yijing64 */ = {
+			isa = PBXGroup;
+			children = (
+				F159539638046310ECBAB5A3 /* Yijing64App.swift */,
+				2A5C50104DECBBB7CE7BE548 /* ViewModels */,
+				DC237BA371E956D51F50C23D /* Views */,
+			);
+			path = Yijing64;
+			sourceTree = "<group>";
+		};
+		A2EFBA7094F06B0005872776 /* YijingCoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				F5FEEACC49E3FCCA65408BD0 /* CoinCasterTests.swift */,
+				192DD225A6CC0CC3299C3F04 /* HexagramDataTests.swift */,
+				9A1818089970E588725225B7 /* PlumBlossomCasterTests.swift */,
+			);
+			path = YijingCoreTests;
+			sourceTree = "<group>";
+		};
+		AED43F7873517C41AB5EB8CD /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				5EB19640CDA7BB190772AC0A /* HexagramDetailView.swift */,
+				D836249D8DF0EED6AF21450F /* LibraryTabView.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		B6EF952F9246A46D52081B5D /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				0056D7A7A600C91C0642876E /* YijingCore */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		D46D32C0CCEDA7370CD0332E = {
+			isa = PBXGroup;
+			children = (
+				A01457450E3FE02D96A0CB1D /* Yijing64 */,
+				9FD605D872AB5DEFDE04149F /* YijingCore */,
+				15042F12F5AE5735147F0F26 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DC237BA371E956D51F50C23D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7620CA75872C9BC7ADA48849 /* RootTabView.swift */,
+				E2D394C412ECF9AA35FC32AE /* About */,
+				2099FBA2F7C938D2C979A6AF /* Components */,
+				2B7E69ADA8BC28461515FDDF /* Divination */,
+				AED43F7873517C41AB5EB8CD /* Library */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E2D394C412ECF9AA35FC32AE /* About */ = {
+			isa = PBXGroup;
+			children = (
+				C9F7BA416C024218F142A964 /* AboutTabView.swift */,
+			);
+			path = About;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		393A93405E12C19F5DEBBF19 /* YijingCoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B9953E3543C6882BCC5901B3 /* Build configuration list for PBXNativeTarget "YijingCoreTests" */;
+			buildPhases = (
+				5603EB866FE051AB75770769 /* Sources */,
+				D913275ECE41B9D3FB3BD765 /* Frameworks */,
+				4460C109D98C840794623ED7 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9B5532BAA21A0E03A7C85764 /* PBXTargetDependency */,
+			);
+			name = YijingCoreTests;
+			packageProductDependencies = (
+			);
+			productName = YijingCoreTests;
+			productReference = E85E1CD34C9C9B13C5F1C97B /* YijingCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		73B1DDCABB1434C343425E84 /* YijingCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CA3A8CA935B7642456AA6BC /* Build configuration list for PBXNativeTarget "YijingCore" */;
+			buildPhases = (
+				6DE99B97048A9E1923FD43A8 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YijingCore;
+			packageProductDependencies = (
+			);
+			productName = YijingCore;
+			productReference = B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		CF9C684E225446B1B1B35CB9 /* Yijing64 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 693FE0FDFAB77D8E57B934E9 /* Build configuration list for PBXNativeTarget "Yijing64" */;
+			buildPhases = (
+				CDCDD6A9207240161DEFBCEC /* Sources */,
+				6FC5D562810C12D3F75C8D39 /* Frameworks */,
+				04C26083D5B2A21B4E37BB17 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				91C49C7CDBC9C2F481A0DD40 /* PBXTargetDependency */,
+			);
+			name = Yijing64;
+			packageProductDependencies = (
+			);
+			productName = Yijing64;
+			productReference = 19B38EA3FC32DF7DAD628F05 /* Yijing64.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0C4E70B2933C9769F2CD527D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 56E9E40F3BA3B459998C276A /* Build configuration list for PBXProject "Yijing64" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = D46D32C0CCEDA7370CD0332E;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 15042F12F5AE5735147F0F26 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				73B1DDCABB1434C343425E84 /* YijingCore */,
+				393A93405E12C19F5DEBBF19 /* YijingCoreTests */,
+				CF9C684E225446B1B1B35CB9 /* Yijing64 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5603EB866FE051AB75770769 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7DA1C6F81A7EBBC35B5CE81 /* CoinCasterTests.swift in Sources */,
+				42267A0C459A89D63577B96D /* HexagramDataTests.swift in Sources */,
+				9FD98B3869AEE6DE6E02AB68 /* PlumBlossomCasterTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6DE99B97048A9E1923FD43A8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1E99E3208E4AACFCEFFF0B4 /* CastMethod.swift in Sources */,
+				14C9EEA33846E17575F043BC /* CastResult.swift in Sources */,
+				AF50CE6D98295ED05833759F /* CoinCaster.swift in Sources */,
+				4EC32125C940EFCDB80343D5 /* Hexagram.swift in Sources */,
+				4DE38CBEADAB9CD1C44AFB8C /* HexagramData.swift in Sources */,
+				1FF758BA9097B13617B68315 /* LineType.swift in Sources */,
+				8DCBD4A0F8489DBA3722FFD9 /* Palace.swift in Sources */,
+				D82D1BCFD3D419E2DDEAF9E2 /* PlumBlossomCaster.swift in Sources */,
+				D237384A5D113D263CF8852E /* Trigram.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDCDD6A9207240161DEFBCEC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A889DC22F9A24ECC086B8AE /* AboutTabView.swift in Sources */,
+				556A7695C2B03C90B440FDB9 /* CastResultView.swift in Sources */,
+				D4B29B2ED3BD7D74700AB73A /* CastingViewModel.swift in Sources */,
+				A37B778F5AADCE7BB2B9E865 /* DivinationTabView.swift in Sources */,
+				DDCC7052DE056569DCD43D5A /* HexagramDetailView.swift in Sources */,
+				1DBA5919CBD6FBCC5F2DFB0D /* HexagramDrawing.swift in Sources */,
+				5382E99B9697B6EDC0075CFC /* LibraryTabView.swift in Sources */,
+				1C41A21BE60868D9A4F88E68 /* RootTabView.swift in Sources */,
+				3CAABB51C1A0C2935A92DD62 /* Yijing64App.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		91C49C7CDBC9C2F481A0DD40 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 73B1DDCABB1434C343425E84 /* YijingCore */;
+			targetProxy = 8EB226352B19A7C8309CE275 /* PBXContainerItemProxy */;
+		};
+		9B5532BAA21A0E03A7C85764 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 73B1DDCABB1434C343425E84 /* YijingCore */;
+			targetProxy = CBED54C0B8BE20754C01306B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		183082A18D505E2B94BADD93 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		50D72AF2EF674A69214493DE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.YijingCoreTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "";
+			};
+			name = Release;
+		};
+		6A36F03257B7E23420144325 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.YijingCoreTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "";
+			};
+			name = Debug;
+		};
+		8124DCDBFCF61605A56C3F00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.YijingCore;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		9320634D5D6AC58938B2A637 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		C4D9E8C08229BEFD89CDD6F6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.YijingCore;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		D2D723A045A2651FEFE09E3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64;
+				PRODUCT_NAME = Yijing64;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		FC7B0175CE996176E78423E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64;
+				PRODUCT_NAME = Yijing64;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4CA3A8CA935B7642456AA6BC /* Build configuration list for PBXNativeTarget "YijingCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8124DCDBFCF61605A56C3F00 /* Debug */,
+				C4D9E8C08229BEFD89CDD6F6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		56E9E40F3BA3B459998C276A /* Build configuration list for PBXProject "Yijing64" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9320634D5D6AC58938B2A637 /* Debug */,
+				183082A18D505E2B94BADD93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		693FE0FDFAB77D8E57B934E9 /* Build configuration list for PBXNativeTarget "Yijing64" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC7B0175CE996176E78423E4 /* Debug */,
+				D2D723A045A2651FEFE09E3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B9953E3543C6882BCC5901B3 /* Build configuration list for PBXNativeTarget "YijingCoreTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A36F03257B7E23420144325 /* Debug */,
+				50D72AF2EF674A69214493DE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0C4E70B2933C9769F2CD527D /* Project object */;
+}
