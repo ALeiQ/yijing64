@@ -76,6 +76,17 @@ struct HexagramDetailView: View {
                 }
                 .padding(.vertical, 2)
             }
+            if let extra = content.extraLine, !extra.isEmpty {
+                HStack(alignment: .top, spacing: 12) {
+                    Text(hexagram.name == "乾" ? "用九" : "用六")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.accentColor)
+                        .frame(width: 48, alignment: .leading)
+                    Text(extra)
+                        .font(.body)
+                }
+                .padding(.vertical, 2)
+            }
         }
     }
 

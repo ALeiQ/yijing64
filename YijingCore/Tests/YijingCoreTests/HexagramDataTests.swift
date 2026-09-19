@@ -94,4 +94,37 @@ final class HexagramDataTests: XCTestCase {
         XCTAssertNil(Trigram(fuxiNumber: 0))
         XCTAssertNil(Trigram(fuxiNumber: 9))
     }
+
+    func testContentCompleteForAllHexagrams() {
+        for number in 1...64 {
+            let content = HexagramData.content(forKingWenNumber: number)
+            XCTAssertFalse(content.judgementText.trimmingCharacters(in: .whitespaces).isEmpty,
+                           "卦辞缺失：\(number)")
+            XCTAssertEqual(content.lineTexts.count, 6)
+            for line in content.lineTexts {
+                XCTAssertFalse(line.trimmingCharacters(in: .whitespaces).isEmpty,
+                               "爻辞缺失：\(number)")
+            }
+            XCTAssertFalse(content.divinationText.trimmingCharacters(in: .whitespaces).isEmpty,
+                           "白话缺失：\(number)")
+        }
+    }
+
+    func testContentKnownTexts() {
+        // 乾卦卦辞与初爻
+        let qian = HexagramData.content(forKingWenNumber: 1)
+        XCTAssertEqual(qian.judgementText, "元亨。利贞")
+        XCTAssertEqual(qian.lineTexts[0], "潜龙勿用。")
+        XCTAssertEqual(qian.extraLine, "见群龙无首，吉。")
+        XCTAssertTrue(qian.divinationText.contains("《乾卦》象征天"))
+
+        // 坤卦应有 用六
+        let kun = HexagramData.content(forKingWenNumber: 2)
+        XCTAssertEqual(kun.extraLine, "利永贞。")
+
+        // 未济卦名与卦辞
+        let weiji = HexagramData.content(forKingWenNumber: 64)
+        XCTAssertEqual(weiji.judgementText, "亨。小狐汔济，濡其尾，无攸利")
+        XCTAssertTrue(weiji.divinationText.contains("《未济卦》象征事未完成"))
+    }
 }

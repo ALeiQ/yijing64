@@ -50,6 +50,8 @@ targets:
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
         INFOPLIST_KEY_CFBundleDisplayName: 易经六十四卦
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         SWIFT_VERSION: "5.9"
         TARGETED_DEVICE_FAMILY: "1"
     scheme:

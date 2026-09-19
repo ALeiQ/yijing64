@@ -132,11 +132,18 @@ public enum HexagramData {
         find(withLines: (UInt8(upper.kind.rawValue) << 3) | UInt8(lower.kind.rawValue))
     }
 
-    // MARK: - 内容（占位，待补充）
+    // MARK: - 内容
 
-    /// 仅作结构占位的内容（真实性有风险，标注待清空）。
+    /// 按文王卦序取解卦内容。越界或数据缺失时回退到占位文本。
     public static func content(forKingWenNumber number: Int) -> HexagramContent {
-        HexagramContent(judgementText: "[卦辞待补充]", lineTexts: (0..<6).map { _ in "[爻辞待补充]" }, divinationText: "[白话解读待补充]")
+        guard (1...64).contains(number) else {
+            return HexagramContent(judgementText: "[卦辞待补充]", lineTexts: (0..<6).map { _ in "[爻辞待补充]" }, divinationText: "[白话解读待补充]")
+        }
+        let data = HexagramContentData.items[number - 1]
+        if data.judgementText.isEmpty || data.lineTexts.allSatisfy({ $0.isEmpty }) {
+            return HexagramContent(judgementText: "[卦辞待补充]", lineTexts: (0..<6).map { _ in "[爻辞待补充]" }, divinationText: "[白话解读待补充]")
+        }
+        return data
     }
 
     public static func content(for hexagram: Hexagram) -> HexagramContent {
@@ -149,10 +156,13 @@ public struct HexagramContent: Sendable, Equatable, Hashable {
     public let judgementText: String
     public let lineTexts: [String]
     public let divinationText: String
+    /// 用九 / 用六（仅乾坤二卦存在）。
+    public let extraLine: String?
 
-    public init(judgementText: String, lineTexts: [String], divinationText: String) {
+    public init(judgementText: String, lineTexts: [String], divinationText: String, extraLine: String? = nil) {
         self.judgementText = judgementText
         self.lineTexts = lineTexts
         self.divinationText = divinationText
+        self.extraLine = extraLine
     }
 }
