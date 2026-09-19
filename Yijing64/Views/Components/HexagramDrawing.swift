@@ -4,7 +4,7 @@ import YijingCore
 /// 绘制一卦的六爻（自下而上），动爻加圆/叉标识。
 struct HexagramDrawingView: View {
     let lines: [LineType]
-    var lineSpacing: CGFloat = 8
+    var lineSpacing: CGFloat = 3
 
     var body: some View {
         VStack(spacing: lineSpacing) {
@@ -16,24 +16,28 @@ struct HexagramDrawingView: View {
     }
 }
 
-/// 单爻（阳爻为整段，阴爻为两段，动爻叠加标记）。
+/// 单爻（阳爻为整段，阴爻为左右两段留缝，动爻叠加标记）。
 struct HexagramLineView: View {
     let line: LineType
     var width: CGFloat = 44
 
     var body: some View {
         ZStack {
-            HStack(spacing: 4) {
-                if line.isYang {
+            if line.isYang {
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(.primary)
+                    .frame(width: width, height: 6)
+            } else {
+                HStack(spacing: 0) {
                     RoundedRectangle(cornerRadius: 2)
                         .fill(.primary)
-                        .frame(width: width, height: 6)
-                } else {
+                        .frame(width: width * 0.4, height: 6)
+                    Spacer().frame(width: width * 0.2)
                     RoundedRectangle(cornerRadius: 2)
                         .fill(.primary)
-                        .frame(width: width * 0.6, height: 6)
-                    Spacer().frame(width: width * 0.4)
+                        .frame(width: width * 0.4, height: 6)
                 }
+                .frame(width: width)
             }
 
             if line.isMoving {
@@ -48,7 +52,7 @@ struct HexagramLineView: View {
                     .offset(x: width / 2 + 12, y: 0)
             }
         }
-        .frame(width: width + 24, height: 12)
+        .frame(width: width + 24, height: 9)
     }
 }
 

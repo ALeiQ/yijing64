@@ -25,6 +25,7 @@
 		8DCBD4A0F8489DBA3722FFD9 /* Palace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5E6C556D9907A026195BC5 /* Palace.swift */; };
 		9FD98B3869AEE6DE6E02AB68 /* PlumBlossomCasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1818089970E588725225B7 /* PlumBlossomCasterTests.swift */; };
 		A37B778F5AADCE7BB2B9E865 /* DivinationTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4730CBF8C0CE6BD17718467 /* DivinationTabView.swift */; };
+		A5A04DD6133F1CACEEDDC261 /* HexagramSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A597031D10465B1EA4E933D /* HexagramSearch.swift */; };
 		A7DA1C6F81A7EBBC35B5CE81 /* CoinCasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FEEACC49E3FCCA65408BD0 /* CoinCasterTests.swift */; };
 		AB5972261998845C757D0D23 /* HexagramContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A444CAAB2225E45120FE2 /* HexagramContentData.swift */; };
 		AF50CE6D98295ED05833759F /* CoinCaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABED39358FBE9D636E7D7E6 /* CoinCaster.swift */; };
@@ -33,6 +34,7 @@
 		D4B29B2ED3BD7D74700AB73A /* CastingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A00BC786ACECC490F584AF /* CastingViewModel.swift */; };
 		D82D1BCFD3D419E2DDEAF9E2 /* PlumBlossomCaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */; };
 		DDCC7052DE056569DCD43D5A /* HexagramDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB19640CDA7BB190772AC0A /* HexagramDetailView.swift */; };
+		ED1DCFC749E9080491856133 /* ManualCastTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B97EF02B75FEBA641420B79 /* ManualCastTabView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,12 +84,14 @@
 		061159FE95A10A0ACE4B5066 /* HexagramDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramDrawing.swift; sourceTree = "<group>"; };
 		192DD225A6CC0CC3299C3F04 /* HexagramDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramDataTests.swift; sourceTree = "<group>"; };
 		19B38EA3FC32DF7DAD628F05 /* Yijing64.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Yijing64.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A597031D10465B1EA4E933D /* HexagramSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramSearch.swift; sourceTree = "<group>"; };
 		5ABED39358FBE9D636E7D7E6 /* CoinCaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCaster.swift; sourceTree = "<group>"; };
 		5EB19640CDA7BB190772AC0A /* HexagramDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramDetailView.swift; sourceTree = "<group>"; };
 		6B5E6C556D9907A026195BC5 /* Palace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palace.swift; sourceTree = "<group>"; };
 		71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlumBlossomCaster.swift; sourceTree = "<group>"; };
 		7620CA75872C9BC7ADA48849 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		8611C6F9C5733B029E8A2147 /* Hexagram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexagram.swift; sourceTree = "<group>"; };
+		8B97EF02B75FEBA641420B79 /* ManualCastTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualCastTabView.swift; sourceTree = "<group>"; };
 		8DCD8C8437B93097B59A4588 /* CastResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastResult.swift; sourceTree = "<group>"; };
 		9106E4F877B8D9465F0EBFB1 /* HexagramData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramData.swift; sourceTree = "<group>"; };
 		9A1818089970E588725225B7 /* PlumBlossomCasterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlumBlossomCasterTests.swift; sourceTree = "<group>"; };
@@ -173,6 +177,7 @@
 			children = (
 				A0743E11D4E50D9B6280E5A8 /* CastResultView.swift */,
 				A4730CBF8C0CE6BD17718467 /* DivinationTabView.swift */,
+				8B97EF02B75FEBA641420B79 /* ManualCastTabView.swift */,
 			);
 			path = Divination;
 			sourceTree = "<group>";
@@ -196,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				5ABED39358FBE9D636E7D7E6 /* CoinCaster.swift */,
+				5A597031D10465B1EA4E933D /* HexagramSearch.swift */,
 				71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */,
 			);
 			path = Services;
@@ -389,6 +395,7 @@
 				4EC32125C940EFCDB80343D5 /* Hexagram.swift in Sources */,
 				AB5972261998845C757D0D23 /* HexagramContentData.swift in Sources */,
 				4DE38CBEADAB9CD1C44AFB8C /* HexagramData.swift in Sources */,
+				A5A04DD6133F1CACEEDDC261 /* HexagramSearch.swift in Sources */,
 				1FF758BA9097B13617B68315 /* LineType.swift in Sources */,
 				8DCBD4A0F8489DBA3722FFD9 /* Palace.swift in Sources */,
 				D82D1BCFD3D419E2DDEAF9E2 /* PlumBlossomCaster.swift in Sources */,
@@ -407,6 +414,7 @@
 				DDCC7052DE056569DCD43D5A /* HexagramDetailView.swift in Sources */,
 				1DBA5919CBD6FBCC5F2DFB0D /* HexagramDrawing.swift in Sources */,
 				5382E99B9697B6EDC0075CFC /* LibraryTabView.swift in Sources */,
+				ED1DCFC749E9080491856133 /* ManualCastTabView.swift in Sources */,
 				1C41A21BE60868D9A4F88E68 /* RootTabView.swift in Sources */,
 				3CAABB51C1A0C2935A92DD62 /* Yijing64App.swift in Sources */,
 			);

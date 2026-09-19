@@ -3,6 +3,9 @@ import SwiftUI
 struct RootTabView: View {
     var body: some View {
         TabView {
+            ManualCastTabView()
+                .tabItem { Label("线下排卦", systemImage: "hand.tap.fill") }
+
             DivinationTabView()
                 .tabItem { Label("起卦", systemImage: "dice.fill") }
 

@@ -127,4 +127,39 @@ final class HexagramDataTests: XCTestCase {
         XCTAssertEqual(weiji.judgementText, "亨。小狐汔济，濡其尾，无攸利")
         XCTAssertTrue(weiji.divinationText.contains("《未济卦》象征事未完成"))
     }
+
+    func testSearchByName() {
+        let results = HexagramSearch.search(query: "乾")
+        let numbers = results.map(\.kingWenNumber)
+        XCTAssertTrue(numbers.contains(1))
+        XCTAssertTrue(numbers.contains(44)) // 天风姤：上乾下巽
+    }
+
+    func testSearchByFullName() {
+        let results = HexagramSearch.search(query: "天泽履").map(\.kingWenNumber)
+        XCTAssertEqual(results, [10])
+    }
+
+    func testSearchByNumber() {
+        XCTAssertEqual(HexagramSearch.search(query: "13").map(\.kingWenNumber), [13])
+        // 前缀匹配：输入 1 命中序数含 1 的卦
+        let prefix = HexagramSearch.search(query: "1").map(\.kingWenNumber)
+        XCTAssertTrue(prefix.contains(1))
+        XCTAssertTrue(prefix.contains(10))
+    }
+
+    func testSearchByJudgementText() {
+        // 「潜龙勿用」出现在乾卦爻辞，白话译文与爻辞原文都含该句
+        let results = HexagramSearch.search(query: "潜龙勿用").map(\.kingWenNumber)
+        XCTAssertTrue(results.contains(1))
+    }
+
+    func testSearchEmptyReturnsAll() {
+        XCTAssertEqual(HexagramSearch.search(query: "").count, 64)
+        XCTAssertEqual(HexagramSearch.search(query: "   ").count, 64)
+    }
+
+    func testSearchNoMatch() {
+        XCTAssertTrue(HexagramSearch.search(query: "不存在的卦").isEmpty)
+    }
 }

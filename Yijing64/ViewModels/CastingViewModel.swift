@@ -19,6 +19,9 @@ final class CastingViewModel: ObservableObject {
 
     func cast() {
         switch method {
+        case .manual:
+            // 线下排卦不在此处理
+            break
         case .threeCoins:
             state = .casting
             throwing = true
