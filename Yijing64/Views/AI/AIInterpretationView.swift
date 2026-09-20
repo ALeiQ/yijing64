@@ -10,6 +10,13 @@ struct AIInterpretationView: View {
 
     /// 对话底部的稳定锚点，避免以高度变化的气泡作为滚动目标。
     private static let bottomAnchorID = "chat-bottom"
+    /// 滚动协调：引用类型持有，修改属性不会触发 View 重绘。
+    private final class ScrollCoordinator {
+        var lastStreamScroll = Date.distantPast
+        /// 是否跟随流式内容贴底；用户手动滑动后暂停，下次提问恢复。
+        var follow = true
+    }
+    @State private var scrollCoordinator = ScrollCoordinator()
 
     /// 聊天气泡主题：响应式言文（无块级背景），颜色跟随系统深浅模式。
     private static let chatTheme: Theme = Theme()
@@ -168,10 +175,10 @@ struct AIInterpretationView: View {
                     VStack(alignment: .leading, spacing: 0) {
                         LazyVStack(alignment: .leading, spacing: 12) {
                             if showOutput {
-                                ForEach(viewModel.turns) { turn in
-                                    bubble(for: turn)
-                                        .id(turn.id)
-                                }
+                            ForEach(viewModel.turns) { turn in
+                                bubble(for: turn, proxy: proxy)
+                                    .id(turn.id)
+                            }
                                 if let error = viewModel.errorMessage {
                                     errorCard(error)
                                 }
@@ -191,17 +198,25 @@ struct AIInterpretationView: View {
                     // 收起键盘但保持当前滚动位置，不强制跳到底部。
                     hideKeyboard()
                 })
+                .simultaneousGesture(
+                    DragGesture(minimumDistance: 8).onChanged { _ in
+                        // 用户手动滑动 → 暂停流式跟随，直到下次提问。
+                        scrollCoordinator.follow = false
+                    }
+                )
                 .onAppear {
                     // 回放历史会话时自动滚到底部（最新对话）；新会话保持顶部。
                     guard viewModel.isReplay else { return }
+                    scrollCoordinator.follow = true
                     scrollToBottom(proxy)
                 }
                 .onChange(of: viewModel.turns.count) { _, _ in
-                    // 新气泡落定时滚动；思考流式期间不自动跟随，避免与手动滑动抢主线程。
+                    // 新提问/新气泡：恢复跟随并贴底。
+                    scrollCoordinator.follow = true
                     scrollToBottom(proxy)
                 }
                 .onChange(of: viewModel.turns.last?.isStreaming) { _, isStreaming in
-                    // 完成折叠后内容变矮，补滚一次重新贴底。
+                    // 完成折叠后内容变矮，补滚一次重新贴底（若用户已手动上滑则不打扰）。
                     guard isStreaming == false else { return }
                     scrollToBottom(proxy)
                 }
@@ -297,7 +312,7 @@ struct AIInterpretationView: View {
     // MARK: - 消息气泡
 
     @ViewBuilder
-    private func bubble(for turn: AITurn) -> some View {
+    private func bubble(for turn: AITurn, proxy: ScrollViewProxy) -> some View {
         switch turn.role {
         case .user:
             HStack {
@@ -310,7 +325,9 @@ struct AIInterpretationView: View {
             }
         case .assistant:
             if turn.isStreaming {
-                StreamingBubble(live: viewModel.live)
+                StreamingBubble(live: viewModel.live) {
+                    scrollToBottom(proxy, streaming: true)
+                }
             } else {
                 AssistantBubble(turn: turn, theme: Self.chatTheme)
             }
@@ -368,9 +385,10 @@ struct AIInterpretationView: View {
     }
 
     /// 流式气泡：单独订阅 `LiveStream`，高频更新只重绘自身；
-    /// 流式期间用纯文本并禁用选择，展示完整思考与正文。
+    /// 流式期间用纯文本并禁用选择，展示完整思考与正文；内容增长时回调跟随滚动。
     private struct StreamingBubble: View {
         @ObservedObject var live: LiveStream
+        let onGrow: () -> Void
 
         var body: some View {
             VStack(alignment: .leading, spacing: 10) {
@@ -398,6 +416,8 @@ struct AIInterpretationView: View {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color(.secondarySystemBackground))
             }
+            .onChange(of: live.reasoning) { _, _ in onGrow() }
+            .onChange(of: live.content) { _, _ in onGrow() }
         }
     }
 
@@ -500,9 +520,22 @@ struct AIInterpretationView: View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 
-    /// 滚动到底部锚点。多段补滚（0.05s / 0.35s），覆盖布局未完成、键盘收起与
-    /// Markdown 异步排版，避免落在越界区域而空白。仅在新气泡落定/完成时调用。
-    private func scrollToBottom(_ proxy: ScrollViewProxy) {
+    /// 滚动到底部锚点。流式跟随（`streaming`）按 ~0.2s 节流，避免高频滚动；
+    /// 其余时机多段补滚（0.05s / 0.35s）覆盖布局未完成与 Markdown 异步排版。
+    /// 用户手动上滑后会暂停跟随（`follow == false`），下次提问恢复。
+    private func scrollToBottom(_ proxy: ScrollViewProxy, streaming: Bool = false) {
+        guard scrollCoordinator.follow else { return }
+        if streaming {
+            let now = Date()
+            guard now.timeIntervalSince(scrollCoordinator.lastStreamScroll) >= 0.2 else { return }
+            scrollCoordinator.lastStreamScroll = now
+            DispatchQueue.main.async {
+                withAnimation(nil) {
+                    proxy.scrollTo(Self.bottomAnchorID, anchor: .bottom)
+                }
+            }
+            return
+        }
         for delay in [0.05, 0.35] {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 withAnimation(nil) {

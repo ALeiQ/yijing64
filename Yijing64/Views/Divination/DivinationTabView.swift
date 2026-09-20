@@ -4,6 +4,8 @@ import YijingCore
 struct DivinationTabView: View {
     @StateObject private var viewModel = CastingViewModel()
 
+    private static let bottomAnchorID = "divination-bottom"
+
     private enum MethodField: Hashable {
         case num1
         case num2
@@ -12,28 +14,52 @@ struct DivinationTabView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    regulationPicker
-                    numberInputIfNeeded
-                    castButton
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        regulationPicker
+                        numberInputIfNeeded
+                        castButton
 
-                    switch viewModel.state {
-                    case .idle:
-                        idleHint
-                    case .casting:
-                        HStack(spacing: 12) {
-                            ProgressView()
-                            Text("起卦中…")
+                        switch viewModel.state {
+                        case .idle:
+                            idleHint
+                        case .casting:
+                            HStack(spacing: 12) {
+                                ProgressView()
+                                Text("起卦中…")
+                            }
+                            .frame(maxWidth: .infinity)
+                        case .done(let result):
+                            CastResultView(result: result)
                         }
-                        .frame(maxWidth: .infinity)
-                    case .done(let result):
-                        CastResultView(result: result)
+
+                        Color.clear
+                            .frame(height: 1)
+                            .id(Self.bottomAnchorID)
                     }
+                    .padding()
                 }
-                .padding()
+                .onChange(of: viewModel.state) { _, newState in
+                    // 起卦完成后自动滑到底端展示结果。
+                    guard case .done = newState else { return }
+                    scrollToBottom(proxy)
+                }
             }
             .navigationTitle("起卦")
+        }
+    }
+
+    private func scrollToBottom(_ proxy: ScrollViewProxy) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            withAnimation(.easeInOut(duration: 0.25)) {
+                proxy.scrollTo(Self.bottomAnchorID, anchor: .bottom)
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            withAnimation(nil) {
+                proxy.scrollTo(Self.bottomAnchorID, anchor: .bottom)
+            }
         }
     }
 

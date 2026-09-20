@@ -3,7 +3,7 @@ import YijingCore
 
 @MainActor
 final class CastingViewModel: ObservableObject {
-    enum CastState {
+    enum CastState: Equatable {
         case idle
         case casting
         case done(CastResult)
