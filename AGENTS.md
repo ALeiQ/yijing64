@@ -16,9 +16,23 @@ bash scripts/sync.sh
 
 - 模拟器 UDID：`928C09EA-3720-4D66-BA17-732A264FB76C`（iPhone 16 Pro），构建目录 `.build/dd`
 - 真机 UDID：`00008030-000804100CE8802E`，构建目录 `.build/device`
-- 真机 Team ID：`T8TG4WAR43`；免费账号签名 7 天过期，需重签并在手机信任开发者
+- 真机 Team ID：`T8TG4WAR43`（个人/免费 Team）
 - Bundle ID：`com.liuzixiang.Yijing64`
 - `project.yml` 中 `CODE_SIGNING_ALLOWED/REQUIRED` 为 NO，真机构建需命令行覆盖
+
+## 签名与续签（免费个人账号）
+
+- 签名证书：`Apple Development: lzx422206217@icloud.com (38LST5PD3Q)`，个人证书通常约 1 年有效（过期的是描述文件，不是它）
+- 描述文件：`iOS Team Provisioning Profile: com.liuzixiang.Yijing64`，**免费账号 7 天过期**
+- 查看方式（只读）：
+  ```
+  security find-identity -v -p codesigning
+  security cms -D -i ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/*.mobileprovision | grep -A1 ExpirationDate
+  ```
+- **续签**：描述文件过期后直接运行 `bash scripts/sync.sh` 即可。脚本带 `CODE_SIGN_STYLE=Automatic` 与 `-allowProvisioningUpdates`，构建时会联网向 Apple 自动刷新描述文件，再经 `devicectl` 安装；证书未过期则无需重新「信任开发者」
+- **无线更新**：真机已与本机配对（`xcrun devicectl list devices` 显示 `available (paired)`，主机名 `<UDID>.coredevice.local`）。只要 iPhone 与本机在同一 Wi‑Fi、且 Xcode 里启用了 Connect via network，无需数据线即可构建/安装/续签
+- 需要插线或重新信任的情况：证书被吊销 / 换电脑 / 重装系统、设备配对失效或不在同一 Wi‑Fi、换新设备首次安装。此时在 iPhone「设置 → 通用 → VPN 与设备管理」重新信任开发者
+- 免费账号额度：每 7 天约可创建 10 个 App ID 等（本项目复用同一 App ID，一般不会触发）
 
 ## 其他
 
