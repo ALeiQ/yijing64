@@ -172,21 +172,19 @@ struct AIInterpretationView: View {
             Divider()
             ScrollViewReader { proxy in
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 0) {
-                        LazyVStack(alignment: .leading, spacing: 12) {
-                            if showOutput {
+                    VStack(alignment: .leading, spacing: 12) {
+                        if showOutput {
                             ForEach(viewModel.turns) { turn in
                                 bubble(for: turn, proxy: proxy)
                                     .id(turn.id)
                             }
-                                if let error = viewModel.errorMessage {
-                                    errorCard(error)
-                                }
-                            } else {
-                                emptyHint
+                            if let error = viewModel.errorMessage {
+                                errorCard(error)
                             }
+                        } else {
+                            emptyHint
                         }
-                        // 底部锚点放在懒加载容器之外，保证始终实例化，滚动定位可靠。
+                        // 非懒容器内，锚点始终实例化，滚动定位可靠。
                         Color.clear
                             .frame(height: 1)
                             .id(Self.bottomAnchorID)
