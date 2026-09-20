@@ -1,8 +1,8 @@
 # 易经六十四卦 (Yijing64)
 
-当前版本：**2.4.4**（详见 [CHANGELOG.md](CHANGELOG.md)）
+当前版本：**2.5.0**（详见 [CHANGELOG.md](CHANGELOG.md)）
 
-SwiftUI 编写的《周易》六十四卦 App，含线下排卦、多种起卦方式、卦辞白话查询，以及基于大模型的 AI 解卦。
+SwiftUI 编写的《周易》六十四卦 App，含线下排卦、多种起卦方式、卦辞白话查询，以及基于大模型的 AI 解卦；同时提供 iOS 与原生 macOS 版本。
 
 ## 功能
 
@@ -30,7 +30,7 @@ YijingCore/            Swift Package：模型与业务逻辑
                         AI 提示词与客户端（HexagramInterpretation、LLMClient）、
                         配置与计费（LLMSettings、TokenUsage/TokenUsageStore）、起卦记录
   Tests/                XCTest 单元测试
-scripts/                构建同步脚本（sync.sh）、Python 抓取与内容生成脚本
+scripts/                构建同步脚本（sync.sh、mac.sh）、Python 抓取与内容生成脚本
 ```
 
 ## 构建 / 测试
@@ -44,6 +44,9 @@ cd YijingCore && swift test
 
 # 一键构建并安装到模拟器与真机（含启动）
 bash scripts/sync.sh
+
+# 构建并启动原生 macOS App（本地 ad-hoc 签名，无需开发者账号）
+bash scripts/mac.sh
 
 # 仅构建 App（模拟器）
 xcodebuild build -project Yijing64.xcodeproj -scheme Yijing64 \

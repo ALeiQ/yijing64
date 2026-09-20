@@ -96,11 +96,11 @@ struct DivinationTabView: View {
             if viewModel.method == .plumNumbers {
                 HStack(spacing: 12) {
                     TextField("数一", text: $viewModel.num1)
-                        .keyboardType(.numberPad)
+                        .numberPadKeyboard()
                         .textFieldStyle(.roundedBorder)
                         .focused($focusedField, equals: .num1)
                     TextField("数二", text: $viewModel.num2)
-                        .keyboardType(.numberPad)
+                        .numberPadKeyboard()
                         .textFieldStyle(.roundedBorder)
                         .focused($focusedField, equals: .num2)
                 }

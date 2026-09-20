@@ -39,21 +39,21 @@ struct AboutTabView: View {
                         loadFromSettings()
                     }
                     SecureField(keyPlaceholder, text: $apiKey)
-                        .textInputAutocapitalization(.never)
+                        .noTextAutocapitalization()
                         .autocorrectionDisabled()
                         .onChange(of: apiKey) { _, newValue in
                             LLMSettings.shared.apiKey = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                             flash(.key)
                         }
                     TextField("模型", text: $model)
-                        .textInputAutocapitalization(.never)
+                        .noTextAutocapitalization()
                         .autocorrectionDisabled()
                         .onChange(of: model) { _, newValue in
                             LLMSettings.shared.model = newValue
                             flash(.model)
                         }
                     TextField("Base URL", text: $baseURL)
-                        .textInputAutocapitalization(.never)
+                        .noTextAutocapitalization()
                         .autocorrectionDisabled()
                         .onChange(of: baseURL) { _, newValue in
                             LLMSettings.shared.baseURL = newValue

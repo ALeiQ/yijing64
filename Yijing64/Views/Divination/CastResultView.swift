@@ -25,7 +25,7 @@ struct CastResultView: View {
         .padding()
         .background {
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color(.secondarySystemBackground))
+                .fill(Color.secondarySystemBackground)
         }
     }
 
@@ -136,7 +136,7 @@ struct CastResultView: View {
             .padding(.horizontal, 12)
             .background {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(.systemBackground))
+                    .fill(Color.systemBackground)
             }
         }
         .buttonStyle(.plain)
@@ -161,7 +161,7 @@ struct CastResultView: View {
             .padding(.horizontal, 12)
             .background {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(.systemBackground))
+                    .fill(Color.systemBackground)
             }
         }
         .buttonStyle(.plain)
@@ -196,7 +196,7 @@ struct CastResultView: View {
         .padding()
         .background {
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemBackground))
+                .fill(Color.systemBackground)
         }
     }
 }

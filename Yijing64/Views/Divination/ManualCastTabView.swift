@@ -65,7 +65,7 @@ struct ManualCastTabView: View {
         .padding()
         .background {
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color(.secondarySystemBackground))
+                .fill(Color.secondarySystemBackground)
         }
     }
 
@@ -133,7 +133,7 @@ struct ManualCastTabView: View {
             .padding(.horizontal, 10)
             .background {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(.systemBackground))
+                    .fill(Color.systemBackground)
             }
         }
         .buttonStyle(.plain)

@@ -20,7 +20,7 @@ struct HexagramDetailView: View {
             relatedSection(content: content)
         }
         .navigationTitle("第\(hexagram.kingWenNumber)卦 · \(hexagram.fullName)")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationTitle()
     }
 
     private var aiSection: some View {
@@ -61,7 +61,7 @@ struct HexagramDetailView: View {
                     .font(.caption2)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 2)
-                    .background(Color(.secondarySystemFill))
+                    .background(Color.secondarySystemFill)
                     .clipShape(Capsule())
             }
             .frame(maxWidth: .infinity)

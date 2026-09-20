@@ -12,6 +12,13 @@ bash scripts/sync.sh
 
 脚本会先构建并安装到模拟器，再构建并安装到真机（含启动）。可用环境变量覆盖：`SIM_UDID`、`DEVICE_UDID`、`DEVELOPMENT_TEAM`。
 
+## macOS App
+
+- 原生 macOS 版复用同一套 `Yijing64` 源码 + `YijingCore`（target：`YijingCoreMac` / `Yijing64Mac`），界面保持 TabView
+- 构建并启动：`bash scripts/mac.sh`（构建目录 `.build/mac`，Bundle ID `com.liuzixiang.Yijing64Mac`）
+- 本地使用 **ad-hoc 签名**（`CODE_SIGN_IDENTITY: "-"`），无需开发者账号 / 描述文件，也没有 7 天续签问题；`sync.sh` 只负责 iOS，不影响 Mac
+- iOS 专有 API（`UIKit`、`navigationBarTitleDisplayMode`、`keyboardType` 等）统一收敛在 `Yijing64/Views/Components/PlatformCompat.swift`，新增代码请使用其中的兼容扩展
+
 ## 环境信息
 
 - 模拟器 UDID：`928C09EA-3720-4D66-BA17-732A264FB76C`（iPhone 16 Pro），构建目录 `.build/dd`
@@ -39,7 +46,7 @@ bash scripts/sync.sh
 1. 更新 `project.yml`：`MARKETING_VERSION` 改为新版本号；`CURRENT_PROJECT_VERSION`（build 号）**递增 +1**
 2. 运行 `xcodegen generate` 重新生成工程（版本写入 pbxproj / Info.plist）
 3. 更新 `CHANGELOG.md`：新增对应版本条目（Keep a Changelog 风格）
-4. 验证：`cd YijingCore && swift test` → `bash scripts/sync.sh`（「关于」页应显示新版本号）
+4. 验证：`cd YijingCore && swift test` → `bash scripts/sync.sh` → `bash scripts/mac.sh`（「关于」页应显示新版本号）
 5. 提交推送后**打标签**：`git tag -a vX.Y.Z -m "X.Y.Z"` → `git push origin vX.Y.Z`
 
 版本号遵循语义化版本；App 内「关于」页版本由 Info.plist 动态读取，无需手改 UI。
@@ -47,5 +54,6 @@ bash scripts/sync.sh
 ## 其他
 
 - 新增 `YijingCore` 源文件后需先运行 `xcodegen generate` 重新生成工程
+- `YijingCore` 同时作为 xcodegen target（iOS：`YijingCore`、macOS：`YijingCoreMac`，模块名均为 `YijingCore`）与本地 Swift Package（`cd YijingCore && swift test`）
 - 测试：`cd YijingCore && swift test`
 - 提交信息使用中文，风格：`Add <主题>：<要点>`

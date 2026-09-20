@@ -20,7 +20,7 @@ struct HistoryTabView: View {
             .navigationTitle("起卦记录")
             .toolbar {
                 if !records.isEmpty {
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .trailingAction) {
                         Button {
                             showingClearConfirm = true
                         } label: {

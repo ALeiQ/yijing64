@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 import MarkdownUI
 import YijingCore
 
@@ -27,7 +26,7 @@ struct AIInterpretationView: View {
         .code {
             FontFamilyVariant(.monospaced)
             FontSize(.em(0.85))
-            BackgroundColor(Color(.quaternarySystemFill))
+            BackgroundColor(Color.quaternarySystemFill)
         }
         .strong {
             FontWeight(.semibold)
@@ -94,7 +93,7 @@ struct AIInterpretationView: View {
         .blockquote { configuration in
             HStack(spacing: 0) {
                 RoundedRectangle(cornerRadius: 6)
-                    .fill(Color(.separator))
+                    .fill(Color.separatorLine)
                     .relativeFrame(width: .em(0.2))
                 configuration.label
                     .markdownTextStyle { ForegroundColor(.secondary) }
@@ -113,7 +112,7 @@ struct AIInterpretationView: View {
                     }
                     .padding(14)
             }
-            .background(Color(.quaternarySystemFill))
+            .background(Color.quaternarySystemFill)
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .markdownMargin(top: 0, bottom: 12)
         }
@@ -124,9 +123,9 @@ struct AIInterpretationView: View {
         .table { configuration in
             configuration.label
                 .fixedSize(horizontal: false, vertical: true)
-                .markdownTableBorderStyle(.init(color: Color(.separator)))
+                .markdownTableBorderStyle(.init(color: Color.separatorLine))
                 .markdownTableBackgroundStyle(
-                    .alternatingRows(Color(.secondarySystemBackground), Color(.quaternarySystemFill))
+                    .alternatingRows(Color.secondarySystemBackground, Color.quaternarySystemFill)
                 )
                 .markdownMargin(top: 0, bottom: 12)
         }
@@ -191,7 +190,7 @@ struct AIInterpretationView: View {
                     }
                     .padding()
                 }
-                .scrollDismissesKeyboard(.interactively)
+                .dismissKeyboardOnScroll()
                 .simultaneousGesture(TapGesture().onEnded {
                     // 收起键盘但保持当前滚动位置，不强制跳到底部。
                     hideKeyboard()
@@ -225,7 +224,7 @@ struct AIInterpretationView: View {
             inputBar
         }
         .navigationTitle("AI 解卦")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationTitle()
     }
 
     // MARK: - 固定摘要（不随消息滚动）
@@ -238,7 +237,7 @@ struct AIInterpretationView: View {
         .padding(.horizontal)
         .padding(.vertical, 12)
         .background {
-            Color(.secondarySystemBackground)
+            Color.secondarySystemBackground
                 .ignoresSafeArea(edges: .bottom)
         }
     }
@@ -303,7 +302,7 @@ struct AIInterpretationView: View {
         .frame(maxWidth: .infinity)
         .background {
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemBackground))
+                .fill(Color.systemBackground)
         }
     }
 
@@ -377,7 +376,7 @@ struct AIInterpretationView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.secondarySystemBackground))
+                    .fill(Color.secondarySystemBackground)
             }
         }
     }
@@ -400,11 +399,11 @@ struct AIInterpretationView: View {
                 .foregroundColor(.secondary)
 
                 if !live.reasoning.isEmpty {
-                    StreamingTextView(text: live.reasoning, color: .secondaryLabel)
+                    StreamingTextView(text: live.reasoning, color: .secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 if !live.content.isEmpty {
-                    StreamingTextView(text: live.content, color: .label)
+                    StreamingTextView(text: live.content, color: .primary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
@@ -412,7 +411,7 @@ struct AIInterpretationView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.secondarySystemBackground))
+                    .fill(Color.secondarySystemBackground)
             }
             .onChange(of: live.reasoning) { _, _ in onGrow() }
             .onChange(of: live.content) { _, _ in onGrow() }
@@ -467,7 +466,7 @@ struct AIInterpretationView: View {
                 .padding(.vertical, 8)
                 .background {
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color(.secondarySystemBackground))
+                        .fill(Color.secondarySystemBackground)
                 }
 
             Button {
@@ -515,7 +514,7 @@ struct AIInterpretationView: View {
     }
 
     private func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        dismissKeyboard()
     }
 
     /// 滚动到底部锚点。流式跟随（`streaming`）按 ~0.2s 节流，避免高频滚动；
@@ -555,14 +554,28 @@ struct AIInterpretationView: View {
     .environmentObject(AppRouter())
 }
 
-/// 流式纯文本视图：基于非滚动 `UITextView`，新内容以**增量追加**方式写入
-/// `textStorage`，只让 CoreText 排布新增部分，避免长文本每次全量重排导致卡顿。
+/// 流式纯文本视图：基于非滚动 `UITextView`（iOS）/ `NSTextView`（macOS），新内容以
+/// **增量追加**方式写入 `textStorage`，只让 CoreText 排布新增部分，避免长文本每次全量重排导致卡顿。
 /// 用 `CADisplayLink` 做打字机式平滑揭示：网络到达多少字与显示多少字解耦，
 /// 每帧追加少量字符（落后越多追加越快），把突发到达抹平为顺滑输出。
 /// 流式期间不可选中，也避免文本选择手势与滚动争抢。
-private struct StreamingTextView: UIViewRepresentable {
+private struct StreamingTextView: View {
     let text: String
-    var color: UIColor = .label
+    var color: Color = .primary
+
+    var body: some View {
+        #if os(iOS)
+        StreamingTextUIView(text: text, color: UIColor(color))
+        #else
+        StreamingTextUIView(text: text, color: NSColor(color))
+        #endif
+    }
+}
+
+#if os(iOS)
+private struct StreamingTextUIView: UIViewRepresentable {
+    let text: String
+    var color: UIColor
 
     private var font: UIFont { .preferredFont(forTextStyle: .subheadline) }
 
@@ -669,3 +682,116 @@ private struct StreamingTextView: UIViewRepresentable {
         }
     }
 }
+#else
+private struct StreamingTextUIView: NSViewRepresentable {
+    let text: String
+    var color: NSColor
+
+    private var font: NSFont { .preferredFont(forTextStyle: .subheadline) }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(font: font, color: color)
+    }
+
+    func makeNSView(context: Context) -> NSTextView {
+        let view = NSTextView()
+        view.isEditable = false
+        view.isSelectable = false
+        view.drawsBackground = false
+        view.textContainerInset = .zero
+        view.textContainer?.lineFragmentPadding = 0
+        view.font = font
+        view.textColor = color
+        view.isRichText = false
+        view.isVerticallyResizable = true
+        view.isHorizontallyResizable = false
+        view.textContainer?.widthTracksTextView = true
+        context.coordinator.attach(view)
+        return view
+    }
+
+    func updateNSView(_ view: NSTextView, context: Context) {
+        context.coordinator.update(font: font, color: color, target: text)
+    }
+
+    static func dismantleNSView(_ nsView: NSTextView, coordinator: Coordinator) {
+        coordinator.stop()
+    }
+
+    func sizeThatFits(_ proposal: ProposedViewSize, nsView: NSTextView, context: Context) -> CGSize? {
+        guard let layoutManager = nsView.layoutManager, let container = nsView.textContainer else { return nil }
+        let width = proposal.width ?? nsView.bounds.width
+        guard width > 0 else { return nil }
+        container.containerSize = CGSize(width: width, height: .greatestFiniteMagnitude)
+        layoutManager.ensureLayout(for: container)
+        let used = layoutManager.usedRect(for: container)
+        return CGSize(width: width, height: ceil(used.height))
+    }
+
+    final class Coordinator: NSObject {
+        private weak var view: NSTextView?
+        private var link: CADisplayLink?
+        private var displayed = ""
+        private var target = ""
+        private var font: NSFont
+        private var color: NSColor
+
+        init(font: NSFont, color: NSColor) {
+            self.font = font
+            self.color = color
+        }
+
+        func attach(_ view: NSTextView) {
+            self.view = view
+        }
+
+        func update(font: NSFont, color: NSColor, target: String) {
+            self.font = font
+            self.color = color
+            if !target.hasPrefix(displayed) {
+                displayed = ""
+                view?.textStorage?.setAttributedString(NSAttributedString(string: ""))
+            }
+            self.target = target
+            guard let view else { return }
+            if displayed.count >= target.count {
+                stop()
+                return
+            }
+            if link == nil {
+                let link = view.displayLink(target: self, selector: #selector(tick))
+                link.add(to: .main, forMode: .common)
+                self.link = link
+            }
+            view.invalidateIntrinsicContentSize()
+        }
+
+        func stop() {
+            link?.invalidate()
+            link = nil
+        }
+
+        @objc private func tick() {
+            guard let view else { stop(); return }
+            let remaining = target.count - displayed.count
+            if remaining <= 0 { stop(); return }
+            let step = max(1, remaining / 6)
+            let newCount = min(displayed.count + step, target.count)
+            let end = target.index(target.startIndex, offsetBy: newCount)
+            let newText = String(target[..<end])
+            let delta = String(newText.dropFirst(displayed.count))
+            view.textStorage?.append(NSAttributedString(string: delta, attributes: [
+                .font: font,
+                .foregroundColor: color,
+            ]))
+            displayed = newText
+            view.invalidateIntrinsicContentSize()
+            if displayed.count >= target.count { stop() }
+        }
+
+        deinit {
+            link?.invalidate()
+        }
+    }
+}
+#endif

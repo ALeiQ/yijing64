@@ -26,6 +26,17 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.liuzixiang.YijingCore
         SWIFT_VERSION: "5.9"
+  YijingCoreMac:
+    type: framework
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: YijingCore/Sources/YijingCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.liuzixiang.YijingCoreMac
+        PRODUCT_NAME: YijingCore
+        SWIFT_VERSION: "5.9"
   YijingCoreTests:
     type: bundle.unit-test
     platform: iOS
@@ -53,8 +64,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.liuzixiang.Yijing64
         PRODUCT_NAME: Yijing64
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        MARKETING_VERSION: "2.4.4"
-        CURRENT_PROJECT_VERSION: "5"
+        MARKETING_VERSION: "2.5.0"
+        CURRENT_PROJECT_VERSION: "6"
         INFOPLIST_KEY_CFBundleDisplayName: 易经六十四卦
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
@@ -63,6 +74,28 @@ targets:
     scheme:
       testTargets:
         - YijingCoreTests
+  Yijing64Mac:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: Yijing64
+    dependencies:
+      - target: YijingCoreMac
+      - package: MarkdownUI
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.liuzixiang.Yijing64Mac
+        PRODUCT_NAME: Yijing64
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        MARKETING_VERSION: "2.5.0"
+        CURRENT_PROJECT_VERSION: "6"
+        INFOPLIST_KEY_CFBundleDisplayName: 易经六十四卦
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.lifestyle
+        CODE_SIGNING_ALLOWED: YES
+        CODE_SIGN_IDENTITY: "-"
+        ENABLE_HARDENED_RUNTIME: NO
+        SWIFT_VERSION: "5.9"
 schemes:
   Yijing64:
     build:
@@ -75,6 +108,18 @@ schemes:
       config: Debug
       targets:
         - YijingCoreTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+  Yijing64Mac:
+    build:
+      targets:
+        Yijing64Mac: all
+    run:
+      config: Debug
     profile:
       config: Release
     analyze:

@@ -7,8 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		020EE349BC506137E305E254 /* HexagramContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A444CAAB2225E45120FE2 /* HexagramContentData.swift */; };
+		069DA99958E02803CA56FC21 /* LLMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B4FBD949E772AE261C3CD6 /* LLMClient.swift */; };
+		0863B986E39FDE3132543A74 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8559E6B68C5FCD1FE5416D3 /* AppRouter.swift */; };
+		0AE336E1561B4B0B934BE747 /* CastResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0743E11D4E50D9B6280E5A8 /* CastResultView.swift */; };
+		1047B77B76C9EB6D6C49C723 /* Yijing64App.swift in Sources */ = {isa = PBXBuildFile; fileRef = F159539638046310ECBAB5A3 /* Yijing64App.swift */; };
 		13AE69CEBEEA5665D618F97A /* HistoryTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778ED1C506F5146FAA567D19 /* HistoryTabView.swift */; };
+		13F49D09FDBB6F5F31705677 /* HexagramSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A597031D10465B1EA4E933D /* HexagramSearch.swift */; };
 		14C9EEA33846E17575F043BC /* CastResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD8C8437B93097B59A4588 /* CastResult.swift */; };
+		19CAAC15EFBED5B53B101808 /* Hexagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8611C6F9C5733B029E8A2147 /* Hexagram.swift */; };
+		1ACA7A1132DEA19FE8D3756C /* AIInterpretationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E54E988C1001F09879CB9F0 /* AIInterpretationViewModel.swift */; };
 		1C41A21BE60868D9A4F88E68 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7620CA75872C9BC7ADA48849 /* RootTabView.swift */; };
 		1DBA5919CBD6FBCC5F2DFB0D /* HexagramDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 061159FE95A10A0ACE4B5066 /* HexagramDrawing.swift */; };
 		1FF758BA9097B13617B68315 /* LineType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FA7A14C7D9F8BFE074F4CF /* LineType.swift */; };
@@ -17,20 +25,30 @@
 		3CD4DF0ACD32ECA64E1AE866 /* AIServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAC53C6B46D430977592A9E /* AIServiceTests.swift */; };
 		40A8ACEF5B3B5C0061589080 /* YijingCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42267A0C459A89D63577B96D /* HexagramDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192DD225A6CC0CC3299C3F04 /* HexagramDataTests.swift */; };
+		443768AAFEC167C589EC4560 /* DivinationTopic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE891BE0555D469437C839D /* DivinationTopic.swift */; };
 		4DE38CBEADAB9CD1C44AFB8C /* HexagramData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9106E4F877B8D9465F0EBFB1 /* HexagramData.swift */; };
 		4EC32125C940EFCDB80343D5 /* Hexagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8611C6F9C5733B029E8A2147 /* Hexagram.swift */; };
 		5382E99B9697B6EDC0075CFC /* LibraryTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D836249D8DF0EED6AF21450F /* LibraryTabView.swift */; };
 		556A7695C2B03C90B440FDB9 /* CastResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0743E11D4E50D9B6280E5A8 /* CastResultView.swift */; };
+		5804BB3C10E38DBE3CEFCB37 /* HexagramDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 061159FE95A10A0ACE4B5066 /* HexagramDrawing.swift */; };
+		589D7D644237666E8C86E226 /* CastHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F18B71E082E3AF2D57FDC96 /* CastHistoryStore.swift */; };
+		5AD17A5BE97520C0282A1DB5 /* CastResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD8C8437B93097B59A4588 /* CastResult.swift */; };
 		5E1DE283FF030A3D727A9D41 /* YijingCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5F621418A002282B1147A712 /* YijingCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */; };
 		623CFB552D193B378778A707 /* YijingCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */; };
 		6A889DC22F9A24ECC086B8AE /* AboutTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F7BA416C024218F142A964 /* AboutTabView.swift */; };
+		6DCBB966C7BD4582A652E6C0 /* LLMSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0658E927118FBC6AF248C84A /* LLMSettings.swift */; };
 		702EE8E031B106D67E77A315 /* TokenUsage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76BD427B1F6A299DC266CFC /* TokenUsage.swift */; };
+		8264DCFCB50C6E16450A25E5 /* DivinationTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4730CBF8C0CE6BD17718467 /* DivinationTabView.swift */; };
+		8526C21242FAA80A6A5C4704 /* AIInterpretationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA5456E98D81D0010895837 /* AIInterpretationView.swift */; };
 		85E56E887E1146B8CB6535EB /* LLMSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0658E927118FBC6AF248C84A /* LLMSettings.swift */; };
 		87B7F759A9787570FA91473F /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = B4C5E1A8D24955FE8D4AB90D /* MarkdownUI */; };
+		8AD8D0593C2AB2C60E4C6BDB /* AboutTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F7BA416C024218F142A964 /* AboutTabView.swift */; };
 		8DCBD4A0F8489DBA3722FFD9 /* Palace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5E6C556D9907A026195BC5 /* Palace.swift */; };
+		9333D09ED69ED89EDB7FEA98 /* LineType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FA7A14C7D9F8BFE074F4CF /* LineType.swift */; };
 		9386A2852369109137C1B32E /* HexagramInterpretation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885E3CE3926504359D2472E6 /* HexagramInterpretation.swift */; };
 		9A41F75BD443FB13FFFB46FA /* TokenUsageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F663B601BA15BB515BF7C624 /* TokenUsageTests.swift */; };
+		9D8F00C650E3012C4B4C58DF /* HexagramDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB19640CDA7BB190772AC0A /* HexagramDetailView.swift */; };
 		9E1B408B20BAF3F7A44CFDA9 /* LLMClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B94CD0249D55A78A498A86 /* LLMClientTests.swift */; };
 		9F690DA890BF44D6FE8FEE6C /* TokenUsageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6588595EAC8D6149B530A0 /* TokenUsageStore.swift */; };
 		9FD98B3869AEE6DE6E02AB68 /* PlumBlossomCasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1818089970E588725225B7 /* PlumBlossomCasterTests.swift */; };
@@ -40,22 +58,49 @@
 		A68253F630C667A0FC02E075 /* LLMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B4FBD949E772AE261C3CD6 /* LLMClient.swift */; };
 		A7DA1C6F81A7EBBC35B5CE81 /* CoinCasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FEEACC49E3FCCA65408BD0 /* CoinCasterTests.swift */; };
 		AB5972261998845C757D0D23 /* HexagramContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019A444CAAB2225E45120FE2 /* HexagramContentData.swift */; };
+		ACD224E736AD87CE8472405F /* CoinCaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABED39358FBE9D636E7D7E6 /* CoinCaster.swift */; };
 		AF50CE6D98295ED05833759F /* CoinCaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABED39358FBE9D636E7D7E6 /* CoinCaster.swift */; };
 		B1E99E3208E4AACFCEFFF0B4 /* CastMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = F636093CB3345AEAD3134B84 /* CastMethod.swift */; };
 		B304A49DA1D2E1CCCB2FE6D2 /* AIInterpretationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA5456E98D81D0010895837 /* AIInterpretationView.swift */; };
+		B4121FB769A97FD845B77305 /* HexagramData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9106E4F877B8D9465F0EBFB1 /* HexagramData.swift */; };
+		B5B17D40E29788A7A27E103E /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7620CA75872C9BC7ADA48849 /* RootTabView.swift */; };
+		B8D2D739F31FC0D75EB7BB9E /* PlatformCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80404CECA1129D6CD90C3C65 /* PlatformCompat.swift */; };
+		BA73337408E15D79D155AC95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA9FF24DDA23017CDE923B8A /* Assets.xcassets */; };
+		BC01985E2A59A6709B50D6D3 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 031D845354944F220C465105 /* MarkdownUI */; };
+		BF0B208D6915EA8A0441F735 /* TokenUsageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6588595EAC8D6149B530A0 /* TokenUsageStore.swift */; };
+		C2E4DE4BE5661570F698CC59 /* CastingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A00BC786ACECC490F584AF /* CastingViewModel.swift */; };
 		C4010AC97811B518F07DEA0E /* AIInterpretationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E54E988C1001F09879CB9F0 /* AIInterpretationViewModel.swift */; };
 		CF310EF3FAA40A4006D3ED19 /* CastHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F18B71E082E3AF2D57FDC96 /* CastHistoryStore.swift */; };
 		D237384A5D113D263CF8852E /* Trigram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB127ABBAA888BCE6F7F82F /* Trigram.swift */; };
 		D301679EFD1AFADE02D3E1D3 /* DivinationTopic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE891BE0555D469437C839D /* DivinationTopic.swift */; };
+		D3FBCC32307776F5751FA88E /* YijingCoreMac.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB70A66863ED357D9088ABC /* YijingCoreMac.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D4B29B2ED3BD7D74700AB73A /* CastingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A00BC786ACECC490F584AF /* CastingViewModel.swift */; };
+		D7C5DCA4F48175880C2FCA90 /* HistoryTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778ED1C506F5146FAA567D19 /* HistoryTabView.swift */; };
 		D8253759651E597D3D1F9151 /* SSEChunkParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59992E835C94E05FF0F54FBC /* SSEChunkParserTests.swift */; };
 		D82D1BCFD3D419E2DDEAF9E2 /* PlumBlossomCaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */; };
+		DA0F551545EC65734F40CCF6 /* TokenUsage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76BD427B1F6A299DC266CFC /* TokenUsage.swift */; };
 		DDCC7052DE056569DCD43D5A /* HexagramDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB19640CDA7BB190772AC0A /* HexagramDetailView.swift */; };
+		E0F6F0A0E63E08D881C77284 /* PlatformCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80404CECA1129D6CD90C3C65 /* PlatformCompat.swift */; };
+		E87452BA0CA11F19246D3102 /* HexagramInterpretation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885E3CE3926504359D2472E6 /* HexagramInterpretation.swift */; };
 		E98AB85BEE537349E3D22522 /* DivinationTopicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E98FD475DBAB1BE4DDE486D /* DivinationTopicTests.swift */; };
+		EAAD9803CC429EB175419FEC /* PlumBlossomCaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */; };
 		ED1DCFC749E9080491856133 /* ManualCastTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B97EF02B75FEBA641420B79 /* ManualCastTabView.swift */; };
+		F22713DFCEFADF5DB455E4DA /* ManualCastTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B97EF02B75FEBA641420B79 /* ManualCastTabView.swift */; };
+		F27AD1C4AC31A26748F1E7E2 /* LibraryTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D836249D8DF0EED6AF21450F /* LibraryTabView.swift */; };
+		F8800CAB6A18E8FB83C189E5 /* CastMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = F636093CB3345AEAD3134B84 /* CastMethod.swift */; };
+		FBFBD612AF051F20A8963F33 /* YijingCoreMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB70A66863ED357D9088ABC /* YijingCoreMac.framework */; };
+		FD6CB66F152479B4313B2BB5 /* Palace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5E6C556D9907A026195BC5 /* Palace.swift */; };
+		FDD72F0B5A366973818CCC78 /* Trigram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB127ABBAA888BCE6F7F82F /* Trigram.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		19396F6B4E8D778819AE1DD1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0C4E70B2933C9769F2CD527D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B3B3F72EE6A1825D5C42C2D7;
+			remoteInfo = YijingCoreMac;
+		};
 		8EB226352B19A7C8309CE275 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0C4E70B2933C9769F2CD527D /* Project object */;
@@ -80,6 +125,17 @@
 			dstSubfolderSpec = 10;
 			files = (
 				5E1DE283FF030A3D727A9D41 /* YijingCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4329426D69BEB39B900A4F78 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D3FBCC32307776F5751FA88E /* YijingCoreMac.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -117,11 +173,13 @@
 		71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlumBlossomCaster.swift; sourceTree = "<group>"; };
 		7620CA75872C9BC7ADA48849 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		778ED1C506F5146FAA567D19 /* HistoryTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTabView.swift; sourceTree = "<group>"; };
+		80404CECA1129D6CD90C3C65 /* PlatformCompat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformCompat.swift; sourceTree = "<group>"; };
 		8611C6F9C5733B029E8A2147 /* Hexagram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexagram.swift; sourceTree = "<group>"; };
 		885E3CE3926504359D2472E6 /* HexagramInterpretation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramInterpretation.swift; sourceTree = "<group>"; };
 		8B97EF02B75FEBA641420B79 /* ManualCastTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualCastTabView.swift; sourceTree = "<group>"; };
 		8DCD8C8437B93097B59A4588 /* CastResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastResult.swift; sourceTree = "<group>"; };
 		8EAC53C6B46D430977592A9E /* AIServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIServiceTests.swift; sourceTree = "<group>"; };
+		8EB70A66863ED357D9088ABC /* YijingCoreMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YijingCoreMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9106E4F877B8D9465F0EBFB1 /* HexagramData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramData.swift; sourceTree = "<group>"; };
 		92B4FBD949E772AE261C3CD6 /* LLMClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMClient.swift; sourceTree = "<group>"; };
 		9A1818089970E588725225B7 /* PlumBlossomCasterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlumBlossomCasterTests.swift; sourceTree = "<group>"; };
@@ -132,6 +190,7 @@
 		AFE891BE0555D469437C839D /* DivinationTopic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivinationTopic.swift; sourceTree = "<group>"; };
 		B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YijingCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F7BA416C024218F142A964 /* AboutTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutTabView.swift; sourceTree = "<group>"; };
+		D44595B72DC8AE4B58BAF199 /* Yijing64Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Yijing64Mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D836249D8DF0EED6AF21450F /* LibraryTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTabView.swift; sourceTree = "<group>"; };
 		E6A00BC786ACECC490F584AF /* CastingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastingViewModel.swift; sourceTree = "<group>"; };
 		E76BD427B1F6A299DC266CFC /* TokenUsage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenUsage.swift; sourceTree = "<group>"; };
@@ -145,6 +204,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		15DBC8FA5048BC3342E12DB7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FBFBD612AF051F20A8963F33 /* YijingCoreMac.framework in Frameworks */,
+				BC01985E2A59A6709B50D6D3 /* MarkdownUI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6FC5D562810C12D3F75C8D39 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -178,7 +246,9 @@
 			isa = PBXGroup;
 			children = (
 				19B38EA3FC32DF7DAD628F05 /* Yijing64.app */,
+				D44595B72DC8AE4B58BAF199 /* Yijing64Mac.app */,
 				B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */,
+				8EB70A66863ED357D9088ABC /* YijingCoreMac.framework */,
 				E85E1CD34C9C9B13C5F1C97B /* YijingCoreTests.xctest */,
 			);
 			name = Products;
@@ -188,6 +258,7 @@
 			isa = PBXGroup;
 			children = (
 				061159FE95A10A0ACE4B5066 /* HexagramDrawing.swift */,
+				80404CECA1129D6CD90C3C65 /* PlatformCompat.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -391,6 +462,23 @@
 			productReference = B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		B3B3F72EE6A1825D5C42C2D7 /* YijingCoreMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F7D32120289348E0EC2A96A6 /* Build configuration list for PBXNativeTarget "YijingCoreMac" */;
+			buildPhases = (
+				F16713FE337B874AD8BFF71B /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YijingCoreMac;
+			packageProductDependencies = (
+			);
+			productName = YijingCoreMac;
+			productReference = 8EB70A66863ED357D9088ABC /* YijingCoreMac.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		CF9C684E225446B1B1B35CB9 /* Yijing64 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 693FE0FDFAB77D8E57B934E9 /* Build configuration list for PBXNativeTarget "Yijing64" */;
@@ -411,6 +499,28 @@
 			);
 			productName = Yijing64;
 			productReference = 19B38EA3FC32DF7DAD628F05 /* Yijing64.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D6424866695A39D5750C4963 /* Yijing64Mac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3669A96A41B908B92CED5D9B /* Build configuration list for PBXNativeTarget "Yijing64Mac" */;
+			buildPhases = (
+				90C8F908817C8EA0ED937998 /* Sources */,
+				F3C52E46C8E6716889EA3F99 /* Resources */,
+				15DBC8FA5048BC3342E12DB7 /* Frameworks */,
+				4329426D69BEB39B900A4F78 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4444794DE028B045DD532039 /* PBXTargetDependency */,
+			);
+			name = Yijing64Mac;
+			packageProductDependencies = (
+				031D845354944F220C465105 /* MarkdownUI */,
+			);
+			productName = Yijing64Mac;
+			productReference = D44595B72DC8AE4B58BAF199 /* Yijing64Mac.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -442,8 +552,10 @@
 			projectRoot = "";
 			targets = (
 				73B1DDCABB1434C343425E84 /* YijingCore */,
+				B3B3F72EE6A1825D5C42C2D7 /* YijingCoreMac */,
 				393A93405E12C19F5DEBBF19 /* YijingCoreTests */,
 				CF9C684E225446B1B1B35CB9 /* Yijing64 */,
+				D6424866695A39D5750C4963 /* Yijing64Mac */,
 			);
 		};
 /* End PBXProject section */
@@ -454,6 +566,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2861F6A636F34C35F08AC7F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3C52E46C8E6716889EA3F99 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA73337408E15D79D155AC95 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,6 +620,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		90C8F908817C8EA0ED937998 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8526C21242FAA80A6A5C4704 /* AIInterpretationView.swift in Sources */,
+				1ACA7A1132DEA19FE8D3756C /* AIInterpretationViewModel.swift in Sources */,
+				8AD8D0593C2AB2C60E4C6BDB /* AboutTabView.swift in Sources */,
+				0863B986E39FDE3132543A74 /* AppRouter.swift in Sources */,
+				0AE336E1561B4B0B934BE747 /* CastResultView.swift in Sources */,
+				C2E4DE4BE5661570F698CC59 /* CastingViewModel.swift in Sources */,
+				8264DCFCB50C6E16450A25E5 /* DivinationTabView.swift in Sources */,
+				9D8F00C650E3012C4B4C58DF /* HexagramDetailView.swift in Sources */,
+				5804BB3C10E38DBE3CEFCB37 /* HexagramDrawing.swift in Sources */,
+				D7C5DCA4F48175880C2FCA90 /* HistoryTabView.swift in Sources */,
+				F27AD1C4AC31A26748F1E7E2 /* LibraryTabView.swift in Sources */,
+				F22713DFCEFADF5DB455E4DA /* ManualCastTabView.swift in Sources */,
+				E0F6F0A0E63E08D881C77284 /* PlatformCompat.swift in Sources */,
+				B5B17D40E29788A7A27E103E /* RootTabView.swift in Sources */,
+				1047B77B76C9EB6D6C49C723 /* Yijing64App.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CDCDD6A9207240161DEFBCEC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -516,14 +658,45 @@
 				13AE69CEBEEA5665D618F97A /* HistoryTabView.swift in Sources */,
 				5382E99B9697B6EDC0075CFC /* LibraryTabView.swift in Sources */,
 				ED1DCFC749E9080491856133 /* ManualCastTabView.swift in Sources */,
+				B8D2D739F31FC0D75EB7BB9E /* PlatformCompat.swift in Sources */,
 				1C41A21BE60868D9A4F88E68 /* RootTabView.swift in Sources */,
 				3CAABB51C1A0C2935A92DD62 /* Yijing64App.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F16713FE337B874AD8BFF71B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				589D7D644237666E8C86E226 /* CastHistoryStore.swift in Sources */,
+				F8800CAB6A18E8FB83C189E5 /* CastMethod.swift in Sources */,
+				5AD17A5BE97520C0282A1DB5 /* CastResult.swift in Sources */,
+				ACD224E736AD87CE8472405F /* CoinCaster.swift in Sources */,
+				443768AAFEC167C589EC4560 /* DivinationTopic.swift in Sources */,
+				19CAAC15EFBED5B53B101808 /* Hexagram.swift in Sources */,
+				020EE349BC506137E305E254 /* HexagramContentData.swift in Sources */,
+				B4121FB769A97FD845B77305 /* HexagramData.swift in Sources */,
+				E87452BA0CA11F19246D3102 /* HexagramInterpretation.swift in Sources */,
+				13F49D09FDBB6F5F31705677 /* HexagramSearch.swift in Sources */,
+				069DA99958E02803CA56FC21 /* LLMClient.swift in Sources */,
+				6DCBB966C7BD4582A652E6C0 /* LLMSettings.swift in Sources */,
+				9333D09ED69ED89EDB7FEA98 /* LineType.swift in Sources */,
+				FD6CB66F152479B4313B2BB5 /* Palace.swift in Sources */,
+				EAAD9803CC429EB175419FEC /* PlumBlossomCaster.swift in Sources */,
+				DA0F551545EC65734F40CCF6 /* TokenUsage.swift in Sources */,
+				BF0B208D6915EA8A0441F735 /* TokenUsageStore.swift in Sources */,
+				FDD72F0B5A366973818CCC78 /* Trigram.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4444794DE028B045DD532039 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B3B3F72EE6A1825D5C42C2D7 /* YijingCoreMac */;
+			targetProxy = 19396F6B4E8D778819AE1DD1 /* PBXContainerItemProxy */;
+		};
 		91C49C7CDBC9C2F481A0DD40 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 73B1DDCABB1434C343425E84 /* YijingCore */;
@@ -537,6 +710,54 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		04F01EFF785CB996239ADD9B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 6;
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 2.5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64Mac;
+				PRODUCT_NAME = Yijing64;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		0D8F8FA96C90A968D132881D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 6;
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 2.5.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64Mac;
+				PRODUCT_NAME = Yijing64;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
 		183082A18D505E2B94BADD93 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -589,10 +810,34 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		4BDC11085D6CB265E4443B23 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.YijingCoreMac;
+				PRODUCT_NAME = YijingCore;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
@@ -629,6 +874,31 @@
 				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "";
+			};
+			name = Debug;
+		};
+		7ECA097D834045767F9D2631 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.YijingCoreMac;
+				PRODUCT_NAME = YijingCore;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -715,7 +985,6 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.9;
@@ -751,7 +1020,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -760,7 +1029,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.4;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64;
 				PRODUCT_NAME = Yijing64;
 				SDKROOT = iphoneos;
@@ -774,7 +1043,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -783,7 +1052,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.4;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64;
 				PRODUCT_NAME = Yijing64;
 				SDKROOT = iphoneos;
@@ -795,6 +1064,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3669A96A41B908B92CED5D9B /* Build configuration list for PBXNativeTarget "Yijing64Mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				04F01EFF785CB996239ADD9B /* Debug */,
+				0D8F8FA96C90A968D132881D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		4CA3A8CA935B7642456AA6BC /* Build configuration list for PBXNativeTarget "YijingCore" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -831,6 +1109,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		F7D32120289348E0EC2A96A6 /* Build configuration list for PBXNativeTarget "YijingCoreMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7ECA097D834045767F9D2631 /* Debug */,
+				4BDC11085D6CB265E4443B23 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -845,6 +1132,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		031D845354944F220C465105 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E6C24D45047C843D3CE0B2B7 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
+		};
 		B4C5E1A8D24955FE8D4AB90D /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E6C24D45047C843D3CE0B2B7 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
