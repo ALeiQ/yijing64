@@ -10,8 +10,9 @@ struct AIInterpretationView: View {
 
     /// 对话底部的稳定锚点，避免以高度变化的气泡作为滚动目标。
     private static let bottomAnchorID = "chat-bottom"
-    /// 上次自动滚动时间，用于流式跟随时节流。
-    @State private var lastAutoScroll = Date.distantPast
+    /// 滚动节流状态：用引用类型持有，修改其属性不会触发 View 重绘。
+    private final class ScrollThrottle { var last = Date.distantPast }
+    @State private var scrollThrottle = ScrollThrottle()
 
     /// 聊天气泡主题：响应式言文（无块级背景），颜色跟随系统深浅模式。
     private static let chatTheme: Theme = Theme()
@@ -167,7 +168,7 @@ struct AIInterpretationView: View {
             Divider()
             ScrollViewReader { proxy in
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 12) {
+                    LazyVStack(alignment: .leading, spacing: 12) {
                         if showOutput {
                             ForEach(viewModel.turns) { turn in
                                 bubble(for: turn)
@@ -489,12 +490,12 @@ struct AIInterpretationView: View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 
-    /// 滚动到底部锚点：流式跟随时节流（默认 ≥0.1s 一次），并可延后一个 runloop，
+    /// 滚动到底部锚点：流式跟随时节流（默认 ≥0.25s 一次），并可延后一个 runloop，
     /// 避开布局未完成与键盘收起动画的窗口，防止滚动到空白区域。
     private func scrollToBottom(_ proxy: ScrollViewProxy, after delay: TimeInterval = 0, force: Bool = false) {
         let now = Date()
-        if !force, now.timeIntervalSince(lastAutoScroll) < 0.1 { return }
-        lastAutoScroll = now
+        if !force, now.timeIntervalSince(scrollThrottle.last) < 0.25 { return }
+        scrollThrottle.last = now
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             withAnimation(nil) {
                 proxy.scrollTo(Self.bottomAnchorID, anchor: .bottom)

@@ -140,9 +140,9 @@ final class AIInterpretationViewModel: ObservableObject {
                     }
                     reasoning += event.reasoning
                     content += event.content
-                    // 节流刷新 UI（约 50ms 一批），避免逐 token 重绘。
+                    // 节流刷新 UI（约 100ms 一批），避免逐 token 重绘。
                     let now = Date()
-                    if now.timeIntervalSince(lastFlush) >= 0.05 {
+                    if now.timeIntervalSince(lastFlush) >= 0.1 {
                         if let idx = turns.firstIndex(where: { $0.id == placeholder.id }) {
                             turns[idx] = AITurn(id: placeholder.id, role: .assistant, content: content, reasoning: reasoning, isStreaming: true)
                         }
