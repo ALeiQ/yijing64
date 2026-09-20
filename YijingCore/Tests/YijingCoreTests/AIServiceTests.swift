@@ -90,6 +90,16 @@ final class AIServiceTests: XCTestCase {
         XCTAssertTrue(system.contains("能不能出门"), "应将出行吉凶等切身问题列为应解读场景")
         XCTAssertTrue(system.contains("写代码"), "应将活动时机吉凶（如写代码）列为应解读场景，而非知识求助")
     }
+
+    func testSystemPromptRequiresDecisiveVerdict() {
+        let result = CastResult(method: .manual, originalLines: Array(repeating: .youngYin, count: 6))
+        let system = HexagramInterpretation.messages(for: result, question: "今天适合开车吗").first!.content
+        XCTAssertTrue(system.contains("明确判词"), "应要求针对所问给出明确判词")
+        XCTAssertTrue(system.contains("不宜"), "应要求卦象不利时直接判不宜")
+        XCTAssertTrue(system.contains("禁止把不利弱化为折中说法"), "应禁止和稀泥表达")
+        XCTAssertTrue(system.contains("勉强可行"), "应点名禁止“勉强可行”等措辞")
+        XCTAssertTrue(system.contains("适量"), "应点名禁止“适量/适度”等回避措辞")
+    }
 }
 
 final class LLMSettingsTests: XCTestCase {
