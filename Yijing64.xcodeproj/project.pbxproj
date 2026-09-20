@@ -34,6 +34,7 @@
 		9E1B408B20BAF3F7A44CFDA9 /* LLMClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B94CD0249D55A78A498A86 /* LLMClientTests.swift */; };
 		9F690DA890BF44D6FE8FEE6C /* TokenUsageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6588595EAC8D6149B530A0 /* TokenUsageStore.swift */; };
 		9FD98B3869AEE6DE6E02AB68 /* PlumBlossomCasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1818089970E588725225B7 /* PlumBlossomCasterTests.swift */; };
+		A2861F6A636F34C35F08AC7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA9FF24DDA23017CDE923B8A /* Assets.xcassets */; };
 		A37B778F5AADCE7BB2B9E865 /* DivinationTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4730CBF8C0CE6BD17718467 /* DivinationTabView.swift */; };
 		A5A04DD6133F1CACEEDDC261 /* HexagramSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A597031D10465B1EA4E933D /* HexagramSearch.swift */; };
 		A68253F630C667A0FC02E075 /* LLMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B4FBD949E772AE261C3CD6 /* LLMClient.swift */; };
@@ -140,6 +141,7 @@
 		F5FEEACC49E3FCCA65408BD0 /* CoinCasterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCasterTests.swift; sourceTree = "<group>"; };
 		F636093CB3345AEAD3134B84 /* CastMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastMethod.swift; sourceTree = "<group>"; };
 		F663B601BA15BB515BF7C624 /* TokenUsageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenUsageTests.swift; sourceTree = "<group>"; };
+		FA9FF24DDA23017CDE923B8A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -270,6 +272,7 @@
 		A01457450E3FE02D96A0CB1D /* Yijing64 */ = {
 			isa = PBXGroup;
 			children = (
+				FA9FF24DDA23017CDE923B8A /* Assets.xcassets */,
 				F159539638046310ECBAB5A3 /* Yijing64App.swift */,
 				2A5C50104DECBBB7CE7BE548 /* ViewModels */,
 				DC237BA371E956D51F50C23D /* Views */,
@@ -393,6 +396,7 @@
 			buildConfigurationList = 693FE0FDFAB77D8E57B934E9 /* Build configuration list for PBXNativeTarget "Yijing64" */;
 			buildPhases = (
 				CDCDD6A9207240161DEFBCEC /* Sources */,
+				8C30854B39028EF9B270484A /* Resources */,
 				6FC5D562810C12D3F75C8D39 /* Frameworks */,
 				04C26083D5B2A21B4E37BB17 /* Embed Frameworks */,
 			);
@@ -443,6 +447,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8C30854B39028EF9B270484A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2861F6A636F34C35F08AC7F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5603EB866FE051AB75770769 /* Sources */ = {
@@ -736,7 +751,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -745,7 +760,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.1;
+				MARKETING_VERSION = 2.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64;
 				PRODUCT_NAME = Yijing64;
 				SDKROOT = iphoneos;
@@ -759,7 +774,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -768,7 +783,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.1;
+				MARKETING_VERSION = 2.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64;
 				PRODUCT_NAME = Yijing64;
 				SDKROOT = iphoneos;
