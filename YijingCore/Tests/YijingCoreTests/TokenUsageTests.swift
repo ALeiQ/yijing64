@@ -212,6 +212,81 @@ final class TokenUsageTests: XCTestCase {
         suite.removePersistentDomain(forName: "test.token.usage.trim")
     }
 
+    func testStoreSummariesByModel() throws {
+        let suite = try XCTUnwrap(UserDefaults(suiteName: "test.token.usage.bymodel"))
+        suite.removePersistentDomain(forName: "test.token.usage.bymodel")
+        let store = TokenUsageStore(defaults: suite)
+
+        store.record(TokenUsage(promptTokens: 100, completionTokens: 50, totalTokens: 150, cacheHitTokens: 30, cacheMissTokens: 70, costCNY: 0.5), model: "deepseek-flash")
+        store.record(TokenUsage(promptTokens: 10, completionTokens: 5, totalTokens: 15, cacheHitTokens: 0, cacheMissTokens: 10, costCNY: 0.01), model: "glm-4.7-flash")
+        store.record(TokenUsage(promptTokens: 200, completionTokens: 60, totalTokens: 260, cacheHitTokens: 10, cacheMissTokens: 190, costCNY: 0.3), model: "deepseek-flash")
+
+        let summaries = store.summariesByModel()
+        XCTAssertEqual(summaries.map(\.model), ["deepseek-flash", "glm-4.7-flash"], "应按 token 总量降序")
+        XCTAssertEqual(summaries[0].provider, .deepseek, "旧数据应按模型名回退推断服务商")
+        XCTAssertEqual(summaries[0].displayName, "DeepSeek · deepseek-flash")
+        XCTAssertEqual(summaries[1].provider, .zhipu)
+        XCTAssertEqual(summaries[0].requestCount, 2)
+        XCTAssertEqual(summaries[0].promptTokens, 300)
+        XCTAssertEqual(summaries[0].completionTokens, 110)
+        XCTAssertEqual(summaries[0].totalTokens, 410)
+        XCTAssertEqual(summaries[0].estimatedCostCNY, 0.8, accuracy: 1e-9)
+        XCTAssertEqual(summaries[0].hitRate ?? -1, 40.0 / 300.0, accuracy: 1e-9)
+        XCTAssertEqual(summaries[1].requestCount, 1)
+        XCTAssertEqual(summaries[1].totalTokens, 15)
+
+        store.clear()
+        XCTAssertTrue(store.summariesByModel().isEmpty)
+        suite.removePersistentDomain(forName: "test.token.usage.bymodel")
+    }
+
+    func testSummariesByModelSplitsByProvider() throws {
+        let suite = try XCTUnwrap(UserDefaults(suiteName: "test.token.usage.provider"))
+        suite.removePersistentDomain(forName: "test.token.usage.provider")
+        let store = TokenUsageStore(defaults: suite)
+
+        store.record(TokenUsage(promptTokens: 100, completionTokens: 50, totalTokens: 150), model: "deepseek-v4.1-flash", provider: .opencodeGo)
+        store.record(TokenUsage(promptTokens: 10, completionTokens: 5, totalTokens: 15), model: "deepseek-flash", provider: .deepseek)
+
+        let summaries = store.summariesByModel()
+        XCTAssertEqual(summaries.count, 2)
+        XCTAssertEqual(summaries[0].provider, .opencodeGo)
+        XCTAssertEqual(summaries[0].displayName, "opencode Go · deepseek-v4.1-flash")
+        XCTAssertEqual(summaries[1].displayName, "DeepSeek · deepseek-flash")
+        suite.removePersistentDomain(forName: "test.token.usage.provider")
+    }
+
+    func testStoreRecordsProviderAndBaseURL() throws {
+        let suite = try XCTUnwrap(UserDefaults(suiteName: "test.token.usage.providerstore"))
+        suite.removePersistentDomain(forName: "test.token.usage.providerstore")
+        let store = TokenUsageStore(defaults: suite)
+
+        store.record(
+            TokenUsage(promptTokens: 10, completionTokens: 5, totalTokens: 15),
+            model: "deepseek-v4.1-flash",
+            provider: .opencodeGo,
+            baseURL: "https://opencode.ai/zen/go/v1"
+        )
+
+        let record = try XCTUnwrap(store.records().first)
+        XCTAssertEqual(record.provider, .opencodeGo)
+        XCTAssertEqual(record.baseURL, "https://opencode.ai/zen/go/v1")
+        XCTAssertEqual(store.summariesByModel().first?.displayName, "opencode Go · deepseek-v4.1-flash")
+        suite.removePersistentDomain(forName: "test.token.usage.providerstore")
+    }
+
+    func testSummariesByModelGroupsEmptyModel() throws {
+        let suite = try XCTUnwrap(UserDefaults(suiteName: "test.token.usage.emptymodel"))
+        suite.removePersistentDomain(forName: "test.token.usage.emptymodel")
+        let store = TokenUsageStore(defaults: suite)
+        store.record(TokenUsage(promptTokens: 1, completionTokens: 1, totalTokens: 2), model: "")
+        let summaries = store.summariesByModel()
+        XCTAssertEqual(summaries.count, 1)
+        XCTAssertEqual(summaries[0].model, "未记录")
+        XCTAssertEqual(summaries[0].provider, .custom)
+        suite.removePersistentDomain(forName: "test.token.usage.emptymodel")
+    }
+
     // MARK: - CastRecord 兼容
 
     func testCastRecordDecodesLegacyDataWithoutAIUsage() throws {
@@ -233,6 +308,8 @@ final class TokenUsageTests: XCTestCase {
         let records = try JSONDecoder().decode([CastRecord].self, from: Data(json.utf8))
         XCTAssertEqual(records.count, 1)
         XCTAssertNil(records[0].aiUsage, "旧数据缺 aiUsage 应解码为 nil")
+        XCTAssertNil(records[0].model, "旧数据缺 model 应解码为 nil")
+        XCTAssertNil(records[0].provider, "旧数据缺 provider 应解码为 nil")
     }
 
     func testCastRecordRoundTripWithAIUsage() throws {
@@ -241,11 +318,15 @@ final class TokenUsageTests: XCTestCase {
             originalLines: [.youngYang, .youngYin, .oldYin, .youngYang, .oldYang, .youngYang],
             question: "hi",
             aiAnswer: "answer",
-            aiUsage: TokenUsage(promptTokens: 10, completionTokens: 5, totalTokens: 15, cacheHitTokens: 2, cacheMissTokens: 8, costCNY: 0.01)
+            aiUsage: TokenUsage(promptTokens: 10, completionTokens: 5, totalTokens: 15, cacheHitTokens: 2, cacheMissTokens: 8, costCNY: 0.01),
+            model: "deepseek-flash",
+            provider: .deepseek
         )
         let data = try JSONEncoder().encode([record])
         let decoded = try JSONDecoder().decode([CastRecord].self, from: data)
         XCTAssertEqual(decoded[0].aiUsage?.promptTokens, 10)
         XCTAssertEqual(decoded[0].aiUsage?.costCNY, 0.01)
+        XCTAssertEqual(decoded[0].model, "deepseek-flash")
+        XCTAssertEqual(decoded[0].provider, .deepseek)
     }
 }

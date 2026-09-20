@@ -494,7 +494,7 @@ struct AIInterpretationView: View {
             HStack(spacing: 6) {
                 Image(systemName: "chart.bar.doc.horizontal")
                     .font(.caption2)
-                Text("\(viewModel.isReplay ? "该次用量" : "本次用量")：输入 \(Self.tokenText(usage.promptTokens)) · 输出 \(Self.tokenText(usage.completionTokens)) · \(Self.costText(usage))")
+                Text("\(viewModel.isReplay ? "该次用量" : "本次用量")\(modelSuffix)：输入 \(Self.tokenText(usage.promptTokens)) · 输出 \(Self.tokenText(usage.completionTokens)) · \(Self.costText(usage))")
                     .font(.caption2)
             }
             .foregroundColor(.secondary)
@@ -502,6 +502,11 @@ struct AIInterpretationView: View {
             .padding(.horizontal)
             .padding(.bottom, 4)
         }
+    }
+
+    private var modelSuffix: String {
+        guard let label = viewModel.modelLabel else { return "" }
+        return " · \(label)"
     }
 
     private static func tokenText(_ count: Int) -> String {

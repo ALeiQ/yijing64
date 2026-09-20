@@ -96,6 +96,10 @@ private struct HistoryRow: View {
                 .foregroundColor(.secondary)
                 if let usage = record.aiUsage, usage.totalTokens > 0 {
                     HStack(spacing: 6) {
+                        if let label = modelLabel {
+                            Text(label)
+                            Text("·")
+                        }
                         Text(costText(usage))
                         Text("·")
                         Text("\(tokenText(usage.totalTokens)) tokens")
@@ -117,6 +121,13 @@ private struct HistoryRow: View {
     private func costText(_ usage: TokenUsage) -> String {
         guard let cost = usage.costCNY else { return "费用—" }
         return String(format: "≈¥%.4f", cost)
+    }
+
+    /// 「服务商 · 模型」（未知服务商时仅模型名；无模型时 nil）。
+    private var modelLabel: String? {
+        guard let model = record.model, !model.isEmpty else { return nil }
+        guard let provider = record.provider else { return model }
+        return "\(provider.displayName) · \(model)"
     }
 
     private func tokenText(_ count: Int) -> String {

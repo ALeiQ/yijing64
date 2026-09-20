@@ -210,6 +210,17 @@ final class LLMSettingsTests: XCTestCase {
         XCTAssertEqual(LLMProvider.detect(model: "glm-5.3-flash", baseURL: "https://opencode.ai/zen/go/v1"), .opencodeGo)
         XCTAssertEqual(LLMProvider.detect(model: "kimi-k2.5", baseURL: "https://api.moonshot.ai"), .custom)
     }
+
+    func testProviderDetectByURLOnly() {
+        XCTAssertEqual(LLMProvider.detect(baseURL: "https://api.deepseek.com"), .deepseek)
+        XCTAssertEqual(LLMProvider.detect(baseURL: "https://open.bigmodel.cn/api/paas/v4"), .zhipu)
+        XCTAssertEqual(LLMProvider.detect(baseURL: "https://opencode.ai/zen/v1"), .opencodeZen)
+        XCTAssertEqual(LLMProvider.detect(baseURL: "https://opencode.ai/zen/go/v1"), .opencodeGo)
+        // 只看 URL：opencode 的 deepseek 系模型不会被误判为 DeepSeek。
+        XCTAssertEqual(LLMProvider.detect(baseURL: "https://opencode.ai/zen/go/v1"), .opencodeGo)
+        XCTAssertEqual(LLMProvider.detect(baseURL: "https://api.moonshot.ai"), .custom)
+        XCTAssertEqual(LLMProvider.detect(baseURL: ""), .custom)
+    }
 }
 
 final class CastHistoryStoreTests: XCTestCase {

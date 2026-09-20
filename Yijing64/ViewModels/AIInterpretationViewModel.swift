@@ -54,6 +54,10 @@ final class AIInterpretationViewModel: ObservableObject {
     @Published private(set) var errorMessage: String?
     /// 本次会话累计的 AI token 用量（含开始前的历史记录累计）。
     @Published private(set) var sessionUsage: TokenUsage?
+    /// 本次会话使用的模型名（用于用量条展示；回放时取记录中的模型）。
+    @Published private(set) var sessionModel: String?
+    /// 本次会话使用的服务商（用于用量条展示；回放时取记录中的服务商）。
+    @Published private(set) var sessionProvider: LLMProvider?
     /// 进行中的流式内容（独立观察对象，避免整页重绘）。
     let live = LiveStream()
 
@@ -80,6 +84,13 @@ final class AIInterpretationViewModel: ObservableObject {
     /// 记录创建时间（用于回放标注）。
     var recordDate: Date { record.date }
 
+    /// 用量条展示用的「服务商 · 模型」标签（未知服务商时仅模型名）。
+    var modelLabel: String? {
+        guard let sessionModel, !sessionModel.isEmpty else { return nil }
+        guard let sessionProvider else { return sessionModel }
+        return "\(sessionProvider.displayName) · \(sessionModel)"
+    }
+
     init(
         record: CastRecord,
         client: LLMClient? = nil,
@@ -96,6 +107,8 @@ final class AIInterpretationViewModel: ObservableObject {
         self.store = store
         self.usageStore = usageStore
         self.sessionUsage = record.aiUsage
+        self.sessionModel = record.model
+        self.sessionProvider = record.provider
 
         if !record.transcript.isEmpty {
             committed = record.transcript
@@ -177,17 +190,22 @@ final class AIInterpretationViewModel: ObservableObject {
                 finalizeStreamingTurn(id: placeholder.id, content: content, reasoning: reasoning)
 
                 committed.append(contentsOf: [userTurn, DialogueTurn.assistant(content, reasoning: reasoning)])
+                let provider = LLMProvider.detect(baseURL: client.config.baseURL)
                 if let raw = lastUsage {
                     var usage = raw
                     usage.applyingCost(model: client.config.model, baseURL: client.config.baseURL)
-                    usageStore.record(usage, model: client.config.model)
+                    usageStore.record(usage, model: client.config.model, provider: provider, baseURL: client.config.baseURL)
                     sessionUsage = sessionUsage.map { $0 + usage } ?? usage
+                    sessionModel = client.config.model
+                    sessionProvider = provider
                 }
                 var updated = record
                 updated.question = trimmed
                 updated.aiAnswer = content
                 updated.transcript = committed
                 updated.aiUsage = sessionUsage
+                updated.model = client.config.model
+                updated.provider = provider
                 if persistsHistory { store.save(updated) }
             } catch {
                 finalizeStreamingTurn(id: placeholder.id, content: content, reasoning: reasoning)

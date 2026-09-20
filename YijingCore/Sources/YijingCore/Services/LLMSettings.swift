@@ -1,7 +1,7 @@
 import Foundation
 
 /// 可选的大模型服务商，决定预设连接参数与各自独立存储的 Key。
-public enum LLMProvider: String, CaseIterable, Sendable {
+public enum LLMProvider: String, CaseIterable, Sendable, Codable {
     case deepseek
     case zhipu
     case opencodeZen
@@ -40,19 +40,29 @@ public enum LLMProvider: String, CaseIterable, Sendable {
         }
     }
 
-    /// 依据模型名与 Base URL 推断服务商（用于旧数据迁移与计费识别）。
-    public static func detect(model: String, baseURL: String) -> LLMProvider {
-        let m = model.lowercased()
+    /// 仅依据 Base URL 识别服务商；识别不到即 `.custom`（新记录存服务商时以此为准）。
+    public static func detect(baseURL: String) -> LLMProvider {
         let url = baseURL.lowercased()
         if url.contains("opencode.ai") {
             return url.contains("/zen/go") ? .opencodeGo : .opencodeZen
         }
-        if m.contains("deepseek") || url.contains("deepseek") {
+        if url.contains("deepseek") {
             return .deepseek
         }
-        if m.contains("glm") || m.contains("chatglm") || url.contains("bigmodel.cn") {
+        if url.contains("bigmodel.cn") {
             return .zhipu
         }
+        return .custom
+    }
+
+    /// 依据模型名与 Base URL 推断服务商（用于旧数据迁移与历史记录回退）。
+    /// 优先看 Base URL，其次才看模型名。
+    public static func detect(model: String, baseURL: String) -> LLMProvider {
+        let byURL = detect(baseURL: baseURL)
+        if byURL != .custom { return byURL }
+        let m = model.lowercased()
+        if m.contains("deepseek") { return .deepseek }
+        if m.contains("glm") || m.contains("chatglm") { return .zhipu }
         return .custom
     }
 }

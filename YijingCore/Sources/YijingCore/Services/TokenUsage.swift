@@ -162,9 +162,9 @@ public struct TokenPricing: Sendable {
         outputIdleCNYPerMillion: 8.0
     )
 
-    /// 依据设置中的模型名与 Base URL 自动选择计费方式；未识别返回 nil（不估算费用）。
+    /// 依据 Base URL 识别出的真实服务商（必要时结合模型）选择计费方式；未识别返回 nil（不估算费用）。
     public static func resolve(model: String, baseURL: String) -> TokenPricing? {
-        switch LLMProvider.detect(model: model, baseURL: baseURL) {
+        switch LLMProvider.detect(baseURL: baseURL) {
         case .deepseek:
             return .deepSeekFlash
         case .zhipu:
@@ -216,11 +216,17 @@ public struct TokenUsageRecord: Codable, Sendable, Equatable, Identifiable {
     public let date: Date
     public let model: String
     public var usage: TokenUsage
+    /// 服务商（旧数据缺该字段时解码为 nil，展示时可回退推断）。
+    public var provider: LLMProvider?
+    /// 请求时使用的 Base URL（旧数据缺该字段时解码为 nil，便于排查/重算）。
+    public var baseURL: String?
 
-    public init(id: UUID = UUID(), date: Date = Date(), model: String, usage: TokenUsage) {
+    public init(id: UUID = UUID(), date: Date = Date(), model: String, usage: TokenUsage, provider: LLMProvider? = nil, baseURL: String? = nil) {
         self.id = id
         self.date = date
         self.model = model
         self.usage = usage
+        self.provider = provider
+        self.baseURL = baseURL
     }
 }

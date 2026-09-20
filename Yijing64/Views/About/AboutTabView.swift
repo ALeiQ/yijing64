@@ -8,6 +8,7 @@ struct AboutTabView: View {
     @State private var baseURL = LLMSettings.shared.baseURL
     @State private var savedHint: SaveHint?
     @State private var usageSummary = TokenUsageStore.Summary()
+    @State private var modelSummaries: [TokenUsageStore.ModelUsageSummary] = []
 
     private let usageStore = TokenUsageStore()
 
@@ -85,9 +86,29 @@ struct AboutTabView: View {
                         }
                     }
                 } header: {
-                    Text("Token 用量")
+                    Text("Token 用量 · 总计")
                 } footer: {
                     Text("按设置模型对应的官方单价与请求时刻时段估算，实际费用以平台账单为准。")
+                }
+                if !modelSummaries.isEmpty {
+                    Section("按模型") {
+                        ForEach(modelSummaries) { item in
+                            DisclosureGroup {
+                                LabeledContent("请求次数", value: "\(item.requestCount)")
+                                LabeledContent("输入 tokens", value: Self.tokenText(item.promptTokens))
+                                LabeledContent("输出 tokens", value: Self.tokenText(item.completionTokens))
+                                LabeledContent("缓存命中率", value: Self.hitRateText(item.hitRate))
+                                LabeledContent("估算费用", value: String(format: "¥%.4f", item.estimatedCostCNY))
+                            } label: {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(item.displayName)
+                                    Text(Self.modelBrief(item))
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                    }
                 }
                 Section("易经六十四卦") {
                     LabeledContent("版本", value: Self.appVersion)
@@ -107,6 +128,7 @@ struct AboutTabView: View {
 
     private func reload() {
         usageSummary = usageStore.summary()
+        modelSummaries = usageStore.summariesByModel()
     }
 
     /// 切换服务商后，载入该服务商已保存（或预设）的 Key / 模型 / Base URL。
@@ -153,13 +175,21 @@ struct AboutTabView: View {
 
     private static func hitRateText(_ summary: TokenUsageStore.Summary) -> String {
         guard summary.promptTokens > 0 else { return "—" }
-        let percent = Double(summary.cacheHitTokens) / Double(summary.promptTokens) * 100
-        return String(format: "%.0f%%", max(0, percent))
+        return hitRateText(Double(summary.cacheHitTokens) / Double(summary.promptTokens))
+    }
+
+    private static func hitRateText(_ rate: Double?) -> String {
+        guard let rate else { return "—" }
+        return String(format: "%.0f%%", max(0, rate * 100))
+    }
+
+    private static func modelBrief(_ summary: TokenUsageStore.ModelUsageSummary) -> String {
+        "\(summary.requestCount) 次 · \(tokenText(summary.totalTokens)) tok · ≈¥\(String(format: "%.4f", summary.estimatedCostCNY))"
     }
 
     /// 依据当前模型与 Base URL 识别计费方式。
     private static func billingSchemeText(model: String, baseURL: String) -> String {
-        switch LLMProvider.detect(model: model, baseURL: baseURL) {
+        switch LLMProvider.detect(baseURL: baseURL) {
         case .deepseek:
             return "DeepSeek Flash（含峰谷）"
         case .zhipu:

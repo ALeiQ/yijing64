@@ -55,6 +55,10 @@ public struct CastRecord: Identifiable, Codable, Sendable, Equatable {
     public var transcript: [DialogueTurn]
     /// 该次会话的 AI token 用量累计（旧数据缺该字段时解码为 nil）。
     public var aiUsage: TokenUsage?
+    /// 该次会话使用的模型名（旧数据缺该字段时解码为 nil）。
+    public var model: String?
+    /// 该次会话使用的服务商（旧数据缺该字段时解码为 nil）。
+    public var provider: LLMProvider?
 
     public init(
         id: UUID = UUID(),
@@ -64,7 +68,9 @@ public struct CastRecord: Identifiable, Codable, Sendable, Equatable {
         question: String = "",
         aiAnswer: String = "",
         transcript: [DialogueTurn] = [],
-        aiUsage: TokenUsage? = nil
+        aiUsage: TokenUsage? = nil,
+        model: String? = nil,
+        provider: LLMProvider? = nil
     ) {
         self.id = id
         self.date = date
@@ -74,10 +80,12 @@ public struct CastRecord: Identifiable, Codable, Sendable, Equatable {
         self.aiAnswer = aiAnswer
         self.transcript = transcript
         self.aiUsage = aiUsage
+        self.model = model
+        self.provider = provider
     }
 
     private enum CodingKeys: String, CodingKey {
-        case id, date, method, originalLines, question, aiAnswer, transcript, aiUsage
+        case id, date, method, originalLines, question, aiAnswer, transcript, aiUsage, model, provider
     }
 
     public init(from decoder: Decoder) throws {
@@ -90,6 +98,8 @@ public struct CastRecord: Identifiable, Codable, Sendable, Equatable {
         aiAnswer = try c.decodeIfPresent(String.self, forKey: .aiAnswer) ?? ""
         transcript = try c.decodeIfPresent([DialogueTurn].self, forKey: .transcript) ?? []
         aiUsage = try c.decodeIfPresent(TokenUsage.self, forKey: .aiUsage)
+        model = try c.decodeIfPresent(String.self, forKey: .model)
+        provider = try c.decodeIfPresent(LLMProvider.self, forKey: .provider)
     }
 
     /// 由记录还原完整分析结果。
