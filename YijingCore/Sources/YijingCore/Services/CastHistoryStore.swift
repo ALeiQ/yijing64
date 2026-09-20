@@ -10,19 +10,37 @@ public struct DialogueTurn: Identifiable, Codable, Sendable, Equatable {
     public let id: UUID
     public var role: Role
     public var content: String
+    /// AI 思考过程（仅 assistant 有；旧数据缺该字段时解码为 ""）。
+    public var reasoning: String
 
     public init(
         id: UUID = UUID(),
         role: Role,
-        content: String
+        content: String,
+        reasoning: String = ""
     ) {
         self.id = id
         self.role = role
         self.content = content
+        self.reasoning = reasoning
     }
 
     public static func user(_ content: String) -> DialogueTurn { .init(role: .user, content: content) }
-    public static func assistant(_ content: String) -> DialogueTurn { .init(role: .assistant, content: content) }
+    public static func assistant(_ content: String, reasoning: String = "") -> DialogueTurn {
+        .init(role: .assistant, content: content, reasoning: reasoning)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, role, content, reasoning
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(UUID.self, forKey: .id)
+        role = try c.decode(Role.self, forKey: .role)
+        content = try c.decode(String.self, forKey: .content)
+        reasoning = try c.decodeIfPresent(String.self, forKey: .reasoning) ?? ""
+    }
 }
 
 /// 一次起卦记录（可还原卦象与当时的 AI 解卦会话）。

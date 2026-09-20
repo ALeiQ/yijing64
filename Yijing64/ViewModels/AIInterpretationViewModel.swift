@@ -9,17 +9,21 @@ struct AITurn: Identifiable, Equatable {
     var role: Role
     var content: String
     var reasoning: String
+    /// 是否为进行中的流式占位行（行身份保持稳定，完成时就地替换，避免插删导致滚动空白）。
+    var isStreaming: Bool
 
     init(
         id: UUID = UUID(),
         role: Role,
         content: String,
-        reasoning: String = ""
+        reasoning: String = "",
+        isStreaming: Bool = false
     ) {
         self.id = id
         self.role = role
         self.content = content
         self.reasoning = reasoning
+        self.isStreaming = isStreaming
     }
 }
 
@@ -95,7 +99,9 @@ final class AIInterpretationViewModel: ObservableObject {
 
         if !record.transcript.isEmpty {
             committed = record.transcript
-            turns = record.transcript.map { AITurn(role: $0.role == .user ? .user : .assistant, content: $0.content) }
+            turns = record.transcript.map {
+                AITurn(role: $0.role == .user ? .user : .assistant, content: $0.content, reasoning: $0.reasoning)
+            }
         } else if !record.question.isEmpty || !record.aiAnswer.isEmpty {
             let dTurns = [DialogueTurn.user(record.question), DialogueTurn.assistant(record.aiAnswer)]
             committed = dTurns
@@ -138,6 +144,10 @@ final class AIInterpretationViewModel: ObservableObject {
         isSending = true
         // 留空提问（直接解卦）关闭思考、快速响应；具体问题开启思考以保证质量。
         let thinking = !trimmed.isEmpty
+        // 固定 id 的流式占位行：思考/正文只走 `live`，高频更新不触碰 `turns`，
+        // 完成时就地替换同一行，避免「删一行 + 插一行」造成滚动定位失效而空白。
+        let placeholder = AITurn(role: .assistant, content: "", reasoning: "", isStreaming: true)
+        turns.append(placeholder)
         live.begin()
 
         Task {
@@ -164,10 +174,9 @@ final class AIInterpretationViewModel: ObservableObject {
                 }
                 live.reasoning = reasoning
                 live.content = content
-                live.finish()
-                turns.append(AITurn(role: .assistant, content: content, reasoning: reasoning))
+                finalizeStreamingTurn(id: placeholder.id, content: content, reasoning: reasoning)
 
-                committed.append(contentsOf: [userTurn, DialogueTurn.assistant(content)])
+                committed.append(contentsOf: [userTurn, DialogueTurn.assistant(content, reasoning: reasoning)])
                 if let raw = lastUsage {
                     var usage = raw
                     usage.applyingCost(model: client.config.model, baseURL: client.config.baseURL)
@@ -181,13 +190,18 @@ final class AIInterpretationViewModel: ObservableObject {
                 updated.aiUsage = sessionUsage
                 if persistsHistory { store.save(updated) }
             } catch {
-                live.finish()
-                if !content.isEmpty || !reasoning.isEmpty {
-                    turns.append(AITurn(role: .assistant, content: content, reasoning: reasoning))
-                }
+                finalizeStreamingTurn(id: placeholder.id, content: content, reasoning: reasoning)
                 errorMessage = (error as? LLMClient.Error)?.message ?? error.localizedDescription
             }
             isSending = false
         }
+    }
+
+    /// 把流式占位行就地替换为已完成内容（保持同一 id），并结束直播状态。
+    private func finalizeStreamingTurn(id: UUID, content: String, reasoning: String) {
+        if let idx = turns.firstIndex(where: { $0.id == id }) {
+            turns[idx] = AITurn(id: id, role: .assistant, content: content, reasoning: reasoning, isStreaming: false)
+        }
+        live.finish()
     }
 }

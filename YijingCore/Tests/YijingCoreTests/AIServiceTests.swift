@@ -276,9 +276,9 @@ final class CastHistoryStoreTests: XCTestCase {
         var record = CastRecord(method: .manual, originalLines: Array(repeating: .youngYang, count: 6))
         record.transcript = [
             .user("事业"),
-            .assistant("乾卦主自强不息。"),
+            .assistant("乾卦主自强不息。", reasoning: "先看本卦乾，动爻初九……"),
             .user("财运呢？"),
-            .assistant("六爻皆动，刚健不已，宜守正积极。"),
+            .assistant("六爻皆动，刚健不已，宜守正积极。", reasoning: "六爻皆动，势不可挡……"),
         ]
         store.save(record)
 
@@ -286,6 +286,18 @@ final class CastHistoryStoreTests: XCTestCase {
         XCTAssertEqual(loaded?.transcript.count, 4)
         XCTAssertEqual(loaded?.transcript.map(\.role), [.user, .assistant, .user, .assistant])
         XCTAssertEqual(loaded?.transcript.last?.content, "六爻皆动，刚健不已，宜守正积极。")
+        XCTAssertEqual(loaded?.transcript.last?.reasoning, "六爻皆动，势不可挡……", "思考过程应随记录持久化")
+        XCTAssertEqual(loaded?.transcript[1].reasoning, "先看本卦乾，动爻初九……")
+    }
+
+    func testDecodeLegacyTranscriptWithoutReasoning() throws {
+        let legacy = """
+        {"id":"\(UUID().uuidString)","date":0,"method":"三枚铜钱","originalLines":[9,7,7,7,7,7],
+         "transcript":[{"id":"\(UUID().uuidString)","role":"assistant","content":"解卦……"}]}
+        """
+        let record = try JSONDecoder().decode(CastRecord.self, from: Data(legacy.utf8))
+        XCTAssertEqual(record.transcript.first?.content, "解卦……")
+        XCTAssertEqual(record.transcript.first?.reasoning, "", "旧数据缺 reasoning 应解码为空串")
     }
 
     func testDecodeLegacyRecordWithoutTranscript() throws {

@@ -171,7 +171,6 @@ struct AIInterpretationView: View {
                                 bubble(for: turn)
                                     .id(turn.id)
                             }
-                            StreamingBubble(live: viewModel.live)
                             if let error = viewModel.errorMessage {
                                 errorCard(error)
                             }
@@ -185,17 +184,23 @@ struct AIInterpretationView: View {
                     .padding()
                 }
                 .scrollDismissesKeyboard(.interactively)
+                .defaultScrollAnchor(showOutput ? .bottom : .top)
                 .simultaneousGesture(TapGesture().onEnded {
                     hideKeyboard()
                 })
                 .onAppear {
                     // 回放历史会话时自动滚到底部（最新对话）；新会话保持顶部。
                     guard viewModel.isReplay else { return }
-                    scrollToBottom(proxy, after: 0.15)
+                    scrollToBottom(proxy)
                 }
                 .onChange(of: viewModel.turns.count) { _, _ in
-                    // 仅在新气泡落定时滚动；思考流式期间不自动跟随，避免与手动滑动抢主线程。
-                    scrollToBottom(proxy, after: 0.15)
+                    // 新气泡落定时滚动；思考流式期间不自动跟随，避免与手动滑动抢主线程。
+                    scrollToBottom(proxy)
+                }
+                .onChange(of: viewModel.turns.last?.isStreaming) { _, isStreaming in
+                    // 完成折叠后内容变矮，补滚一次重新贴底（配合底部锚定，避免越界空白）。
+                    guard isStreaming == false else { return }
+                    scrollToBottom(proxy)
                 }
             }
 
@@ -301,7 +306,11 @@ struct AIInterpretationView: View {
                     .background(Capsule().fill(Color.accentColor))
             }
         case .assistant:
-            AssistantBubble(turn: turn, theme: Self.chatTheme)
+            if turn.isStreaming {
+                StreamingBubble(live: viewModel.live)
+            } else {
+                AssistantBubble(turn: turn, theme: Self.chatTheme)
+            }
         }
     }
 
@@ -361,32 +370,30 @@ struct AIInterpretationView: View {
         @ObservedObject var live: LiveStream
 
         var body: some View {
-            if live.isStreaming {
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "brain.head.profile")
-                        Text("思考中…")
-                        Spacer()
-                        ProgressView()
-                    }
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 6) {
+                    Image(systemName: "brain.head.profile")
+                    Text("思考中…")
+                    Spacer()
+                    ProgressView()
+                }
+                .font(.caption)
+                .foregroundColor(.secondary)
 
-                    if !live.reasoning.isEmpty {
-                        StreamingTextView(text: live.reasoning, color: .secondaryLabel)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    if !live.content.isEmpty {
-                        StreamingTextView(text: live.content, color: .label)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
+                if !live.reasoning.isEmpty {
+                    StreamingTextView(text: live.reasoning, color: .secondaryLabel)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(12)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color(.secondarySystemBackground))
+                if !live.content.isEmpty {
+                    StreamingTextView(text: live.content, color: .label)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
+            }
+            .padding(12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(.secondarySystemBackground))
             }
         }
     }
@@ -490,12 +497,14 @@ struct AIInterpretationView: View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 
-    /// 滚动到底部锚点。延后一个 runloop，避开布局未完成与键盘收起动画的窗口，
-    /// 防止滚动到空白区域。仅在新气泡落定时调用，思考流式期间不跟随。
-    private func scrollToBottom(_ proxy: ScrollViewProxy, after delay: TimeInterval = 0) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-            withAnimation(nil) {
-                proxy.scrollTo(Self.bottomAnchorID, anchor: .bottom)
+    /// 滚动到底部锚点。多段补滚（0.05s / 0.35s），覆盖布局未完成、键盘收起与
+    /// Markdown 异步排版，避免落在越界区域而空白。仅在新气泡落定/完成时调用。
+    private func scrollToBottom(_ proxy: ScrollViewProxy) {
+        for delay in [0.05, 0.35] {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                withAnimation(nil) {
+                    proxy.scrollTo(Self.bottomAnchorID, anchor: .bottom)
+                }
             }
         }
     }
