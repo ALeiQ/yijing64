@@ -77,6 +77,19 @@ final class AIServiceTests: XCTestCase {
         XCTAssertEqual(messages.filter { $0.role == "user" }.count, 3, "卦象上下文 + 历史提问 + 本轮提问")
         XCTAssertEqual(messages.last?.content, "求财")
     }
+
+    func testSystemPromptRequiresStructuredMarkdown() {
+        let result = CastResult(method: .manual, originalLines: Array(repeating: .youngYin, count: 6))
+        let system = HexagramInterpretation.messages(for: result, question: "").first!.content
+        XCTAssertTrue(system.contains("##"), "应要求分节标题")
+        XCTAssertTrue(system.contains("- "), "应要求列表要点")
+        XCTAssertTrue(system.contains("200-500"), "应约束篇幅")
+        XCTAssertTrue(system.contains("2-5"), "每节要点条数约束")
+        XCTAssertTrue(system.contains("整体卦象"), "应包含固定分节名")
+        XCTAssertTrue(system.contains("给你的建议"), "应包含固定分节名")
+        XCTAssertTrue(system.contains("能不能出门"), "应将出行吉凶等切身问题列为应解读场景")
+        XCTAssertTrue(system.contains("写代码"), "应将活动时机吉凶（如写代码）列为应解读场景，而非知识求助")
+    }
 }
 
 final class LLMSettingsTests: XCTestCase {

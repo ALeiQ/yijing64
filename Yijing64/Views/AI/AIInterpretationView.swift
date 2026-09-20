@@ -1,10 +1,137 @@
 import SwiftUI
+import MarkdownUI
 import YijingCore
 
 /// AI 解卦会话窗口：固定卦象摘要、气泡式多轮对话；支持回放历史记录。
 struct AIInterpretationView: View {
     @StateObject private var viewModel: AIInterpretationViewModel
     @EnvironmentObject private var router: AppRouter
+
+    /// 聊天气泡主题：响应式言文（无块级背景），颜色跟随系统深浅模式。
+    private static let chatTheme: Theme = Theme()
+        .text {
+            ForegroundColor(.primary)
+            FontSize(16)
+        }
+        .code {
+            FontFamilyVariant(.monospaced)
+            FontSize(.em(0.85))
+            BackgroundColor(Color(.quaternarySystemFill))
+        }
+        .strong {
+            FontWeight(.semibold)
+        }
+        .emphasis {
+            FontStyle(.italic)
+        }
+        .link {
+            ForegroundColor(.blue)
+        }
+        .heading1 { configuration in
+            configuration.label
+                .markdownTextStyle {
+                    FontWeight(.semibold)
+                    FontSize(.em(1.4))
+                }
+                .markdownMargin(top: 18, bottom: 10)
+        }
+        .heading2 { configuration in
+            configuration.label
+                .markdownTextStyle {
+                    FontWeight(.semibold)
+                    FontSize(.em(1.25))
+                }
+                .markdownMargin(top: 18, bottom: 10)
+        }
+        .heading3 { configuration in
+            configuration.label
+                .markdownTextStyle {
+                    FontWeight(.semibold)
+                    FontSize(.em(1.1))
+                }
+                .markdownMargin(top: 16, bottom: 8)
+        }
+        .heading4 { configuration in
+            configuration.label
+                .markdownTextStyle {
+                    FontWeight(.semibold)
+                }
+                .markdownMargin(top: 14, bottom: 8)
+        }
+        .heading5 { configuration in
+            configuration.label
+                .markdownTextStyle {
+                    FontWeight(.medium)
+                    FontSize(.em(0.95))
+                }
+                .markdownMargin(top: 14, bottom: 8)
+        }
+        .heading6 { configuration in
+            configuration.label
+                .markdownTextStyle {
+                    FontSize(.em(0.9))
+                    ForegroundColor(.secondary)
+                }
+                .markdownMargin(top: 14, bottom: 8)
+        }
+        .paragraph { configuration in
+            configuration.label
+                .fixedSize(horizontal: false, vertical: true)
+                .relativeLineSpacing(.em(0.25))
+                .markdownMargin(top: 0, bottom: 12)
+        }
+        .blockquote { configuration in
+            HStack(spacing: 0) {
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(Color(.separator))
+                    .relativeFrame(width: .em(0.2))
+                configuration.label
+                    .markdownTextStyle { ForegroundColor(.secondary) }
+                    .relativePadding(.horizontal, length: .em(1))
+            }
+            .fixedSize(horizontal: false, vertical: true)
+        }
+        .codeBlock { configuration in
+            ScrollView(.horizontal) {
+                configuration.label
+                    .fixedSize(horizontal: false, vertical: true)
+                    .relativeLineSpacing(.em(0.225))
+                    .markdownTextStyle {
+                        FontFamilyVariant(.monospaced)
+                        FontSize(.em(0.85))
+                    }
+                    .padding(14)
+            }
+            .background(Color(.quaternarySystemFill))
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .markdownMargin(top: 0, bottom: 12)
+        }
+        .listItem { configuration in
+            configuration.label
+                .markdownMargin(top: .em(0.2))
+        }
+        .table { configuration in
+            configuration.label
+                .fixedSize(horizontal: false, vertical: true)
+                .markdownTableBorderStyle(.init(color: Color(.separator)))
+                .markdownTableBackgroundStyle(
+                    .alternatingRows(Color(.secondarySystemBackground), Color(.quaternarySystemFill))
+                )
+                .markdownMargin(top: 0, bottom: 12)
+        }
+        .tableCell { configuration in
+            configuration.label
+                .markdownTextStyle {
+                    if configuration.row == 0 {
+                        FontWeight(.semibold)
+                    }
+                    BackgroundColor(nil)
+                }
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.vertical, 6)
+                .padding(.horizontal, 13)
+                .relativeLineSpacing(.em(0.25))
+        }
 
     /// 从一次起卦结果进入（新会话）。
     init(result: CastResult) {
@@ -22,29 +149,54 @@ struct AIInterpretationView: View {
         VStack(spacing: 0) {
             summaryHeader
             Divider()
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 12) {
-                    if showOutput {
-                        ForEach(viewModel.messages) { turn in
-                            bubble(for: turn)
-                        }
-                        if viewModel.isSending {
-                            HStack(spacing: 10) {
-                                ProgressView()
-                                Text("AI 解卦中…")
-                                    .foregroundColor(.secondary)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 12) {
+                        if showOutput {
+                            ForEach(viewModel.turns) { turn in
+                                bubble(for: turn)
+                                    .id(turn.id)
                             }
-                            .padding(.vertical, 12)
-                            .frame(maxWidth: .infinity)
+                            if viewModel.isSending {
+                                HStack(spacing: 10) {
+                                    ProgressView()
+                                    Text("AI 解卦中…")
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding(.vertical, 12)
+                                .frame(maxWidth: .infinity)
+                            }
+                            if let error = viewModel.errorMessage {
+                                errorCard(error)
+                            }
+                        } else {
+                            emptyHint
                         }
-                        if let error = viewModel.errorMessage {
-                            errorCard(error)
+                    }
+                    .padding()
+                }
+                .onAppear {
+                    // 回放历史会话时自动滚到底部（最新对话）；新会话保持顶部。
+                    guard viewModel.isReplay, let last = viewModel.turns.last else { return }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                        withAnimation(nil) {
+                            proxy.scrollTo(last.id, anchor: .bottom)
                         }
-                    } else {
-                        emptyHint
                     }
                 }
-                .padding()
+                .onChange(of: viewModel.turns.last?.id) { _, _ in
+                    guard let last = viewModel.turns.last else { return }
+                    withAnimation(nil) {
+                        proxy.scrollTo(last.id, anchor: .bottom)
+                    }
+                }
+                .onChange(of: viewModel.turns.last?.content) { _, _ in
+                    // 流式进行中自动跟随到底部。
+                    guard viewModel.isSending, let last = viewModel.turns.last else { return }
+                    withAnimation(nil) {
+                        proxy.scrollTo(last.id, anchor: .bottom)
+                    }
+                }
             }
 
             inputBar
@@ -93,7 +245,7 @@ struct AIInterpretationView: View {
     }
 
     private var showOutput: Bool {
-        !viewModel.messages.isEmpty || viewModel.isSending || viewModel.errorMessage != nil
+        !viewModel.turns.isEmpty || viewModel.isSending || viewModel.errorMessage != nil
     }
 
     private var summaryCard: some View {
@@ -135,7 +287,7 @@ struct AIInterpretationView: View {
     // MARK: - 消息气泡
 
     @ViewBuilder
-    private func bubble(for turn: DialogueTurn) -> some View {
+    private func bubble(for turn: AITurn) -> some View {
         switch turn.role {
         case .user:
             HStack {
@@ -147,15 +299,72 @@ struct AIInterpretationView: View {
                     .background(Capsule().fill(Color.accentColor))
             }
         case .assistant:
-            Text(renderedMarkdown(turn.content))
-                .font(.body)
-                .lineSpacing(4)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(12)
-                .background {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color(.secondarySystemBackground))
+            AssistantBubble(turn: turn, theme: Self.chatTheme)
+        }
+    }
+
+    /// AI 气泡：思考过程（流式实时展示、完成后可折叠展开）+ Markdown 正文。
+    private struct AssistantBubble: View {
+        let turn: AITurn
+        let theme: Theme
+
+        @State private var expanded = false
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 10) {
+                if !turn.reasoning.isEmpty {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) { expanded.toggle() }
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: turn.isStreaming ? "brain.head.profile" : "brain")
+                            Text(turn.isStreaming ? "思考中…" : "思考过程")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Spacer()
+                            Image(systemName: expanded ? "chevron.up" : "chevron.down")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    if expanded {
+                        Text(turn.reasoning)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .textSelection(.enabled)
+                            .transition(.opacity)
+                    }
+                } else if turn.isStreaming {
+                    HStack(spacing: 10) {
+                        ProgressView()
+                        Text("思考中…")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
+                if !turn.content.isEmpty {
+                    Markdown(turn.content)
+                        .markdownTheme(theme)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .textSelection(.enabled)
+                }
+            }
+            .padding(12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(.secondarySystemBackground))
+            }
+            .onAppear {
+                expanded = turn.isStreaming
+            }
+            .onChange(of: turn.isStreaming) { _, newValue in
+                // 思考完成 → 折叠思考内容，用户可手动展开。
+                if !newValue {
+                    expanded = false
+                }
+            }
         }
     }
 
@@ -195,11 +404,6 @@ struct AIInterpretationView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 40)
-    }
-
-    /// 将 AI 回答按 Markdown 渲染（解析失败时回退纯文本）。
-    private func renderedMarkdown(_ text: String) -> AttributedString {
-        (try? AttributedString(markdown: text, options: .init(interpretedSyntax: .full))) ?? AttributedString(text)
     }
 
     // MARK: - 输入条

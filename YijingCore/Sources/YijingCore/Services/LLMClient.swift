@@ -5,11 +5,17 @@ public struct LLMConfig: Sendable, Equatable {
     public var baseURL: String
     public var model: String
     public var apiKey: String
+    /// 单次回复的最大输出 token 数（非思考模式，约束篇幅，防冗长）。
+    public var maxTokens: Int
+    /// 思考模式下的最大输出 token 数（思考也计入预算，需预留更多空间）。
+    public var thinkingMaxTokens: Int
 
-    public init(baseURL: String = "https://api.deepseek.com", model: String = "deepseek-flash", apiKey: String = "") {
+    public init(baseURL: String = "https://api.deepseek.com", model: String = "deepseek-flash", apiKey: String = "", maxTokens: Int = 1000, thinkingMaxTokens: Int = 4000) {
         self.baseURL = baseURL
         self.model = model
         self.apiKey = apiKey
+        self.maxTokens = maxTokens
+        self.thinkingMaxTokens = thinkingMaxTokens
     }
 }
 
@@ -47,8 +53,10 @@ public final class LLMClient: Sendable {
         self.session = session
     }
 
-    /// 发送对话，返回助手文本。
-    public func chat(messages: [ChatMessage]) async throws -> String {
+    /// 发出对话，返回助手文本。
+    /// - Parameter thinking: 是否启用模型思考模式（DeepSeek V4 系默认启用思考，
+    ///   思考 token 计入 max_tokens 预算；短输出场景建议关闭以保证拿到最终答案）。
+    public func chat(messages: [ChatMessage], thinking: Bool) async throws -> String {
         guard !config.apiKey.isEmpty else {
             throw Error("未设置 API Key，请先在“关于”页填写。")
         }
@@ -62,13 +70,12 @@ public final class LLMClient: Sendable {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(config.apiKey)", forHTTPHeaderField: "Authorization")
 
-        let body: [String: Any] = [
-            "model": config.model,
-            "messages": messages.map { ["role": $0.role, "content": $0.content] },
-            "temperature": 0.7,
-            "stream": false,
-        ]
-        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        request.httpBody = try JSONSerialization.data(withJSONObject: Self.requestBody(
+            model: config.model,
+            messages: messages,
+            maxTokens: thinking ? config.thinkingMaxTokens : config.maxTokens,
+            thinking: thinking
+        ))
 
         let (data, response) = try await session.data(for: request)
 
@@ -80,11 +87,98 @@ public final class LLMClient: Sendable {
             throw Error("请求失败（\(http.statusCode)）。\(Self.friendlyDetail(detail))")
         }
 
-        let decoded = try JSONDecoder().decode(ChatCompletionResponse.self, from: data)
+        let decoded = try ChatCompletionResponse.decode(data)
         guard let content = decoded.choices.first?.message.content, !content.isEmpty else {
-            throw Error("模型返回为空。")
+            throw Self.emptyContentError(decoded)
         }
         return content
+    }
+
+    /// 构造 chat.completions 请求体。
+    static func requestBody(model: String, messages: [ChatMessage], maxTokens: Int, thinking: Bool, stream: Bool = false) -> [String: Any] {
+        var body: [String: Any] = [
+            "model": model,
+            "messages": messages.map { ["role": $0.role, "content": $0.content] },
+            "temperature": 0.7,
+            "max_tokens": maxTokens,
+            "stream": stream,
+        ]
+        if thinking {
+            body["thinking"] = ["type": "enabled"]
+        } else {
+            body["thinking"] = ["type": "disabled"]
+        }
+        return body
+    }
+
+    /// 模型返回空时的可读错误（区分：思考截断 vs 真空白）。
+    private static func emptyContentError(_ decoded: ChatCompletionResponse) -> Error {
+        guard let message = decoded.choices.first?.message else {
+            return Error("模型返回为空。")
+        }
+        if message.reasoningContent != nil {
+            return Error("模型思考消耗了全部输出预算，未生成最终回答。")
+        }
+        return Error("模型返回为空。")
+    }
+
+    /// 流式对话：逐块产出（可包含思考与正文增量）。
+    /// - Parameter thinking: 是否启用模型思考模式。
+    /// - Returns: 事件流；`reasoning` 为思考增量、`content` 为正文增量，两者在流结束前都是累积语义下的新块。
+    public func chatStream(messages: [ChatMessage], thinking: Bool) async throws -> AsyncThrowingStream<ChatStreamEvent, Swift.Error> {
+        guard !config.apiKey.isEmpty else {
+            throw Error("未设置 API Key，请先在“关于”页填写。")
+        }
+        guard let url = Self.endpointURL(baseURL: config.baseURL) else {
+            throw Error("Base URL 无效。")
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 60
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(config.apiKey)", forHTTPHeaderField: "Authorization")
+
+        request.httpBody = try JSONSerialization.data(withJSONObject: Self.requestBody(
+            model: config.model,
+            messages: messages,
+            maxTokens: thinking ? config.thinkingMaxTokens : config.maxTokens,
+            thinking: thinking,
+            stream: true
+        ))
+
+        let (bytes, response) = try await session.bytes(for: request)
+
+        guard let http = response as? HTTPURLResponse else {
+            throw Error("网络响应异常。")
+        }
+        guard (200..<300).contains(http.statusCode) else {
+            let data = try await bytes.reduce(into: Data()) { $0.append($1) }
+            let detail = String(data: data, encoding: .utf8) ?? ""
+            throw Error("请求失败（\(http.statusCode)）。\(Self.friendlyDetail(detail))")
+        }
+
+        let stream: AsyncThrowingStream<ChatStreamEvent, Swift.Error> = AsyncThrowingStream {
+            (continuation: AsyncThrowingStream<ChatStreamEvent, Swift.Error>.Continuation) in
+            Task {
+                do {
+                    for try await line in bytes.lines {
+                        let chunk = SSEChunkParser.parse(line: line)
+                        if chunk.done {
+                            continuation.finish()
+                            return
+                        }
+                        if !chunk.reasoning.isEmpty || !chunk.content.isEmpty {
+                            continuation.yield(ChatStreamEvent(reasoning: chunk.reasoning, content: chunk.content))
+                        }
+                    }
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: Error("流式响应中断：\(error.localizedDescription)"))
+                }
+            }
+        }
+        return stream
     }
 
     /// 由 Base URL 构造 chat/completions 端点（容错结尾斜杠）。
@@ -112,9 +206,64 @@ struct ChatCompletionResponse: Codable {
     struct Choice: Codable {
         struct Message: Codable {
             let role: String
-            let content: String
+            let content: String?
+            /// DeepSeek 等思考模式返回的推理内容（仅用于诊断，不对外展示）。
+            let reasoningContent: String?
+            let finishReason: String?
         }
         let message: Message
+        let finishReason: String?
     }
     let choices: [Choice]
+
+    static func decode(_ data: Data) throws -> ChatCompletionResponse {
+        try JSONDecoder().decode(ChatCompletionResponse.self, from: data)
+    }
+}
+
+/// 流式输出的事件块。
+public struct ChatStreamEvent: Sendable, Equatable {
+    /// 思考（reasoning）增量。
+    public let reasoning: String
+    /// 正文增量。
+    public let content: String
+
+    public init(reasoning: String = "", content: String = "") {
+        self.reasoning = reasoning
+        self.content = content
+    }
+}
+
+/// 解析 OpenAI 兼容的 SSE 流式行（如 `data: {"choices":[{"delta":{"content":"…"}}]}`）。
+enum SSEChunkParser {
+    struct Chunk: Sendable, Equatable {
+        var reasoning: String
+        var content: String
+        var done: Bool
+
+        static let empty = Chunk(reasoning: "", content: "", done: false)
+    }
+
+    static func parse(line: String) -> Chunk {
+        guard line.hasPrefix("data:") else { return .empty }
+        var payload = line.dropFirst("data:".count)
+        if payload.hasPrefix(" ") {
+            payload = payload.dropFirst()
+        }
+        let data = String(payload).trimmingCharacters(in: .whitespacesAndNewlines)
+        guard data != "[DONE]" else {
+            return Chunk(reasoning: "", content: "", done: true)
+        }
+        guard let json = data.data(using: .utf8),
+              let obj = try? JSONSerialization.jsonObject(with: json) as? [String: Any],
+              let choices = obj["choices"] as? [[String: Any]],
+              let first = choices.first else {
+            // 空 delta（如 usage 块）不再产出额外文本。
+            return .empty
+        }
+        let delta = first["delta"] as? [String: Any] ?? [:]
+        let reasoning = delta["reasoning_content"] as? String ?? ""
+        let content = delta["content"] as? String ?? ""
+        return Chunk(reasoning: reasoning, content: content, done: false)
+    }
 }

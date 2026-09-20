@@ -32,12 +32,55 @@ final class LLMClientTests: XCTestCase {
     func testChatThrowsWithoutAPIKey() async {
         let client = LLMClient(config: LLMConfig(apiKey: ""))
         do {
-            _ = try await client.chat(messages: [.user("hi")])
+            _ = try await client.chat(messages: [.user("hi")], thinking: false)
             XCTFail("应抛出未设置 Key 错误")
         } catch let error as LLMClient.Error {
             XCTAssertTrue(error.message.contains("API Key"))
         } catch {
             XCTFail("错误类型不符: \(error)")
         }
+    }
+
+    func testRequestBodyDisablesThinking() {
+        let body = LLMClient.requestBody(
+            model: "deepseek-flash",
+            messages: [.user("hello")],
+            maxTokens: 1000,
+            thinking: false
+        )
+        XCTAssertEqual(body["max_tokens"] as? Int, 1000)
+        let thinking = body["thinking"] as? [String: String]
+        XCTAssertEqual(thinking?["type"], "disabled")
+    }
+
+    func testRequestBodyEnablesThinking() {
+        let body = LLMClient.requestBody(
+            model: "deepseek-flash",
+            messages: [.user("hello")],
+            maxTokens: 4000,
+            thinking: true
+        )
+        XCTAssertEqual(body["max_tokens"] as? Int, 4000)
+        let thinking = body["thinking"] as? [String: String]
+        XCTAssertEqual(thinking?["type"], "enabled")
+    }
+
+    func testRequestBodyStreamFlag() {
+        let streaming = LLMClient.requestBody(
+            model: "deepseek-flash",
+            messages: [.user("hello")],
+            maxTokens: 1000,
+            thinking: false,
+            stream: true
+        )
+        XCTAssertEqual(streaming["stream"] as? Bool, true)
+
+        let buffered = LLMClient.requestBody(
+            model: "deepseek-flash",
+            messages: [.user("hello")],
+            maxTokens: 1000,
+            thinking: false
+        )
+        XCTAssertEqual(buffered["stream"] as? Bool, false, "默认非流式")
     }
 }
