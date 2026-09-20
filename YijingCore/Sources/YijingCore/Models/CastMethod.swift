@@ -1,7 +1,7 @@
 import Foundation
 
 /// 起卦方式。
-public enum CastMethod: String, CaseIterable, Sendable, Hashable, Identifiable {
+public enum CastMethod: String, CaseIterable, Sendable, Hashable, Identifiable, Codable {
     case manual = "线下·手动排卦"
     case threeCoins = "三枚铜钱"
     case plumTime = "梅花·时间起卦"

@@ -18,6 +18,8 @@ struct CastResultView: View {
                 movingLinesRow
             }
 
+            aiActionRow
+
             mutualRow
         }
         .padding()
@@ -110,6 +112,34 @@ struct CastResultView: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.yellow.opacity(0.2))
         }
+    }
+
+    private var aiActionRow: some View {
+        NavigationLink {
+            AIInterpretationView(result: result)
+        } label: {
+            HStack {
+                Image(systemName: "sparkles")
+                    .foregroundColor(.accentColor)
+                Text("AI 解卦")
+                    .foregroundColor(.primary)
+                Spacer()
+                Text("智能解读本卦")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .font(.subheadline)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(.systemBackground))
+            }
+        }
+        .buttonStyle(.plain)
     }
 
     private var mutualRow: some View {

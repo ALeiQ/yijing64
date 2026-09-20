@@ -3,7 +3,7 @@ import Foundation
 /// 六爻自下而上的爻的类型。
 ///
 /// 数值采用传统"五行策数"：6 老阴、7 少阳、8 少阴、9 老阳。
-public enum LineType: Int, CaseIterable, Sendable, Hashable {
+public enum LineType: Int, CaseIterable, Sendable, Hashable, Codable {
     case oldYin   = 6  // 老阴 ✕（动爻）
     case youngYang = 7 // 少阳 ─（静爻）
     case youngYin  = 8 // 少阴 ─ ─（静爻）
