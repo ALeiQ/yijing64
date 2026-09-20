@@ -328,6 +328,8 @@ struct AIInterpretationView: View {
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                         }
+                        .frame(maxWidth: .infinity)
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     if expanded {
