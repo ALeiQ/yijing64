@@ -52,8 +52,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.liuzixiang.Yijing64
         PRODUCT_NAME: Yijing64
-        MARKETING_VERSION: "2.4.0"
-        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "2.4.1"
+        CURRENT_PROJECT_VERSION: "2"
         INFOPLIST_KEY_CFBundleDisplayName: 易经六十四卦
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait

@@ -146,14 +146,9 @@ struct AboutTabView: View {
         count >= 1000 ? String(format: "%.1fk", Double(count) / 1000) : "\(count)"
     }
 
-    /// 版本号取自 Info.plist（由 project.yml 的 MARKETING_VERSION / CURRENT_PROJECT_VERSION 生成）。
+    /// 版本号取自 Info.plist（由 project.yml 的 MARKETING_VERSION 生成）；不展示 build 号。
     private static var appVersion: String {
-        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
-        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
-        if let build, !build.isEmpty {
-            return "\(version)（\(build)）"
-        }
-        return version
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
     }
 
     private static func hitRateText(_ summary: TokenUsageStore.Summary) -> String {
