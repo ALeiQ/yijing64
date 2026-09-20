@@ -121,6 +121,71 @@ final class LLMSettingsTests: XCTestCase {
         XCTAssertEqual(s2.baseURL, "https://example.com/v4/")
         XCTAssertEqual(s2.config.apiKey, "test-key")
     }
+
+    func testProviderDefaults() {
+        let s = LLMSettings(defaults: freshDefaults())
+        XCTAssertEqual(s.provider, .deepseek)
+        XCTAssertEqual(LLMProvider.deepseek.defaultModel, "deepseek-flash")
+        XCTAssertEqual(LLMProvider.zhipu.defaultModel, "glm-4.7-flash")
+        XCTAssertEqual(LLMProvider.opencodeZen.defaultModel, "big-pickle")
+        XCTAssertEqual(LLMProvider.opencodeZen.defaultBaseURL, "https://opencode.ai/zen/v1")
+        XCTAssertEqual(LLMProvider.custom.defaultModel, "")
+    }
+
+    func testProviderSwitchAppliesPreset() {
+        let s = LLMSettings(defaults: freshDefaults())
+        s.provider = .zhipu
+        XCTAssertEqual(s.model, "glm-4.7-flash")
+        XCTAssertTrue(s.baseURL.contains("bigmodel.cn"))
+        s.provider = .opencodeZen
+        XCTAssertEqual(s.model, "big-pickle")
+        XCTAssertTrue(s.baseURL.contains("opencode.ai"))
+    }
+
+    func testPerProviderKeyIsolated() {
+        let s = LLMSettings(defaults: freshDefaults())
+        s.provider = .deepseek
+        s.apiKey = "deepseek-key"
+        s.provider = .zhipu
+        s.apiKey = "zhipu-key"
+
+        XCTAssertEqual(s.apiKey, "zhipu-key")
+        s.provider = .deepseek
+        XCTAssertEqual(s.apiKey, "deepseek-key", "切回后应保留各自的 Key")
+        XCTAssertEqual(s.apiKey(for: .zhipu), "zhipu-key")
+    }
+
+    func testPerProviderEditsPreserved() {
+        let s = LLMSettings(defaults: freshDefaults())
+        s.provider = .zhipu
+        s.model = "glm-4.7"
+        s.baseURL = "https://open.bigmodel.cn/api/paas/v4"
+
+        s.provider = .deepseek
+        XCTAssertEqual(s.model, "deepseek-flash")
+        s.provider = .zhipu
+        XCTAssertEqual(s.model, "glm-4.7", "预设项的手动修改应保留在各自槽位")
+    }
+
+    func testLegacyConfigMigration() {
+        let defaults = freshDefaults()
+        defaults.set("legacy-key", forKey: "llm.apiKey")
+        defaults.set("glm-4.7", forKey: "llm.model")
+        defaults.set("https://open.bigmodel.cn/api/paas/v4", forKey: "llm.baseURL")
+
+        let s = LLMSettings(defaults: defaults)
+        XCTAssertEqual(s.provider, .zhipu, "旧数据应推断为智谱")
+        XCTAssertEqual(s.apiKey, "legacy-key", "旧 Key 应迁入对应服务商槽位")
+        XCTAssertEqual(s.model, "glm-4.7")
+    }
+
+    func testProviderDetect() {
+        XCTAssertEqual(LLMProvider.detect(model: "deepseek-flash", baseURL: ""), .deepseek)
+        XCTAssertEqual(LLMProvider.detect(model: "glm-4.7-flash", baseURL: ""), .zhipu)
+        XCTAssertEqual(LLMProvider.detect(model: "", baseURL: "https://open.bigmodel.cn/api/paas/v4"), .zhipu)
+        XCTAssertEqual(LLMProvider.detect(model: "big-pickle", baseURL: "https://opencode.ai/zen/v1"), .opencodeZen)
+        XCTAssertEqual(LLMProvider.detect(model: "kimi-k2.5", baseURL: "https://api.moonshot.ai"), .custom)
+    }
 }
 
 final class CastHistoryStoreTests: XCTestCase {

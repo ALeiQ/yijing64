@@ -2,6 +2,7 @@ import SwiftUI
 import YijingCore
 
 struct AboutTabView: View {
+    @State private var provider = LLMSettings.shared.provider
     @State private var apiKey = LLMSettings.shared.apiKey
     @State private var model = LLMSettings.shared.model
     @State private var baseURL = LLMSettings.shared.baseURL
@@ -28,7 +29,16 @@ struct AboutTabView: View {
         NavigationStack {
             Form {
                 Section {
-                    SecureField("API Key（智谱开放平台）", text: $apiKey)
+                    Picker("模型服务", selection: $provider) {
+                        ForEach(LLMProvider.allCases, id: \.self) { item in
+                            Text(item.displayName).tag(item)
+                        }
+                    }
+                    .onChange(of: provider) { _, newValue in
+                        LLMSettings.shared.provider = newValue
+                        loadFromSettings()
+                    }
+                    SecureField(keyPlaceholder, text: $apiKey)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .onChange(of: apiKey) { _, newValue in
@@ -49,7 +59,7 @@ struct AboutTabView: View {
                             LLMSettings.shared.baseURL = newValue
                             flash(.baseURL)
                         }
-                    Text("默认 DeepSeek（base_url 无结尾斜杠，模型 deepseek-flash，OpenAI 兼容）。也可改用智谱免费模型 glm-4.7-flash（open.bigmodel.cn）。计费按所填模型自动匹配：DeepSeek 按官方价（含峰谷）；智谱免费档为 ¥0；其他模型不估算。")
+                    Text(providerNote)
                         .font(.footnote)
                         .foregroundColor(.secondary)
                     if savedHint != nil {
@@ -99,6 +109,36 @@ struct AboutTabView: View {
         usageSummary = usageStore.summary()
     }
 
+    /// 切换服务商后，载入该服务商已保存（或预设）的 Key / 模型 / Base URL。
+    private func loadFromSettings() {
+        apiKey = LLMSettings.shared.apiKey
+        model = LLMSettings.shared.model
+        baseURL = LLMSettings.shared.baseURL
+        savedHint = nil
+    }
+
+    private var keyPlaceholder: String {
+        switch provider {
+        case .deepseek: return "API Key（DeepSeek）"
+        case .zhipu: return "API Key（智谱）"
+        case .opencodeZen: return "API Key（opencode Zen）"
+        case .custom: return "API Key"
+        }
+    }
+
+    private var providerNote: String {
+        switch provider {
+        case .deepseek:
+            return "DeepSeek 官方接口（base_url 无结尾斜杠，模型 deepseek-flash，OpenAI 兼容）。计费按官方价（含峰谷）估算。"
+        case .zhipu:
+            return "智谱开放平台（open.bigmodel.cn），glm-4.7-flash 为免费档。付费 GLM 按近似价估算。"
+        case .opencodeZen:
+            return "opencode Zen 网关（限时免费体验模型，需 Zen Key）。用量不参与费用估算。"
+        case .custom:
+            return "自定义任意 OpenAI 兼容服务：填写模型名与 Base URL。未识别的服务商不估算费用。"
+        }
+    }
+
     private static func tokenText(_ count: Int) -> String {
         count >= 1000 ? String(format: "%.1fk", Double(count) / 1000) : "\(count)"
     }
@@ -109,18 +149,15 @@ struct AboutTabView: View {
         return String(format: "%.0f%%", max(0, percent))
     }
 
-    /// 依据当前设置识别计费方式。
+    /// 依据当前模型与 Base URL 识别计费方式。
     private static func billingSchemeText(model: String, baseURL: String) -> String {
         guard let pricing = TokenPricing.resolve(model: model, baseURL: baseURL) else {
-            return "未识别（不估算）"
+            return baseURL.lowercased().contains("opencode.ai") ? "opencode Zen（不估算）" : "未识别（不估算）"
         }
         if pricing.appliesPeak {
             return "DeepSeek Flash（含峰谷）"
         }
-        if pricing.cacheMissIdleCNYPerMillion <= 0 {
-            return "智谱免费（¥0）"
-        }
-        return "智谱 GLM（近似）"
+        return pricing.cacheMissIdleCNYPerMillion <= 0 ? "智谱免费（¥0）" : "智谱 GLM（近似）"
     }
 
     private var currentSavedText: String {

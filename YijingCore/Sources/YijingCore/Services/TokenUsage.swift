@@ -164,16 +164,15 @@ public struct TokenPricing: Sendable {
 
     /// 依据设置中的模型名与 Base URL 自动选择计费方式；未识别返回 nil（不估算费用）。
     public static func resolve(model: String, baseURL: String) -> TokenPricing? {
-        let m = model.lowercased()
-        let url = baseURL.lowercased()
-        if m.contains("deepseek") {
+        switch LLMProvider.detect(model: model, baseURL: baseURL) {
+        case .deepseek:
             return .deepSeekFlash
-        }
-        let isZhipu = url.contains("bigmodel.cn") || m.contains("glm") || m.contains("chatglm")
-        if isZhipu {
+        case .zhipu:
+            let m = model.lowercased()
             return m.contains("flash") || m.contains("free") ? .zhipuFree : .zhipuDefault
+        case .opencodeZen, .custom:
+            return nil
         }
-        return nil
     }
 
     /// 是否处于 DeepSeek 高峰时段（北京时间周一至五 9-12、14-18）。
