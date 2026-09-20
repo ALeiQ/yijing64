@@ -354,11 +354,9 @@ struct AIInterpretationView: View {
     }
 
     /// 流式气泡：单独订阅 `LiveStream`，高频更新只重绘自身；
-    /// 流式期间用纯文本、禁用选择、思考正文按尾部截断以限制重排成本。
+    /// 流式期间用纯文本并禁用选择，展示完整思考与正文。
     private struct StreamingBubble: View {
         @ObservedObject var live: LiveStream
-
-        private static let reasoningPreviewLimit = 500
 
         var body: some View {
             if live.isStreaming {
@@ -373,7 +371,7 @@ struct AIInterpretationView: View {
                     .foregroundColor(.secondary)
 
                     if !live.reasoning.isEmpty {
-                        Text(Self.preview(live.reasoning))
+                        Text(live.reasoning)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -391,11 +389,6 @@ struct AIInterpretationView: View {
                         .fill(Color(.secondarySystemBackground))
                 }
             }
-        }
-
-        private static func preview(_ text: String) -> String {
-            guard text.count > reasoningPreviewLimit else { return text }
-            return "…" + text.suffix(reasoningPreviewLimit)
         }
     }
 
