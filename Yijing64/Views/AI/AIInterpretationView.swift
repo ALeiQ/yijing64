@@ -525,7 +525,7 @@ struct AIInterpretationView: View {
         guard scrollCoordinator.follow else { return }
         if streaming {
             let now = Date()
-            guard now.timeIntervalSince(scrollCoordinator.lastStreamScroll) >= 0.2 else { return }
+            guard now.timeIntervalSince(scrollCoordinator.lastStreamScroll) >= 0.1 else { return }
             scrollCoordinator.lastStreamScroll = now
             DispatchQueue.main.async {
                 withAnimation(nil) {
@@ -557,12 +557,18 @@ struct AIInterpretationView: View {
 
 /// 流式纯文本视图：基于非滚动 `UITextView`，新内容以**增量追加**方式写入
 /// `textStorage`，只让 CoreText 排布新增部分，避免长文本每次全量重排导致卡顿。
+/// 用 `CADisplayLink` 做打字机式平滑揭示：网络到达多少字与显示多少字解耦，
+/// 每帧追加少量字符（落后越多追加越快），把突发到达抹平为顺滑输出。
 /// 流式期间不可选中，也避免文本选择手势与滚动争抢。
 private struct StreamingTextView: UIViewRepresentable {
     let text: String
     var color: UIColor = .label
 
     private var font: UIFont { .preferredFont(forTextStyle: .subheadline) }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(font: font, color: color)
+    }
 
     func makeUIView(context: Context) -> UITextView {
         let view = UITextView()
@@ -575,26 +581,16 @@ private struct StreamingTextView: UIViewRepresentable {
         view.font = font
         view.textColor = color
         view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        context.coordinator.attach(view)
         return view
     }
 
     func updateUIView(_ view: UITextView, context: Context) {
-        view.font = font
-        view.textColor = color
-        let current = view.text ?? ""
-        if text == current { return }
-        if !current.isEmpty, text.hasPrefix(current) {
-            let delta = String(text.dropFirst(current.count))
-            view.textStorage.append(NSAttributedString(string: delta, attributes: [
-                .font: font,
-                .foregroundColor: color,
-            ]))
-        } else {
-            view.text = text
-            view.font = font
-            view.textColor = color
-        }
-        view.invalidateIntrinsicContentSize()
+        context.coordinator.update(font: font, color: color, target: text)
+    }
+
+    static func dismantleUIView(_ uiView: UITextView, coordinator: Coordinator) {
+        coordinator.stop()
     }
 
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextView, context: Context) -> CGSize? {
@@ -602,5 +598,74 @@ private struct StreamingTextView: UIViewRepresentable {
         guard width > 0 else { return nil }
         let size = uiView.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
         return CGSize(width: width, height: size.height)
+    }
+
+    /// 逐帧揭示文本（打字机）：`target` 是完整目标文本，`displayed` 是已显示部分。
+    final class Coordinator: NSObject {
+        private weak var view: UITextView?
+        private var link: CADisplayLink?
+        private var displayed = ""
+        private var target = ""
+        private var font: UIFont
+        private var color: UIColor
+
+        init(font: UIFont, color: UIColor) {
+            self.font = font
+            self.color = color
+        }
+
+        func attach(_ view: UITextView) {
+            self.view = view
+        }
+
+        func update(font: UIFont, color: UIColor, target: String) {
+            self.font = font
+            self.color = color
+            // 目标不是已显示内容的前缀（如重新生成）→ 重置。
+            if !target.hasPrefix(displayed) {
+                displayed = ""
+                view?.text = ""
+            }
+            self.target = target
+            guard let view else { return }
+            if displayed.count >= target.count {
+                stop()
+                return
+            }
+            if link == nil {
+                let link = CADisplayLink(target: self, selector: #selector(tick))
+                link.add(to: .main, forMode: .common)
+                self.link = link
+            }
+            view.invalidateIntrinsicContentSize()
+        }
+
+        func stop() {
+            link?.invalidate()
+            link = nil
+        }
+
+        @objc private func tick() {
+            guard let view else { stop(); return }
+            let remaining = target.count - displayed.count
+            if remaining <= 0 { stop(); return }
+            // 落后越多追加越快（几何追赶），平时每帧 1 字，避免暴冲。
+            let step = max(1, remaining / 6)
+            let newCount = min(displayed.count + step, target.count)
+            let end = target.index(target.startIndex, offsetBy: newCount)
+            let newText = String(target[..<end])
+            let delta = String(newText.dropFirst(displayed.count))
+            view.textStorage.append(NSAttributedString(string: delta, attributes: [
+                .font: font,
+                .foregroundColor: color,
+            ]))
+            displayed = newText
+            view.invalidateIntrinsicContentSize()
+            if displayed.count >= target.count { stop() }
+        }
+
+        deinit {
+            link?.invalidate()
+        }
     }
 }
