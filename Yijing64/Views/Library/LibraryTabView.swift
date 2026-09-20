@@ -45,18 +45,27 @@ struct LibraryTabView: View {
     }
 
     private var searchResultSection: some View {
-        Section("搜索结果") {
+        Group {
             if searchResults.isEmpty {
-                Text("未找到相关卦")
-                    .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
+                Section("搜索结果") {
+                    Text("未找到相关卦")
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+                }
             } else {
-                ForEach(searchResults, id: \.kingWenNumber) { hexagram in
-                    NavigationLink {
-                        HexagramDetailView(hexagram: hexagram)
-                    } label: {
-                        HexagramRow(hexagram: hexagram, query: query)
+                ForEach(palaces, id: \.self) { palace in
+                    let items = searchResults.filter { $0.palace == palace }
+                    if !items.isEmpty {
+                        Section(palace.name) {
+                            ForEach(items, id: \.kingWenNumber) { hexagram in
+                                NavigationLink {
+                                    HexagramDetailView(hexagram: hexagram)
+                                } label: {
+                                    HexagramRow(hexagram: hexagram, query: query)
+                                }
+                            }
+                        }
                     }
                 }
             }
