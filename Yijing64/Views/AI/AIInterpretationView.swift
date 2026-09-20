@@ -146,6 +146,16 @@ struct AIInterpretationView: View {
         _viewModel = StateObject(wrappedValue: AIInterpretationViewModel(record: record))
     }
 
+    /// 从卦库单卦详情进入（静态卦、不写入起卦记录）。
+    init(hexagram: Hexagram) {
+        let lines: [LineType] = (0..<6).map { hexagram.lineIsYang(at: $0) ? .youngYang : .youngYin }
+        _viewModel = StateObject(wrappedValue: AIInterpretationViewModel(
+            record: CastRecord(method: .manual, originalLines: lines),
+            persistsHistory: false,
+            methodLabel: "卦库·单卦解读"
+        ))
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             summaryHeader
@@ -272,7 +282,7 @@ struct AIInterpretationView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
-                    Text(result.method.rawValue)
+                    Text(viewModel.methodLabel)
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }

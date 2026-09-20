@@ -40,6 +40,10 @@ final class AIInterpretationViewModel: ObservableObject {
     private let store: CastHistoryStore
     private let usageStore: TokenUsageStore
     private let record: CastRecord
+    /// 是否将会话写入起卦记录（卦库浏览进入时为 false，避免污染历史）。
+    private let persistsHistory: Bool
+    /// 摘要处展示的起卦方式标签。
+    let methodLabel: String
     /// 已成功保存的对话轮次（仅成功轮次入队，避免悬空提问）。
     private var committed: [DialogueTurn]
 
@@ -60,9 +64,13 @@ final class AIInterpretationViewModel: ObservableObject {
         client: LLMClient? = nil,
         settings: LLMSettings = .shared,
         store: CastHistoryStore = CastHistoryStore(),
-        usageStore: TokenUsageStore = TokenUsageStore()
+        usageStore: TokenUsageStore = TokenUsageStore(),
+        persistsHistory: Bool = true,
+        methodLabel: String? = nil
     ) {
         self.record = record
+        self.persistsHistory = persistsHistory
+        self.methodLabel = methodLabel ?? record.method.rawValue
         self.client = client ?? LLMClient(config: settings.config, sessionID: record.id.uuidString)
         self.store = store
         self.usageStore = usageStore
@@ -100,7 +108,7 @@ final class AIInterpretationViewModel: ObservableObject {
             updated.question = trimmed
             updated.aiAnswer = refusal
             updated.transcript = committed
-            store.save(updated)
+            if persistsHistory { store.save(updated) }
             return
         }
 
@@ -156,7 +164,7 @@ final class AIInterpretationViewModel: ObservableObject {
                 updated.aiAnswer = content
                 updated.transcript = committed
                 updated.aiUsage = sessionUsage
-                store.save(updated)
+                if persistsHistory { store.save(updated) }
             } catch {
                 if let idx = turns.firstIndex(where: { $0.id == placeholder.id }) {
                     turns[idx] = AITurn(id: placeholder.id, role: .assistant, content: content, reasoning: reasoning, isStreaming: false)

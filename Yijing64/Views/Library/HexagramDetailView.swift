@@ -14,12 +14,24 @@ struct HexagramDetailView: View {
     var body: some View {
         List {
             headerSection
+            aiSection
             judgementSection
             linesSection
             relatedSection(content: content)
         }
         .navigationTitle("第\(hexagram.kingWenNumber)卦 · \(hexagram.fullName)")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var aiSection: some View {
+        Section {
+            NavigationLink {
+                AIInterpretationView(hexagram: hexagram)
+            } label: {
+                Label("AI 解卦", systemImage: "sparkles")
+                    .font(.body.weight(.medium))
+            }
+        }
     }
 
     private var headerSection: some View {
