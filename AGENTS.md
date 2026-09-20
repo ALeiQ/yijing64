@@ -16,12 +16,19 @@ bash scripts/sync.sh
 
 - 原生 macOS 版复用同一套 `Yijing64` 源码 + `YijingCore`（target：`YijingCoreMac` / `Yijing64Mac`），界面保持 TabView
 - 构建并启动：`bash scripts/mac.sh`（构建目录 `.build/mac`，Bundle ID `com.liuzixiang.Yijing64Mac`）
-- 本地使用 **ad-hoc 签名**（`CODE_SIGN_IDENTITY: "-"`），无需开发者账号 / 描述文件，也没有 7 天续签问题；`sync.sh` 只负责 iOS，不影响 Mac
+- 本地使用 **ad-hoc 签名**（`CODE_SIGN_IDENTITY: "-"`），无需开发者账号 / 描述文件，也没有 7 天续签问题
+- **Mac 版独立维护，不随 iOS 同步**：日常改代码 / 验证只跑 `sync.sh`（iOS），无需构建或打开 Mac 版；需要时才单独跑 `mac.sh`
 - iOS 专有 API（`UIKit`、`navigationBarTitleDisplayMode`、`keyboardType` 等）统一收敛在 `Yijing64/Views/Components/PlatformCompat.swift`，新增代码请使用其中的兼容扩展
+
+## 桌面启动器（模拟器）
+
+- 安装 / 更新：`bash scripts/install-simulator-launcher.sh` → 生成 `/Applications/易经模拟器.app`（复用 App 图标，ad-hoc 签名）
+- 双击图标：按需构建模拟器版（缺失才构建）→ 启动模拟器 → 安装并打开「易经六十四卦」
+- 强制重建：`bash scripts/simulator-launch.sh --build`；运行日志：`.build/sim-launcher.log`
 
 ## 环境信息
 
-- 模拟器 UDID：`928C09EA-3720-4D66-BA17-732A264FB76C`（iPhone 16 Pro），构建目录 `.build/dd`
+- 模拟器 UDID：`AEA49BA7-D3EB-4EDC-9497-546D596E1FDE`（iPhone 16 Pro Max），构建目录 `.build/dd`
 - 真机 UDID：`00008030-000804100CE8802E`，构建目录 `.build/device`
 - 真机 Team ID：`T8TG4WAR43`（个人/免费 Team）
 - Bundle ID：`com.liuzixiang.Yijing64`
@@ -46,7 +53,7 @@ bash scripts/sync.sh
 1. 更新 `project.yml`：`MARKETING_VERSION` 改为新版本号；`CURRENT_PROJECT_VERSION`（build 号）**递增 +1**
 2. 运行 `xcodegen generate` 重新生成工程（版本写入 pbxproj / Info.plist）
 3. 更新 `CHANGELOG.md`：新增对应版本条目（Keep a Changelog 风格）
-4. 验证：`cd YijingCore && swift test` → `bash scripts/sync.sh` → `bash scripts/mac.sh`（「关于」页应显示新版本号）
+4. 验证：`cd YijingCore && swift test` → `bash scripts/sync.sh`（「关于」页应显示新版本号）。Mac 版独立维护，无需一并构建/打开
 5. 提交推送后**打标签**：`git tag -a vX.Y.Z -m "X.Y.Z"` → `git push origin vX.Y.Z`
 
 版本号遵循语义化版本；App 内「关于」页版本由 Info.plist 动态读取，无需手改 UI。

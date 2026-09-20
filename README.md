@@ -1,6 +1,6 @@
 # 易经六十四卦 (Yijing64)
 
-当前版本：**2.5.0**（详见 [CHANGELOG.md](CHANGELOG.md)）
+当前版本：**2.6.0**（详见 [CHANGELOG.md](CHANGELOG.md)）
 
 SwiftUI 编写的《周易》六十四卦 App，含线下排卦、多种起卦方式、卦辞白话查询，以及基于大模型的 AI 解卦；同时提供 iOS 与原生 macOS 版本。
 
@@ -14,7 +14,7 @@ SwiftUI 编写的《周易》六十四卦 App，含线下排卦、多种起卦�
   - 直问直答：先给出明确吉凶判词，判别不利时不软化。
   - 卦库每卦详情页可直接进入该卦的 AI 解读（不写入起卦记录）。
 - **模型服务**：关于页可切换 DeepSeek / 智谱 / opencode Zen / opencode Go / 自定义，各服务商独立记忆 API Key 与连接配置；按所填模型自动匹配计费单价。
-- **Token 用量**：统计请求次数、输入/输出 tokens、缓存命中率与估算费用（关于页 / 记录 / 解卦页三处展示）。
+- **Token 用量**：统计请求次数、输入/输出 tokens、缓存命中率与估算费用，并按模型拆分（关于页 / 记录 / 解卦页三处展示，附所用模型名）。
 
 ## 项目结构
 
@@ -45,8 +45,11 @@ cd YijingCore && swift test
 # 一键构建并安装到模拟器与真机（含启动）
 bash scripts/sync.sh
 
-# 构建并启动原生 macOS App（本地 ad-hoc 签名，无需开发者账号）
+# 构建并启动原生 macOS App（独立于 iOS，按需运行；本地 ad-hoc 签名，无需开发者账号）
 bash scripts/mac.sh
+
+# 安装桌面启动器「易经模拟器」到 /Applications（双击即可在模拟器中打开）
+bash scripts/install-simulator-launcher.sh
 
 # 仅构建 App（模拟器）
 xcodebuild build -project Yijing64.xcodeproj -scheme Yijing64 \

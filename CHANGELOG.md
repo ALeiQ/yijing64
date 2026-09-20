@@ -4,6 +4,13 @@
 
 说明：1.0.0–1.2.0 为回溯整理；自 **2.0.0** 起正式版本化，每个版本均打 Git 标签 `vX.Y.Z`。
 
+## [2.6.0] - 2026-09-20
+
+### Added
+- Token 用量按「服务商 · 模型」拆分统计（服务商按 Base URL 识别并随记录持久化；关于页每项可展开明细；按 token 总量排序）
+- 解卦页用量条与起卦记录条目显示所用「服务商 · 模型」
+- 桌面启动器「易经模拟器」：`bash scripts/install-simulator-launcher.sh` 安装到 /Applications，双击即可在模拟器中打开
+
 ## [2.5.0] - 2026-09-20
 
 ### Added
@@ -99,6 +106,7 @@
 ### Added
 - 初版：六十四卦模型、八卦 / 八宫、三枚铜钱与梅花易数起卦、卦库浏览
 
+[2.6.0]: https://github.com/ALeiQ/yijing64/releases/tag/v2.6.0
 [2.5.0]: https://github.com/ALeiQ/yijing64/releases/tag/v2.5.0
 [2.4.4]: https://github.com/ALeiQ/yijing64/releases/tag/v2.4.4
 [2.4.3]: https://github.com/ALeiQ/yijing64/releases/tag/v2.4.3
