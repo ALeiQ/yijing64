@@ -170,7 +170,7 @@ public struct TokenPricing: Sendable {
         case .zhipu:
             let m = model.lowercased()
             return m.contains("flash") || m.contains("free") ? .zhipuFree : .zhipuDefault
-        case .opencodeZen, .custom:
+        case .opencodeZen, .opencodeGo, .custom:
             return nil
         }
     }

@@ -5,6 +5,7 @@ public enum LLMProvider: String, CaseIterable, Sendable {
     case deepseek
     case zhipu
     case opencodeZen
+    case opencodeGo
     case custom
 
     public var displayName: String {
@@ -12,6 +13,7 @@ public enum LLMProvider: String, CaseIterable, Sendable {
         case .deepseek: return "DeepSeek"
         case .zhipu: return "智谱"
         case .opencodeZen: return "opencode Zen"
+        case .opencodeGo: return "opencode Go"
         case .custom: return "自定义"
         }
     }
@@ -22,6 +24,7 @@ public enum LLMProvider: String, CaseIterable, Sendable {
         case .deepseek: return "deepseek-flash"
         case .zhipu: return "glm-4.7-flash"
         case .opencodeZen: return "big-pickle"
+        case .opencodeGo: return "deepseek-v4.1-flash"
         case .custom: return ""
         }
     }
@@ -32,6 +35,7 @@ public enum LLMProvider: String, CaseIterable, Sendable {
         case .deepseek: return "https://api.deepseek.com"
         case .zhipu: return "https://open.bigmodel.cn/api/paas/v4"
         case .opencodeZen: return "https://opencode.ai/zen/v1"
+        case .opencodeGo: return "https://opencode.ai/zen/go/v1"
         case .custom: return ""
         }
     }
@@ -40,14 +44,14 @@ public enum LLMProvider: String, CaseIterable, Sendable {
     public static func detect(model: String, baseURL: String) -> LLMProvider {
         let m = model.lowercased()
         let url = baseURL.lowercased()
+        if url.contains("opencode.ai") {
+            return url.contains("/zen/go") ? .opencodeGo : .opencodeZen
+        }
         if m.contains("deepseek") || url.contains("deepseek") {
             return .deepseek
         }
         if m.contains("glm") || m.contains("chatglm") || url.contains("bigmodel.cn") {
             return .zhipu
-        }
-        if url.contains("opencode.ai") {
-            return .opencodeZen
         }
         return .custom
     }

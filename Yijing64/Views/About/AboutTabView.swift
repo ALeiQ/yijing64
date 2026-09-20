@@ -122,6 +122,7 @@ struct AboutTabView: View {
         case .deepseek: return "API Key（DeepSeek）"
         case .zhipu: return "API Key（智谱）"
         case .opencodeZen: return "API Key（opencode Zen）"
+        case .opencodeGo: return "API Key（opencode Go）"
         case .custom: return "API Key"
         }
     }
@@ -134,6 +135,8 @@ struct AboutTabView: View {
             return "智谱开放平台（open.bigmodel.cn），glm-4.7-flash 为免费档。付费 GLM 按近似价估算。"
         case .opencodeZen:
             return "opencode Zen 网关（限时免费体验模型，需 Zen Key）。用量不参与费用估算。"
+        case .opencodeGo:
+            return "opencode Go 订阅（$10/月，稳定访问多家开源编码模型，需 Zen 账号 Key，模型如 deepseek-v4.1-flash、glm-5.3-flash）。用量不参与费用估算。"
         case .custom:
             return "自定义任意 OpenAI 兼容服务：填写模型名与 Base URL。未识别的服务商不估算费用。"
         }
@@ -151,13 +154,19 @@ struct AboutTabView: View {
 
     /// 依据当前模型与 Base URL 识别计费方式。
     private static func billingSchemeText(model: String, baseURL: String) -> String {
-        guard let pricing = TokenPricing.resolve(model: model, baseURL: baseURL) else {
-            return baseURL.lowercased().contains("opencode.ai") ? "opencode Zen（不估算）" : "未识别（不估算）"
-        }
-        if pricing.appliesPeak {
+        switch LLMProvider.detect(model: model, baseURL: baseURL) {
+        case .deepseek:
             return "DeepSeek Flash（含峰谷）"
+        case .zhipu:
+            let m = model.lowercased()
+            return m.contains("flash") || m.contains("free") ? "智谱免费（¥0）" : "智谱 GLM（近似）"
+        case .opencodeZen:
+            return "opencode Zen（不估算）"
+        case .opencodeGo:
+            return "opencode Go（不估算）"
+        case .custom:
+            return "未识别（不估算）"
         }
-        return pricing.cacheMissIdleCNYPerMillion <= 0 ? "智谱免费（¥0）" : "智谱 GLM（近似）"
     }
 
     private var currentSavedText: String {

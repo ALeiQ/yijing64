@@ -129,6 +129,8 @@ final class LLMSettingsTests: XCTestCase {
         XCTAssertEqual(LLMProvider.zhipu.defaultModel, "glm-4.7-flash")
         XCTAssertEqual(LLMProvider.opencodeZen.defaultModel, "big-pickle")
         XCTAssertEqual(LLMProvider.opencodeZen.defaultBaseURL, "https://opencode.ai/zen/v1")
+        XCTAssertEqual(LLMProvider.opencodeGo.defaultModel, "deepseek-v4.1-flash")
+        XCTAssertEqual(LLMProvider.opencodeGo.defaultBaseURL, "https://opencode.ai/zen/go/v1")
         XCTAssertEqual(LLMProvider.custom.defaultModel, "")
     }
 
@@ -140,6 +142,9 @@ final class LLMSettingsTests: XCTestCase {
         s.provider = .opencodeZen
         XCTAssertEqual(s.model, "big-pickle")
         XCTAssertTrue(s.baseURL.contains("opencode.ai"))
+        s.provider = .opencodeGo
+        XCTAssertEqual(s.model, "deepseek-v4.1-flash")
+        XCTAssertEqual(s.baseURL, "https://opencode.ai/zen/go/v1")
     }
 
     func testPerProviderKeyIsolated() {
@@ -184,6 +189,8 @@ final class LLMSettingsTests: XCTestCase {
         XCTAssertEqual(LLMProvider.detect(model: "glm-4.7-flash", baseURL: ""), .zhipu)
         XCTAssertEqual(LLMProvider.detect(model: "", baseURL: "https://open.bigmodel.cn/api/paas/v4"), .zhipu)
         XCTAssertEqual(LLMProvider.detect(model: "big-pickle", baseURL: "https://opencode.ai/zen/v1"), .opencodeZen)
+        XCTAssertEqual(LLMProvider.detect(model: "deepseek-v4.1-flash", baseURL: "https://opencode.ai/zen/go/v1"), .opencodeGo)
+        XCTAssertEqual(LLMProvider.detect(model: "glm-5.3-flash", baseURL: "https://opencode.ai/zen/go/v1"), .opencodeGo)
         XCTAssertEqual(LLMProvider.detect(model: "kimi-k2.5", baseURL: "https://api.moonshot.ai"), .custom)
     }
 }
