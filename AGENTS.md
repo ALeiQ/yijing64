@@ -34,6 +34,16 @@ bash scripts/sync.sh
 - 需要插线或重新信任的情况：证书被吊销 / 换电脑 / 重装系统、设备配对失效或不在同一 Wi‑Fi、换新设备首次安装。此时在 iPhone「设置 → 通用 → VPN 与设备管理」重新信任开发者
 - 免费账号额度：每 7 天约可创建 10 个 App ID 等（本项目复用同一 App ID，一般不会触发）
 
+## 发版流程
+
+1. 更新 `project.yml`：`MARKETING_VERSION` 改为新版本号；`CURRENT_PROJECT_VERSION`（build 号）**递增 +1**
+2. 运行 `xcodegen generate` 重新生成工程（版本写入 pbxproj / Info.plist）
+3. 更新 `CHANGELOG.md`：新增对应版本条目（Keep a Changelog 风格）
+4. 验证：`cd YijingCore && swift test` → `bash scripts/sync.sh`（「关于」页应显示新版本号）
+5. 提交推送后**打标签**：`git tag -a vX.Y.Z -m "X.Y.Z"` → `git push origin vX.Y.Z`
+
+版本号遵循语义化版本；App 内「关于」页版本由 Info.plist 动态读取，无需手改 UI。
+
 ## 其他
 
 - 新增 `YijingCore` 源文件后需先运行 `xcodegen generate` 重新生成工程

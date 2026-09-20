@@ -90,7 +90,7 @@ struct AboutTabView: View {
                     Text("按设置模型对应的官方单价与请求时刻时段估算，实际费用以平台账单为准。")
                 }
                 Section("易经六十四卦") {
-                    LabeledContent("版本", value: "1.0")
+                    LabeledContent("版本", value: Self.appVersion)
                     LabeledContent("起卦方式", value: "三枚铜钱 · 梅花易数")
                     LabeledContent("卦库", value: "文王卦序 · 八宫")
                 }
@@ -144,6 +144,16 @@ struct AboutTabView: View {
 
     private static func tokenText(_ count: Int) -> String {
         count >= 1000 ? String(format: "%.1fk", Double(count) / 1000) : "\(count)"
+    }
+
+    /// 版本号取自 Info.plist（由 project.yml 的 MARKETING_VERSION / CURRENT_PROJECT_VERSION 生成）。
+    private static var appVersion: String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
+        if let build, !build.isEmpty {
+            return "\(version)（\(build)）"
+        }
+        return version
     }
 
     private static func hitRateText(_ summary: TokenUsageStore.Summary) -> String {
