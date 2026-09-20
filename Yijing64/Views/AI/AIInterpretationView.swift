@@ -8,6 +8,11 @@ struct AIInterpretationView: View {
     @StateObject private var viewModel: AIInterpretationViewModel
     @EnvironmentObject private var router: AppRouter
 
+    /// 对话底部的稳定锚点，避免以高度变化的气泡作为滚动目标。
+    private static let bottomAnchorID = "chat-bottom"
+    /// 上次自动滚动时间，用于流式跟随时节流。
+    @State private var lastAutoScroll = Date.distantPast
+
     /// 聊天气泡主题：响应式言文（无块级背景），颜色跟随系统深浅模式。
     private static let chatTheme: Theme = Theme()
         .text {
@@ -162,7 +167,7 @@ struct AIInterpretationView: View {
             Divider()
             ScrollViewReader { proxy in
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 12) {
                         if showOutput {
                             ForEach(viewModel.turns) { turn in
                                 bubble(for: turn)
@@ -183,6 +188,9 @@ struct AIInterpretationView: View {
                         } else {
                             emptyHint
                         }
+                        Color.clear
+                            .frame(height: 1)
+                            .id(Self.bottomAnchorID)
                     }
                     .padding()
                 }
@@ -192,25 +200,22 @@ struct AIInterpretationView: View {
                 })
                 .onAppear {
                     // 回放历史会话时自动滚到底部（最新对话）；新会话保持顶部。
-                    guard viewModel.isReplay, let last = viewModel.turns.last else { return }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                        withAnimation(nil) {
-                            proxy.scrollTo(last.id, anchor: .bottom)
-                        }
-                    }
+                    guard viewModel.isReplay else { return }
+                    scrollToBottom(proxy, after: 0.15, force: true)
                 }
-                .onChange(of: viewModel.turns.last?.id) { _, _ in
-                    guard let last = viewModel.turns.last else { return }
-                    withAnimation(nil) {
-                        proxy.scrollTo(last.id, anchor: .bottom)
-                    }
+                .onChange(of: viewModel.turns.count) { _, _ in
+                    // 新气泡加入：延后滚动，避开键盘收起动画的高度竞态。
+                    scrollToBottom(proxy, after: 0.15, force: true)
                 }
                 .onChange(of: viewModel.turns.last?.content) { _, _ in
-                    // 流式进行中自动跟随到底部。
-                    guard viewModel.isSending, let last = viewModel.turns.last else { return }
-                    withAnimation(nil) {
-                        proxy.scrollTo(last.id, anchor: .bottom)
-                    }
+                    // 流式进行中自动跟随到底部（节流）。
+                    guard viewModel.isSending else { return }
+                    scrollToBottom(proxy)
+                }
+                .onChange(of: viewModel.isSending) { _, isSending in
+                    // 流式结束再补一次，补偿用量条出现等内容高度变化。
+                    guard !isSending else { return }
+                    scrollToBottom(proxy, after: 0.05, force: true)
                 }
             }
 
@@ -482,6 +487,19 @@ struct AIInterpretationView: View {
 
     private func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+
+    /// 滚动到底部锚点：流式跟随时节流（默认 ≥0.1s 一次），并可延后一个 runloop，
+    /// 避开布局未完成与键盘收起动画的窗口，防止滚动到空白区域。
+    private func scrollToBottom(_ proxy: ScrollViewProxy, after delay: TimeInterval = 0, force: Bool = false) {
+        let now = Date()
+        if !force, now.timeIntervalSince(lastAutoScroll) < 0.1 { return }
+        lastAutoScroll = now
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            withAnimation(nil) {
+                proxy.scrollTo(Self.bottomAnchorID, anchor: .bottom)
+            }
+        }
     }
 }
 
