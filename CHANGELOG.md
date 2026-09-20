@@ -4,6 +4,11 @@
 
 说明：1.0.0–1.2.0 为回溯整理；自 **2.0.0** 起正式版本化，每个版本均打 Git 标签 `vX.Y.Z`。
 
+## [2.4.3] - 2026-09-20
+
+### Changed
+- App 图标改用无水印版；移除误入仓库的图标源图
+
 ## [2.4.2] - 2026-09-20
 
 ### Added
@@ -83,6 +88,7 @@
 ### Added
 - 初版：六十四卦模型、八卦 / 八宫、三枚铜钱与梅花易数起卦、卦库浏览
 
+[2.4.3]: https://github.com/ALeiQ/yijing64/releases/tag/v2.4.3
 [2.4.2]: https://github.com/ALeiQ/yijing64/releases/tag/v2.4.2
 [2.4.1]: https://github.com/ALeiQ/yijing64/releases/tag/v2.4.1
 [2.4.0]: https://github.com/ALeiQ/yijing64/releases/tag/v2.4.0
