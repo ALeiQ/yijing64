@@ -100,6 +100,13 @@ final class AIServiceTests: XCTestCase {
         XCTAssertTrue(system.contains("勉强可行"), "应点名禁止“勉强可行”等措辞")
         XCTAssertTrue(system.contains("适量"), "应点名禁止“适量/适度”等回避措辞")
     }
+
+    func testSystemPromptRequiresChineseThroughout() {
+        let result = CastResult(method: .manual, originalLines: Array(repeating: .youngYin, count: 6))
+        let system = HexagramInterpretation.messages(for: result, question: "").first!.content
+        XCTAssertTrue(system.contains("全程使用中文"), "应要求思考与回答全程中文")
+        XCTAssertTrue(system.contains("包括思考过程"), "应明确包含思考过程，避免中英混合")
+    }
 }
 
 final class LLMSettingsTests: XCTestCase {

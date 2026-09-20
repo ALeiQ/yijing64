@@ -371,14 +371,11 @@ struct AIInterpretationView: View {
                     .foregroundColor(.secondary)
 
                     if !live.reasoning.isEmpty {
-                        Text(live.reasoning)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                        StreamingTextView(text: live.reasoning, color: .secondaryLabel)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     if !live.content.isEmpty {
-                        Text(live.content)
-                            .font(.subheadline)
+                        StreamingTextView(text: live.content, color: .label)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
@@ -511,4 +508,54 @@ struct AIInterpretationView: View {
         )
     }
     .environmentObject(AppRouter())
+}
+
+/// 流式纯文本视图：基于非滚动 `UITextView`，新内容以**增量追加**方式写入
+/// `textStorage`，只让 CoreText 排布新增部分，避免长文本每次全量重排导致卡顿。
+/// 流式期间不可选中，也避免文本选择手势与滚动争抢。
+private struct StreamingTextView: UIViewRepresentable {
+    let text: String
+    var color: UIColor = .label
+
+    private var font: UIFont { .preferredFont(forTextStyle: .subheadline) }
+
+    func makeUIView(context: Context) -> UITextView {
+        let view = UITextView()
+        view.isEditable = false
+        view.isSelectable = false
+        view.isScrollEnabled = false
+        view.backgroundColor = .clear
+        view.textContainerInset = .zero
+        view.textContainer.lineFragmentPadding = 0
+        view.font = font
+        view.textColor = color
+        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        return view
+    }
+
+    func updateUIView(_ view: UITextView, context: Context) {
+        view.font = font
+        view.textColor = color
+        let current = view.text ?? ""
+        if text == current { return }
+        if !current.isEmpty, text.hasPrefix(current) {
+            let delta = String(text.dropFirst(current.count))
+            view.textStorage.append(NSAttributedString(string: delta, attributes: [
+                .font: font,
+                .foregroundColor: color,
+            ]))
+        } else {
+            view.text = text
+            view.font = font
+            view.textColor = color
+        }
+        view.invalidateIntrinsicContentSize()
+    }
+
+    func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextView, context: Context) -> CGSize? {
+        let width = proposal.width ?? uiView.bounds.width
+        guard width > 0 else { return nil }
+        let size = uiView.sizeThatFits(CGSize(width: width, height: .greatestFiniteMagnitude))
+        return CGSize(width: width, height: size.height)
+    }
 }
