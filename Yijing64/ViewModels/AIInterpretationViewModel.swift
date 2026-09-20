@@ -63,7 +63,7 @@ final class AIInterpretationViewModel: ObservableObject {
         usageStore: TokenUsageStore = TokenUsageStore()
     ) {
         self.record = record
-        self.client = client ?? LLMClient(config: settings.config)
+        self.client = client ?? LLMClient(config: settings.config, sessionID: record.id.uuidString)
         self.store = store
         self.usageStore = usageStore
         self.sessionUsage = record.aiUsage

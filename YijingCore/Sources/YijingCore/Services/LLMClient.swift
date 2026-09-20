@@ -47,10 +47,13 @@ public final class LLMClient: Sendable {
 
     public let config: LLMConfig
     private let session: URLSession
+    /// 会话标识：opencode 网关要求随请求发送 `x-opencode-session`，用于路由与提示缓存。
+    private let sessionID: String
 
-    public init(config: LLMConfig, session: URLSession = .shared) {
+    public init(config: LLMConfig, session: URLSession = .shared, sessionID: String = UUID().uuidString) {
         self.config = config
         self.session = session
+        self.sessionID = sessionID
     }
 
     /// 非流式对话结果：正文 + token 用量。
@@ -78,8 +81,7 @@ public final class LLMClient: Sendable {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.timeoutInterval = 60
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(config.apiKey)", forHTTPHeaderField: "Authorization")
+        Self.applyStandardHeaders(to: &request, config: config, sessionID: sessionID)
 
         request.httpBody = try JSONSerialization.data(withJSONObject: Self.requestBody(
             model: config.model,
@@ -157,8 +159,7 @@ public final class LLMClient: Sendable {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.timeoutInterval = 60
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(config.apiKey)", forHTTPHeaderField: "Authorization")
+        Self.applyStandardHeaders(to: &request, config: config, sessionID: sessionID)
 
         request.httpBody = try JSONSerialization.data(withJSONObject: Self.requestBody(
             model: config.model,
@@ -203,6 +204,16 @@ public final class LLMClient: Sendable {
             }
         }
         return stream
+    }
+
+    /// 统一设置请求头。opencode 网关（Zen/Go）要求带上 `x-opencode-session` 才能路由。
+    static func applyStandardHeaders(to request: inout URLRequest, config: LLMConfig, sessionID: String) {
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(config.apiKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("Yijing64/1.0", forHTTPHeaderField: "User-Agent")
+        if config.baseURL.lowercased().contains("opencode.ai") {
+            request.setValue(sessionID, forHTTPHeaderField: "x-opencode-session")
+        }
     }
 
     /// 由 Base URL 构造 chat/completions 端点（容错结尾斜杠）。

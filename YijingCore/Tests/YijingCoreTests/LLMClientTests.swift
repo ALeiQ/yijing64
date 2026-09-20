@@ -138,6 +138,30 @@ final class LLMClientTests: XCTestCase {
         }
     }
 
+    func testOpencodeSendsSessionHeader() async throws {
+        var captured: URLRequest?
+        let session = LLMClientTests.session(expecting: .singleComplete, status: 200) { captured = $0 }
+        let client = LLMClient(
+            config: LLMConfig(baseURL: "https://opencode.ai/zen/go/v1", model: "deepseek-v4.1-flash", apiKey: "sk-test"),
+            session: session,
+            sessionID: "session-123"
+        )
+        _ = try await client.chat(messages: [.user("hi")], thinking: false)
+        XCTAssertEqual(captured?.value(forHTTPHeaderField: "x-opencode-session"), "session-123")
+        XCTAssertFalse((captured?.value(forHTTPHeaderField: "User-Agent") ?? "").isEmpty)
+    }
+
+    func testNonOpencodeOmitsSessionHeader() async throws {
+        var captured: URLRequest?
+        let session = LLMClientTests.session(expecting: .singleComplete, status: 200) { captured = $0 }
+        let client = LLMClient(
+            config: LLMConfig(baseURL: "https://api.deepseek.com", model: "deepseek-flash", apiKey: "sk-test"),
+            session: session
+        )
+        _ = try await client.chat(messages: [.user("hi")], thinking: false)
+        XCTAssertNil(captured?.value(forHTTPHeaderField: "x-opencode-session"), "非 opencode 端点不应带会话头")
+    }
+
     // MARK: - 模拟 URLSession
 
     private enum StubKind {
@@ -145,8 +169,9 @@ final class LLMClientTests: XCTestCase {
         case errorBody
     }
 
-    private static func session(expecting stub: StubKind, status: Int) -> URLSession {
+    private static func session(expecting stub: StubKind, status: Int, onRequest: ((URLRequest) -> Void)? = nil) -> URLSession {
         StubURLProtocol.requestHandler = { request in
+            onRequest?(request)
             let statusCode: Int
             let body: String
             if status >= 400 {
