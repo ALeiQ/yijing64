@@ -1,6 +1,6 @@
 # 易经六十四卦 (Yijing64)
 
-当前版本：**2.4.3**（详见 [CHANGELOG.md](CHANGELOG.md)）
+当前版本：**2.4.4**（详见 [CHANGELOG.md](CHANGELOG.md)）
 
 SwiftUI 编写的《周易》六十四卦 App，含线下排卦、多种起卦方式、卦辞白话查询，以及基于大模型的 AI 解卦。
 
