@@ -10,9 +10,6 @@ struct AIInterpretationView: View {
 
     /// 对话底部的稳定锚点，避免以高度变化的气泡作为滚动目标。
     private static let bottomAnchorID = "chat-bottom"
-    /// 滚动节流状态：用引用类型持有，修改其属性不会触发 View 重绘。
-    private final class ScrollThrottle { var last = Date.distantPast }
-    @State private var scrollThrottle = ScrollThrottle()
 
     /// 聊天气泡主题：响应式言文（无块级背景），颜色跟随系统深浅模式。
     private static let chatTheme: Theme = Theme()
@@ -174,15 +171,7 @@ struct AIInterpretationView: View {
                                 bubble(for: turn)
                                     .id(turn.id)
                             }
-                            if viewModel.isSending {
-                                HStack(spacing: 10) {
-                                    ProgressView()
-                                    Text("AI 解卦中…")
-                                        .foregroundColor(.secondary)
-                                }
-                                .padding(.vertical, 12)
-                                .frame(maxWidth: .infinity)
-                            }
+                            StreamingBubble(live: viewModel.live)
                             if let error = viewModel.errorMessage {
                                 errorCard(error)
                             }
@@ -202,21 +191,11 @@ struct AIInterpretationView: View {
                 .onAppear {
                     // 回放历史会话时自动滚到底部（最新对话）；新会话保持顶部。
                     guard viewModel.isReplay else { return }
-                    scrollToBottom(proxy, after: 0.15, force: true)
+                    scrollToBottom(proxy, after: 0.15)
                 }
                 .onChange(of: viewModel.turns.count) { _, _ in
-                    // 新气泡加入：延后滚动，避开键盘收起动画的高度竞态。
-                    scrollToBottom(proxy, after: 0.15, force: true)
-                }
-                .onChange(of: viewModel.turns.last?.content) { _, _ in
-                    // 流式进行中自动跟随到底部（节流）。
-                    guard viewModel.isSending else { return }
-                    scrollToBottom(proxy)
-                }
-                .onChange(of: viewModel.isSending) { _, isSending in
-                    // 流式结束再补一次，补偿用量条出现等内容高度变化。
-                    guard !isSending else { return }
-                    scrollToBottom(proxy, after: 0.05, force: true)
+                    // 仅在新气泡落定时滚动；思考流式期间不自动跟随，避免与手动滑动抢主线程。
+                    scrollToBottom(proxy, after: 0.15)
                 }
             }
 
@@ -268,7 +247,7 @@ struct AIInterpretationView: View {
     }
 
     private var showOutput: Bool {
-        !viewModel.turns.isEmpty || viewModel.isSending || viewModel.errorMessage != nil
+        !viewModel.turns.isEmpty || viewModel.errorMessage != nil
     }
 
     private var summaryCard: some View {
@@ -326,7 +305,7 @@ struct AIInterpretationView: View {
         }
     }
 
-    /// AI 气泡：思考过程（流式实时展示、完成后可折叠展开）+ Markdown 正文。
+    /// AI 气泡（已完成轮次）：思考过程可折叠展开 + Markdown 正文。
     private struct AssistantBubble: View {
         let turn: AITurn
         let theme: Theme
@@ -340,8 +319,8 @@ struct AIInterpretationView: View {
                         withAnimation(.easeInOut(duration: 0.2)) { expanded.toggle() }
                     } label: {
                         HStack(spacing: 6) {
-                            Image(systemName: turn.isStreaming ? "brain.head.profile" : "brain")
-                            Text(turn.isStreaming ? "思考中…" : "思考过程")
+                            Image(systemName: "brain")
+                            Text("思考过程")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             Spacer()
@@ -356,14 +335,6 @@ struct AIInterpretationView: View {
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .textSelection(.enabled)
-                            .transition(.opacity)
-                    }
-                } else if turn.isStreaming {
-                    HStack(spacing: 10) {
-                        ProgressView()
-                        Text("思考中…")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
                     }
                 }
                 if !turn.content.isEmpty {
@@ -379,15 +350,52 @@ struct AIInterpretationView: View {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color(.secondarySystemBackground))
             }
-            .onAppear {
-                expanded = turn.isStreaming
-            }
-            .onChange(of: turn.isStreaming) { _, newValue in
-                // 思考完成 → 折叠思考内容，用户可手动展开。
-                if !newValue {
-                    expanded = false
+        }
+    }
+
+    /// 流式气泡：单独订阅 `LiveStream`，高频更新只重绘自身；
+    /// 流式期间用纯文本、禁用选择、思考正文按尾部截断以限制重排成本。
+    private struct StreamingBubble: View {
+        @ObservedObject var live: LiveStream
+
+        private static let reasoningPreviewLimit = 500
+
+        var body: some View {
+            if live.isStreaming {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "brain.head.profile")
+                        Text("思考中…")
+                        Spacer()
+                        ProgressView()
+                    }
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                    if !live.reasoning.isEmpty {
+                        Text(Self.preview(live.reasoning))
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    if !live.content.isEmpty {
+                        Text(live.content)
+                            .font(.subheadline)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color(.secondarySystemBackground))
                 }
             }
+        }
+
+        private static func preview(_ text: String) -> String {
+            guard text.count > reasoningPreviewLimit else { return text }
+            return "…" + text.suffix(reasoningPreviewLimit)
         }
     }
 
@@ -490,12 +498,9 @@ struct AIInterpretationView: View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 
-    /// 滚动到底部锚点：流式跟随时节流（默认 ≥0.25s 一次），并可延后一个 runloop，
-    /// 避开布局未完成与键盘收起动画的窗口，防止滚动到空白区域。
-    private func scrollToBottom(_ proxy: ScrollViewProxy, after delay: TimeInterval = 0, force: Bool = false) {
-        let now = Date()
-        if !force, now.timeIntervalSince(scrollThrottle.last) < 0.25 { return }
-        scrollThrottle.last = now
+    /// 滚动到底部锚点。延后一个 runloop，避开布局未完成与键盘收起动画的窗口，
+    /// 防止滚动到空白区域。仅在新气泡落定时调用，思考流式期间不跟随。
+    private func scrollToBottom(_ proxy: ScrollViewProxy, after delay: TimeInterval = 0) {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             withAnimation(nil) {
                 proxy.scrollTo(Self.bottomAnchorID, anchor: .bottom)

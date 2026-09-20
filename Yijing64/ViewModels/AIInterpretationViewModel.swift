@@ -1,7 +1,7 @@
 import Foundation
 import YijingCore
 
-/// 对话展示模型：承载思考内容与流式标记（思考不写入持久化 transcript）。
+/// 对话展示模型（思考内容仅用于展示，不写入持久化 transcript）。
 struct AITurn: Identifiable, Equatable {
     enum Role { case user, assistant }
 
@@ -9,32 +9,49 @@ struct AITurn: Identifiable, Equatable {
     var role: Role
     var content: String
     var reasoning: String
-    var isStreaming: Bool
 
     init(
         id: UUID = UUID(),
         role: Role,
         content: String,
-        reasoning: String = "",
-        isStreaming: Bool = false
+        reasoning: String = ""
     ) {
         self.id = id
         self.role = role
         self.content = content
         self.reasoning = reasoning
-        self.isStreaming = isStreaming
+    }
+}
+
+/// 流式直播状态：高频增量更新只作用于订阅它的流式气泡，避免整页 10 次/秒重绘。
+@MainActor
+final class LiveStream: ObservableObject {
+    @Published var reasoning = ""
+    @Published var content = ""
+    @Published var isStreaming = false
+
+    func begin() {
+        reasoning = ""
+        content = ""
+        isStreaming = true
+    }
+
+    func finish() {
+        isStreaming = false
     }
 }
 
 @MainActor
 final class AIInterpretationViewModel: ObservableObject {
     @Published var question = ""
-    /// 本次会话已展示的对话气泡（含进行中的流式占位）。
+    /// 已完成的对话气泡（流式内容在 `live` 中，完成后才落入此处）。
     @Published private(set) var turns: [AITurn] = []
     @Published private(set) var isSending = false
     @Published private(set) var errorMessage: String?
     /// 本次会话累计的 AI token 用量（含开始前的历史记录累计）。
     @Published private(set) var sessionUsage: TokenUsage?
+    /// 进行中的流式内容（独立观察对象，避免整页重绘）。
+    let live = LiveStream()
 
     private let client: LLMClient
     private let store: CastHistoryStore
@@ -121,10 +138,7 @@ final class AIInterpretationViewModel: ObservableObject {
         isSending = true
         // 留空提问（直接解卦）关闭思考、快速响应；具体问题开启思考以保证质量。
         let thinking = !trimmed.isEmpty
-
-        // 流式占位气泡：思考与正文实时增量写入，完成后折叠思考过程。
-        let placeholder = AITurn(role: .assistant, content: "", reasoning: "", isStreaming: true)
-        turns.append(placeholder)
+        live.begin()
 
         Task {
             var reasoning = ""
@@ -140,17 +154,18 @@ final class AIInterpretationViewModel: ObservableObject {
                     }
                     reasoning += event.reasoning
                     content += event.content
-                    // 节流刷新 UI（约 100ms 一批），避免逐 token 重绘。
+                    // 节流刷新直播内容（约 100ms 一批），只重绘流式气泡。
                     let now = Date()
                     if now.timeIntervalSince(lastFlush) >= 0.1 {
-                        if let idx = turns.firstIndex(where: { $0.id == placeholder.id }) {
-                            turns[idx] = AITurn(id: placeholder.id, role: .assistant, content: content, reasoning: reasoning, isStreaming: true)
-                        }
+                        live.reasoning = reasoning
+                        live.content = content
                         lastFlush = now
                     }
                 }
-                guard let idx = turns.firstIndex(where: { $0.id == placeholder.id }) else { return }
-                turns[idx] = AITurn(id: placeholder.id, role: .assistant, content: content, reasoning: reasoning, isStreaming: false)
+                live.reasoning = reasoning
+                live.content = content
+                live.finish()
+                turns.append(AITurn(role: .assistant, content: content, reasoning: reasoning))
 
                 committed.append(contentsOf: [userTurn, DialogueTurn.assistant(content)])
                 if let raw = lastUsage {
@@ -166,8 +181,9 @@ final class AIInterpretationViewModel: ObservableObject {
                 updated.aiUsage = sessionUsage
                 if persistsHistory { store.save(updated) }
             } catch {
-                if let idx = turns.firstIndex(where: { $0.id == placeholder.id }) {
-                    turns[idx] = AITurn(id: placeholder.id, role: .assistant, content: content, reasoning: reasoning, isStreaming: false)
+                live.finish()
+                if !content.isEmpty || !reasoning.isEmpty {
+                    turns.append(AITurn(role: .assistant, content: content, reasoning: reasoning))
                 }
                 errorMessage = (error as? LLMClient.Error)?.message ?? error.localizedDescription
             }
