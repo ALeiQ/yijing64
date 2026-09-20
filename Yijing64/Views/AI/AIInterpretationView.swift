@@ -165,18 +165,21 @@ struct AIInterpretationView: View {
             Divider()
             ScrollViewReader { proxy in
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 12) {
-                        if showOutput {
-                            ForEach(viewModel.turns) { turn in
-                                bubble(for: turn)
-                                    .id(turn.id)
+                    VStack(alignment: .leading, spacing: 0) {
+                        LazyVStack(alignment: .leading, spacing: 12) {
+                            if showOutput {
+                                ForEach(viewModel.turns) { turn in
+                                    bubble(for: turn)
+                                        .id(turn.id)
+                                }
+                                if let error = viewModel.errorMessage {
+                                    errorCard(error)
+                                }
+                            } else {
+                                emptyHint
                             }
-                            if let error = viewModel.errorMessage {
-                                errorCard(error)
-                            }
-                        } else {
-                            emptyHint
                         }
+                        // 底部锚点放在懒加载容器之外，保证始终实例化，滚动定位可靠。
                         Color.clear
                             .frame(height: 1)
                             .id(Self.bottomAnchorID)
@@ -184,8 +187,8 @@ struct AIInterpretationView: View {
                     .padding()
                 }
                 .scrollDismissesKeyboard(.interactively)
-                .defaultScrollAnchor(showOutput ? .bottom : .top)
                 .simultaneousGesture(TapGesture().onEnded {
+                    // 收起键盘但保持当前滚动位置，不强制跳到底部。
                     hideKeyboard()
                 })
                 .onAppear {
@@ -198,7 +201,7 @@ struct AIInterpretationView: View {
                     scrollToBottom(proxy)
                 }
                 .onChange(of: viewModel.turns.last?.isStreaming) { _, isStreaming in
-                    // 完成折叠后内容变矮，补滚一次重新贴底（配合底部锚定，避免越界空白）。
+                    // 完成折叠后内容变矮，补滚一次重新贴底。
                     guard isStreaming == false else { return }
                     scrollToBottom(proxy)
                 }
