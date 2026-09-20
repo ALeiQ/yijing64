@@ -33,9 +33,12 @@ final class AIInterpretationViewModel: ObservableObject {
     @Published private(set) var turns: [AITurn] = []
     @Published private(set) var isSending = false
     @Published private(set) var errorMessage: String?
+    /// 本次会话累计的 AI token 用量（含开始前的历史记录累计）。
+    @Published private(set) var sessionUsage: TokenUsage?
 
     private let client: LLMClient
     private let store: CastHistoryStore
+    private let usageStore: TokenUsageStore
     private let record: CastRecord
     /// 已成功保存的对话轮次（仅成功轮次入队，避免悬空提问）。
     private var committed: [DialogueTurn]
@@ -56,11 +59,14 @@ final class AIInterpretationViewModel: ObservableObject {
         record: CastRecord,
         client: LLMClient? = nil,
         settings: LLMSettings = .shared,
-        store: CastHistoryStore = CastHistoryStore()
+        store: CastHistoryStore = CastHistoryStore(),
+        usageStore: TokenUsageStore = TokenUsageStore()
     ) {
         self.record = record
         self.client = client ?? LLMClient(config: settings.config)
         self.store = store
+        self.usageStore = usageStore
+        self.sessionUsage = record.aiUsage
 
         if !record.transcript.isEmpty {
             committed = record.transcript
@@ -119,7 +125,11 @@ final class AIInterpretationViewModel: ObservableObject {
             do {
                 let stream = try await client.chatStream(messages: conversation, thinking: thinking)
                 var lastFlush = Date.distantPast
+                var lastUsage: TokenUsage?
                 for try await event in stream {
+                    if let usage = event.usage {
+                        lastUsage = usage
+                    }
                     reasoning += event.reasoning
                     content += event.content
                     // 节流刷新 UI（约 50ms 一批），避免逐 token 重绘。
@@ -135,10 +145,17 @@ final class AIInterpretationViewModel: ObservableObject {
                 turns[idx] = AITurn(id: placeholder.id, role: .assistant, content: content, reasoning: reasoning, isStreaming: false)
 
                 committed.append(contentsOf: [userTurn, DialogueTurn.assistant(content)])
+                if let raw = lastUsage {
+                    var usage = raw
+                    usage.applyingCost(model: client.config.model, baseURL: client.config.baseURL)
+                    usageStore.record(usage, model: client.config.model)
+                    sessionUsage = sessionUsage.map { $0 + usage } ?? usage
+                }
                 var updated = record
                 updated.question = trimmed
                 updated.aiAnswer = content
                 updated.transcript = committed
+                updated.aiUsage = sessionUsage
                 store.save(updated)
             } catch {
                 if let idx = turns.firstIndex(where: { $0.id == placeholder.id }) {

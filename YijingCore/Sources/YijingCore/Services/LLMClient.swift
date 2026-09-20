@@ -53,10 +53,21 @@ public final class LLMClient: Sendable {
         self.session = session
     }
 
-    /// 发出对话，返回助手文本。
+    /// 非流式对话结果：正文 + token 用量。
+    public struct LLMChatResult: Sendable, Equatable {
+        public let content: String
+        public let usage: TokenUsage?
+
+        public init(content: String, usage: TokenUsage?) {
+            self.content = content
+            self.usage = usage
+        }
+    }
+
+    /// 发出对话，返回助手文本与用量。
     /// - Parameter thinking: 是否启用模型思考模式（DeepSeek V4 系默认启用思考，
     ///   思考 token 计入 max_tokens 预算；短输出场景建议关闭以保证拿到最终答案）。
-    public func chat(messages: [ChatMessage], thinking: Bool) async throws -> String {
+    public func chat(messages: [ChatMessage], thinking: Bool) async throws -> LLMChatResult {
         guard !config.apiKey.isEmpty else {
             throw Error("未设置 API Key，请先在“关于”页填写。")
         }
@@ -74,7 +85,9 @@ public final class LLMClient: Sendable {
             model: config.model,
             messages: messages,
             maxTokens: thinking ? config.thinkingMaxTokens : config.maxTokens,
-            thinking: thinking
+            thinking: thinking,
+            stream: false,
+            includeUsage: true
         ))
 
         let (data, response) = try await session.data(for: request)
@@ -91,11 +104,16 @@ public final class LLMClient: Sendable {
         guard let content = decoded.choices.first?.message.content, !content.isEmpty else {
             throw Self.emptyContentError(decoded)
         }
-        return content
+        var usage: TokenUsage? = nil
+        if var tokens = decoded.usage, tokens.totalTokens > 0 {
+            tokens.applyingCost(model: config.model, baseURL: config.baseURL)
+            usage = tokens
+        }
+        return LLMChatResult(content: content, usage: usage)
     }
 
     /// 构造 chat.completions 请求体。
-    static func requestBody(model: String, messages: [ChatMessage], maxTokens: Int, thinking: Bool, stream: Bool = false) -> [String: Any] {
+    static func requestBody(model: String, messages: [ChatMessage], maxTokens: Int, thinking: Bool, stream: Bool = false, includeUsage: Bool = false) -> [String: Any] {
         var body: [String: Any] = [
             "model": model,
             "messages": messages.map { ["role": $0.role, "content": $0.content] },
@@ -107,6 +125,9 @@ public final class LLMClient: Sendable {
             body["thinking"] = ["type": "enabled"]
         } else {
             body["thinking"] = ["type": "disabled"]
+        }
+        if stream, includeUsage {
+            body["stream_options"] = ["include_usage": true]
         }
         return body
     }
@@ -144,7 +165,8 @@ public final class LLMClient: Sendable {
             messages: messages,
             maxTokens: thinking ? config.thinkingMaxTokens : config.maxTokens,
             thinking: thinking,
-            stream: true
+            stream: true,
+            includeUsage: true
         ))
 
         let (bytes, response) = try await session.bytes(for: request)
@@ -168,7 +190,9 @@ public final class LLMClient: Sendable {
                             continuation.finish()
                             return
                         }
-                        if !chunk.reasoning.isEmpty || !chunk.content.isEmpty {
+                        if let usage = chunk.usage {
+                            continuation.yield(ChatStreamEvent(usage: usage))
+                        } else if !chunk.reasoning.isEmpty || !chunk.content.isEmpty {
                             continuation.yield(ChatStreamEvent(reasoning: chunk.reasoning, content: chunk.content))
                         }
                     }
@@ -215,9 +239,13 @@ struct ChatCompletionResponse: Codable {
         let finishReason: String?
     }
     let choices: [Choice]
+    /// 非流式响应的 token 用量。
+    let usage: TokenUsage?
 
     static func decode(_ data: Data) throws -> ChatCompletionResponse {
-        try JSONDecoder().decode(ChatCompletionResponse.self, from: data)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return try decoder.decode(ChatCompletionResponse.self, from: data)
     }
 }
 
@@ -227,10 +255,13 @@ public struct ChatStreamEvent: Sendable, Equatable {
     public let reasoning: String
     /// 正文增量。
     public let content: String
+    /// 流末尾的 token 用量（开启 include_usage 后由服务端返回）。
+    public let usage: TokenUsage?
 
-    public init(reasoning: String = "", content: String = "") {
+    public init(reasoning: String = "", content: String = "", usage: TokenUsage? = nil) {
         self.reasoning = reasoning
         self.content = content
+        self.usage = usage
     }
 }
 
@@ -240,8 +271,9 @@ enum SSEChunkParser {
         var reasoning: String
         var content: String
         var done: Bool
+        var usage: TokenUsage?
 
-        static let empty = Chunk(reasoning: "", content: "", done: false)
+        static let empty = Chunk(reasoning: "", content: "", done: false, usage: nil)
     }
 
     static func parse(line: String) -> Chunk {
@@ -252,18 +284,24 @@ enum SSEChunkParser {
         }
         let data = String(payload).trimmingCharacters(in: .whitespacesAndNewlines)
         guard data != "[DONE]" else {
-            return Chunk(reasoning: "", content: "", done: true)
+            return Chunk(reasoning: "", content: "", done: true, usage: nil)
         }
         guard let json = data.data(using: .utf8),
-              let obj = try? JSONSerialization.jsonObject(with: json) as? [String: Any],
-              let choices = obj["choices"] as? [[String: Any]],
+              let obj = try? JSONSerialization.jsonObject(with: json) as? [String: Any] else {
+            return .empty
+        }
+        // 流末尾的 usage 块（choices 为空且带 usage）。
+        if let usageJSON = obj["usage"] as? [String: Any],
+           let usage = TokenUsage.parse(json: usageJSON) {
+            return Chunk(reasoning: "", content: "", done: false, usage: usage)
+        }
+        guard let choices = obj["choices"] as? [[String: Any]],
               let first = choices.first else {
-            // 空 delta（如 usage 块）不再产出额外文本。
             return .empty
         }
         let delta = first["delta"] as? [String: Any] ?? [:]
         let reasoning = delta["reasoning_content"] as? String ?? ""
         let content = delta["content"] as? String ?? ""
-        return Chunk(reasoning: reasoning, content: content, done: false)
+        return Chunk(reasoning: reasoning, content: content, done: false, usage: nil)
     }
 }

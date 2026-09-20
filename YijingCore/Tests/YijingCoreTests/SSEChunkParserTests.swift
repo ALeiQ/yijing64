@@ -44,11 +44,28 @@ final class SSEChunkParserTests: XCTestCase {
     }
 
     func testIgnoresUsageChunkWithoutDelta() {
-        // 流末 usage 块无 delta，不应产出任何文本。
+        // 仅含 single 未 complete usage 字段的块应无文本产出。
         let chunk = SSEChunkParser.parse(
             line: #"data: {"choices":[{"delta":{}}],"usage":{"total_tokens":10}}"#
         )
         XCTAssertEqual(chunk.content, "")
+        XCTAssertFalse(chunk.done)
+    }
+
+    func testParsesUsageChunk() {
+        // 流末 usage 块（无 choices）应产出用量。
+        let chunk = SSEChunkParser.parse(
+            line: #"data: {"choices":[],"usage":{"prompt_tokens":120,"completion_tokens":60,"total_tokens":180,"prompt_cache_hit_tokens":40,"prompt_cache_miss_tokens":80}}"#
+        )
+        let usage = chunk.usage
+        XCTAssertNotNil(usage)
+        XCTAssertEqual(usage?.promptTokens, 120)
+        XCTAssertEqual(usage?.completionTokens, 60)
+        XCTAssertEqual(usage?.totalTokens, 180)
+        XCTAssertEqual(usage?.cacheHitTokens, 40)
+        XCTAssertEqual(usage?.cacheMissTokens, 80)
+        XCTAssertEqual(chunk.content, "")
+        XCTAssertEqual(chunk.reasoning, "")
         XCTAssertFalse(chunk.done)
     }
 

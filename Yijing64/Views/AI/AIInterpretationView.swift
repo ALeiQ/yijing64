@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import MarkdownUI
 import YijingCore
 
@@ -175,6 +176,10 @@ struct AIInterpretationView: View {
                     }
                     .padding()
                 }
+                .scrollDismissesKeyboard(.interactively)
+                .simultaneousGesture(TapGesture().onEnded {
+                    hideKeyboard()
+                })
                 .onAppear {
                     // 回放历史会话时自动滚到底部（最新对话）；新会话保持顶部。
                     guard viewModel.isReplay, let last = viewModel.turns.last else { return }
@@ -198,6 +203,8 @@ struct AIInterpretationView: View {
                     }
                 }
             }
+
+            usageLine
 
             inputBar
         }
@@ -420,6 +427,7 @@ struct AIInterpretationView: View {
                 }
 
             Button {
+                hideKeyboard()
                 viewModel.interpret()
             } label: {
                 Image(systemName: "arrow.up")
@@ -433,6 +441,37 @@ struct AIInterpretationView: View {
         .padding(.horizontal)
         .padding(.vertical, 8)
         .background(.bar)
+    }
+
+    // MARK: - 用量条
+
+    @ViewBuilder
+    private var usageLine: some View {
+        if let usage = viewModel.sessionUsage, usage.totalTokens > 0 {
+            HStack(spacing: 6) {
+                Image(systemName: "chart.bar.doc.horizontal")
+                    .font(.caption2)
+                Text("\(viewModel.isReplay ? "该次用量" : "本次用量")：输入 \(Self.tokenText(usage.promptTokens)) · 输出 \(Self.tokenText(usage.completionTokens)) · \(Self.costText(usage))")
+                    .font(.caption2)
+            }
+            .foregroundColor(.secondary)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal)
+            .padding(.bottom, 4)
+        }
+    }
+
+    private static func tokenText(_ count: Int) -> String {
+        count >= 1000 ? String(format: "%.1fk", Double(count) / 1000) : "\(count)"
+    }
+
+    private static func costText(_ usage: TokenUsage) -> String {
+        guard let cost = usage.costCNY else { return "费用—" }
+        return String(format: "≈¥%.4f", cost)
+    }
+
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 

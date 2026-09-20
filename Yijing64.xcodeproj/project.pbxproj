@@ -25,11 +25,14 @@
 		5F621418A002282B1147A712 /* YijingCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */; };
 		623CFB552D193B378778A707 /* YijingCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9DB1B0F41B26DEEDA36CAF0 /* YijingCore.framework */; };
 		6A889DC22F9A24ECC086B8AE /* AboutTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F7BA416C024218F142A964 /* AboutTabView.swift */; };
+		702EE8E031B106D67E77A315 /* TokenUsage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76BD427B1F6A299DC266CFC /* TokenUsage.swift */; };
 		85E56E887E1146B8CB6535EB /* LLMSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0658E927118FBC6AF248C84A /* LLMSettings.swift */; };
 		87B7F759A9787570FA91473F /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = B4C5E1A8D24955FE8D4AB90D /* MarkdownUI */; };
 		8DCBD4A0F8489DBA3722FFD9 /* Palace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5E6C556D9907A026195BC5 /* Palace.swift */; };
 		9386A2852369109137C1B32E /* HexagramInterpretation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885E3CE3926504359D2472E6 /* HexagramInterpretation.swift */; };
+		9A41F75BD443FB13FFFB46FA /* TokenUsageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F663B601BA15BB515BF7C624 /* TokenUsageTests.swift */; };
 		9E1B408B20BAF3F7A44CFDA9 /* LLMClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B94CD0249D55A78A498A86 /* LLMClientTests.swift */; };
+		9F690DA890BF44D6FE8FEE6C /* TokenUsageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6588595EAC8D6149B530A0 /* TokenUsageStore.swift */; };
 		9FD98B3869AEE6DE6E02AB68 /* PlumBlossomCasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1818089970E588725225B7 /* PlumBlossomCasterTests.swift */; };
 		A37B778F5AADCE7BB2B9E865 /* DivinationTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4730CBF8C0CE6BD17718467 /* DivinationTabView.swift */; };
 		A5A04DD6133F1CACEEDDC261 /* HexagramSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A597031D10465B1EA4E933D /* HexagramSearch.swift */; };
@@ -44,6 +47,7 @@
 		D237384A5D113D263CF8852E /* Trigram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB127ABBAA888BCE6F7F82F /* Trigram.swift */; };
 		D301679EFD1AFADE02D3E1D3 /* DivinationTopic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE891BE0555D469437C839D /* DivinationTopic.swift */; };
 		D4B29B2ED3BD7D74700AB73A /* CastingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A00BC786ACECC490F584AF /* CastingViewModel.swift */; };
+		D8253759651E597D3D1F9151 /* SSEChunkParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59992E835C94E05FF0F54FBC /* SSEChunkParserTests.swift */; };
 		D82D1BCFD3D419E2DDEAF9E2 /* PlumBlossomCaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */; };
 		DDCC7052DE056569DCD43D5A /* HexagramDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB19640CDA7BB190772AC0A /* HexagramDetailView.swift */; };
 		E98AB85BEE537349E3D22522 /* DivinationTopicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E98FD475DBAB1BE4DDE486D /* DivinationTopicTests.swift */; };
@@ -102,6 +106,8 @@
 		2E54E988C1001F09879CB9F0 /* AIInterpretationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIInterpretationViewModel.swift; sourceTree = "<group>"; };
 		2E98FD475DBAB1BE4DDE486D /* DivinationTopicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivinationTopicTests.swift; sourceTree = "<group>"; };
 		4AA5456E98D81D0010895837 /* AIInterpretationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIInterpretationView.swift; sourceTree = "<group>"; };
+		4B6588595EAC8D6149B530A0 /* TokenUsageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenUsageStore.swift; sourceTree = "<group>"; };
+		59992E835C94E05FF0F54FBC /* SSEChunkParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSEChunkParserTests.swift; sourceTree = "<group>"; };
 		5A597031D10465B1EA4E933D /* HexagramSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramSearch.swift; sourceTree = "<group>"; };
 		5ABED39358FBE9D636E7D7E6 /* CoinCaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCaster.swift; sourceTree = "<group>"; };
 		5EB19640CDA7BB190772AC0A /* HexagramDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramDetailView.swift; sourceTree = "<group>"; };
@@ -127,11 +133,13 @@
 		C9F7BA416C024218F142A964 /* AboutTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutTabView.swift; sourceTree = "<group>"; };
 		D836249D8DF0EED6AF21450F /* LibraryTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTabView.swift; sourceTree = "<group>"; };
 		E6A00BC786ACECC490F584AF /* CastingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastingViewModel.swift; sourceTree = "<group>"; };
+		E76BD427B1F6A299DC266CFC /* TokenUsage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenUsage.swift; sourceTree = "<group>"; };
 		E8559E6B68C5FCD1FE5416D3 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		E85E1CD34C9C9B13C5F1C97B /* YijingCoreTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = YijingCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F159539638046310ECBAB5A3 /* Yijing64App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Yijing64App.swift; sourceTree = "<group>"; };
 		F5FEEACC49E3FCCA65408BD0 /* CoinCasterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCasterTests.swift; sourceTree = "<group>"; };
 		F636093CB3345AEAD3134B84 /* CastMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastMethod.swift; sourceTree = "<group>"; };
+		F663B601BA15BB515BF7C624 /* TokenUsageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenUsageTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -244,6 +252,8 @@
 				92B4FBD949E772AE261C3CD6 /* LLMClient.swift */,
 				0658E927118FBC6AF248C84A /* LLMSettings.swift */,
 				71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */,
+				E76BD427B1F6A299DC266CFC /* TokenUsage.swift */,
+				4B6588595EAC8D6149B530A0 /* TokenUsageStore.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -276,6 +286,8 @@
 				192DD225A6CC0CC3299C3F04 /* HexagramDataTests.swift */,
 				11B94CD0249D55A78A498A86 /* LLMClientTests.swift */,
 				9A1818089970E588725225B7 /* PlumBlossomCasterTests.swift */,
+				59992E835C94E05FF0F54FBC /* SSEChunkParserTests.swift */,
+				F663B601BA15BB515BF7C624 /* TokenUsageTests.swift */,
 			);
 			path = YijingCoreTests;
 			sourceTree = "<group>";
@@ -443,6 +455,8 @@
 				42267A0C459A89D63577B96D /* HexagramDataTests.swift in Sources */,
 				9E1B408B20BAF3F7A44CFDA9 /* LLMClientTests.swift in Sources */,
 				9FD98B3869AEE6DE6E02AB68 /* PlumBlossomCasterTests.swift in Sources */,
+				D8253759651E597D3D1F9151 /* SSEChunkParserTests.swift in Sources */,
+				9A41F75BD443FB13FFFB46FA /* TokenUsageTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,6 +479,8 @@
 				1FF758BA9097B13617B68315 /* LineType.swift in Sources */,
 				8DCBD4A0F8489DBA3722FFD9 /* Palace.swift in Sources */,
 				D82D1BCFD3D419E2DDEAF9E2 /* PlumBlossomCaster.swift in Sources */,
+				702EE8E031B106D67E77A315 /* TokenUsage.swift in Sources */,
+				9F690DA890BF44D6FE8FEE6C /* TokenUsageStore.swift in Sources */,
 				D237384A5D113D263CF8852E /* Trigram.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

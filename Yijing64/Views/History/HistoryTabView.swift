@@ -94,6 +94,15 @@ private struct HistoryRow: View {
                 }
                 .font(.caption)
                 .foregroundColor(.secondary)
+                if let usage = record.aiUsage, usage.totalTokens > 0 {
+                    HStack(spacing: 6) {
+                        Text(costText(usage))
+                        Text("·")
+                        Text("\(tokenText(usage.totalTokens)) tokens")
+                    }
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                }
             }
             Spacer()
             if !record.aiAnswer.isEmpty {
@@ -103,6 +112,15 @@ private struct HistoryRow: View {
             }
         }
         .padding(.vertical, 2)
+    }
+
+    private func costText(_ usage: TokenUsage) -> String {
+        guard let cost = usage.costCNY else { return "费用—" }
+        return String(format: "≈¥%.4f", cost)
+    }
+
+    private func tokenText(_ count: Int) -> String {
+        count >= 1000 ? String(format: "%.1fk", Double(count) / 1000) : "\(count)"
     }
 }
 

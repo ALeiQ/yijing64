@@ -83,4 +83,112 @@ final class LLMClientTests: XCTestCase {
         )
         XCTAssertEqual(buffered["stream"] as? Bool, false, "默认非流式")
     }
+
+    func testRequestBodyStreamOptionsOnlyWhenStreamAndIncludeUsage() {
+        let streaming = LLMClient.requestBody(
+            model: "deepseek-flash",
+            messages: [.user("hello")],
+            maxTokens: 1000,
+            thinking: false,
+            stream: true,
+            includeUsage: true
+        )
+        XCTAssertEqual(streaming["stream_options"] as? [String: Bool], ["include_usage": true])
+
+        let noUsage = LLMClient.requestBody(
+            model: "deepseek-flash",
+            messages: [.user("hello")],
+            maxTokens: 1000,
+            thinking: false,
+            stream: true
+        )
+        XCTAssertNil(noUsage["stream_options"], "未请求用量时不应带 stream_options")
+
+        let buffered = LLMClient.requestBody(
+            model: "deepseek-flash",
+            messages: [.user("hello")],
+            maxTokens: 1000,
+            thinking: false,
+            stream: false,
+            includeUsage: true
+        )
+        XCTAssertNil(buffered["stream_options"], "非流式不应带 stream_options")
+    }
+
+    func testChatStripsWhitespaceAndReturnsContent() async throws {
+        let session = LLMClientTests.session(expecting: .singleComplete, status: 200)
+        let client = LLMClient(config: LLMConfig(apiKey: "sk-test"), session: session)
+        let result = try await client.chat(messages: [.user("hello")], thinking: false)
+        XCTAssertEqual(result.content, "你好")
+        XCTAssertEqual(result.usage?.promptTokens, 120)
+        XCTAssertEqual(result.usage?.completionTokens, 60)
+        XCTAssertEqual(result.usage?.cacheHitTokens, 40)
+    }
+
+    func testChatThrowsOnServerError() async throws {
+        let session = LLMClientTests.session(expecting: .errorBody, status: 429)
+        let client = LLMClient(config: LLMConfig(apiKey: "sk-test"), session: session)
+        do {
+            _ = try await client.chat(messages: [.user("hello")], thinking: false)
+            XCTFail("应抛出请求失败错误")
+        } catch let error as LLMClient.Error {
+            XCTAssertTrue(error.message.contains("429"))
+        } catch {
+            XCTFail("错误类型不符: \(error)")
+        }
+    }
+
+    // MARK: - 模拟 URLSession
+
+    private enum StubKind {
+        case singleComplete
+        case errorBody
+    }
+
+    private static func session(expecting stub: StubKind, status: Int) -> URLSession {
+        StubURLProtocol.requestHandler = { request in
+            let statusCode: Int
+            let body: String
+            if status >= 400 {
+                statusCode = status
+                body = #"{"error":{"message":"Rate limit exceeded"}}"#
+            } else {
+                statusCode = 200
+                body = #"""
+                {"choices":[{"index":0,"message":{"role":"assistant","content":"你好"},"finish_reason":"stop"}],
+                 "usage":{"prompt_tokens":120,"completion_tokens":60,"total_tokens":180,"prompt_cache_hit_tokens":40,"prompt_cache_miss_tokens":80}}
+                """#
+            }
+            let response = HTTPURLResponse(
+                url: request.url!,
+                statusCode: statusCode,
+                httpVersion: "HTTP/1.1",
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(body.utf8))
+        }
+        let config = URLSessionConfiguration.ephemeral
+        config.protocolClasses = [StubURLProtocol.self]
+        return URLSession(configuration: config)
+    }
+
+    private final class StubURLProtocol: URLProtocol {
+        static var requestHandler: ((URLRequest) -> (HTTPURLResponse, Data))?
+
+        override class func canInit(with request: URLRequest) -> Bool { true }
+        override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+
+        override func startLoading() {
+            guard let handler = Self.requestHandler else {
+                client?.urlProtocol(self, didFailWithError: URLError(.badServerResponse))
+                return
+            }
+            let (response, data) = handler(request)
+            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            client?.urlProtocol(self, didLoad: data)
+            client?.urlProtocolDidFinishLoading(self)
+        }
+
+        override func stopLoading() {}
+    }
 }

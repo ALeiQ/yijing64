@@ -35,6 +35,8 @@ public struct CastRecord: Identifiable, Codable, Sendable, Equatable {
     public var aiAnswer: String
     /// 完整多轮对话（旧数据缺该字段时解码为 []）。
     public var transcript: [DialogueTurn]
+    /// 该次会话的 AI token 用量累计（旧数据缺该字段时解码为 nil）。
+    public var aiUsage: TokenUsage?
 
     public init(
         id: UUID = UUID(),
@@ -43,7 +45,8 @@ public struct CastRecord: Identifiable, Codable, Sendable, Equatable {
         originalLines: [LineType],
         question: String = "",
         aiAnswer: String = "",
-        transcript: [DialogueTurn] = []
+        transcript: [DialogueTurn] = [],
+        aiUsage: TokenUsage? = nil
     ) {
         self.id = id
         self.date = date
@@ -52,10 +55,11 @@ public struct CastRecord: Identifiable, Codable, Sendable, Equatable {
         self.question = question
         self.aiAnswer = aiAnswer
         self.transcript = transcript
+        self.aiUsage = aiUsage
     }
 
     private enum CodingKeys: String, CodingKey {
-        case id, date, method, originalLines, question, aiAnswer, transcript
+        case id, date, method, originalLines, question, aiAnswer, transcript, aiUsage
     }
 
     public init(from decoder: Decoder) throws {
@@ -67,6 +71,7 @@ public struct CastRecord: Identifiable, Codable, Sendable, Equatable {
         question = try c.decodeIfPresent(String.self, forKey: .question) ?? ""
         aiAnswer = try c.decodeIfPresent(String.self, forKey: .aiAnswer) ?? ""
         transcript = try c.decodeIfPresent([DialogueTurn].self, forKey: .transcript) ?? []
+        aiUsage = try c.decodeIfPresent(TokenUsage.self, forKey: .aiUsage)
     }
 
     /// 由记录还原完整分析结果。
