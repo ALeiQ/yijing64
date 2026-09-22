@@ -28,6 +28,9 @@
 		443768AAFEC167C589EC4560 /* DivinationTopic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE891BE0555D469437C839D /* DivinationTopic.swift */; };
 		4DE38CBEADAB9CD1C44AFB8C /* HexagramData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9106E4F877B8D9465F0EBFB1 /* HexagramData.swift */; };
 		4EC32125C940EFCDB80343D5 /* Hexagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8611C6F9C5733B029E8A2147 /* Hexagram.swift */; };
+		4F595058E4CF4208D5412B3C /* ModelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A11E15EF8AA43F9AD0E811A /* ModelPickerView.swift */; };
+		5031835222CAEDE9C878F4E5 /* ModelCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FBB437E62374B22511D8BA /* ModelCatalog.swift */; };
+		51090F88A9123D1ADE6E3E23 /* ModelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A11E15EF8AA43F9AD0E811A /* ModelPickerView.swift */; };
 		5382E99B9697B6EDC0075CFC /* LibraryTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D836249D8DF0EED6AF21450F /* LibraryTabView.swift */; };
 		556A7695C2B03C90B440FDB9 /* CastResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0743E11D4E50D9B6280E5A8 /* CastResultView.swift */; };
 		5804BB3C10E38DBE3CEFCB37 /* HexagramDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 061159FE95A10A0ACE4B5066 /* HexagramDrawing.swift */; };
@@ -71,6 +74,7 @@
 		C2E4DE4BE5661570F698CC59 /* CastingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A00BC786ACECC490F584AF /* CastingViewModel.swift */; };
 		C4010AC97811B518F07DEA0E /* AIInterpretationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E54E988C1001F09879CB9F0 /* AIInterpretationViewModel.swift */; };
 		CF310EF3FAA40A4006D3ED19 /* CastHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F18B71E082E3AF2D57FDC96 /* CastHistoryStore.swift */; };
+		D0729C8856C4F663323CEF60 /* ModelCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1339F4121474F9D76B39C4B8 /* ModelCatalogTests.swift */; };
 		D237384A5D113D263CF8852E /* Trigram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB127ABBAA888BCE6F7F82F /* Trigram.swift */; };
 		D301679EFD1AFADE02D3E1D3 /* DivinationTopic.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE891BE0555D469437C839D /* DivinationTopic.swift */; };
 		D3FBCC32307776F5751FA88E /* YijingCoreMac.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB70A66863ED357D9088ABC /* YijingCoreMac.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -81,6 +85,7 @@
 		DA0F551545EC65734F40CCF6 /* TokenUsage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76BD427B1F6A299DC266CFC /* TokenUsage.swift */; };
 		DDCC7052DE056569DCD43D5A /* HexagramDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB19640CDA7BB190772AC0A /* HexagramDetailView.swift */; };
 		E0F6F0A0E63E08D881C77284 /* PlatformCompat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80404CECA1129D6CD90C3C65 /* PlatformCompat.swift */; };
+		E742F7963543AD64569B00D1 /* ModelCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FBB437E62374B22511D8BA /* ModelCatalog.swift */; };
 		E87452BA0CA11F19246D3102 /* HexagramInterpretation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885E3CE3926504359D2472E6 /* HexagramInterpretation.swift */; };
 		E98AB85BEE537349E3D22522 /* DivinationTopicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E98FD475DBAB1BE4DDE486D /* DivinationTopicTests.swift */; };
 		EAAD9803CC429EB175419FEC /* PlumBlossomCaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */; };
@@ -158,10 +163,13 @@
 		061159FE95A10A0ACE4B5066 /* HexagramDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramDrawing.swift; sourceTree = "<group>"; };
 		0658E927118FBC6AF248C84A /* LLMSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMSettings.swift; sourceTree = "<group>"; };
 		11B94CD0249D55A78A498A86 /* LLMClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMClientTests.swift; sourceTree = "<group>"; };
+		1339F4121474F9D76B39C4B8 /* ModelCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelCatalogTests.swift; sourceTree = "<group>"; };
 		192DD225A6CC0CC3299C3F04 /* HexagramDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramDataTests.swift; sourceTree = "<group>"; };
 		19B38EA3FC32DF7DAD628F05 /* Yijing64.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Yijing64.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E54E988C1001F09879CB9F0 /* AIInterpretationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIInterpretationViewModel.swift; sourceTree = "<group>"; };
 		2E98FD475DBAB1BE4DDE486D /* DivinationTopicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivinationTopicTests.swift; sourceTree = "<group>"; };
+		30FBB437E62374B22511D8BA /* ModelCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelCatalog.swift; sourceTree = "<group>"; };
+		3A11E15EF8AA43F9AD0E811A /* ModelPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPickerView.swift; sourceTree = "<group>"; };
 		4AA5456E98D81D0010895837 /* AIInterpretationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIInterpretationView.swift; sourceTree = "<group>"; };
 		4B6588595EAC8D6149B530A0 /* TokenUsageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenUsageStore.swift; sourceTree = "<group>"; };
 		59992E835C94E05FF0F54FBC /* SSEChunkParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSEChunkParserTests.swift; sourceTree = "<group>"; };
@@ -324,6 +332,7 @@
 				5A597031D10465B1EA4E933D /* HexagramSearch.swift */,
 				92B4FBD949E772AE261C3CD6 /* LLMClient.swift */,
 				0658E927118FBC6AF248C84A /* LLMSettings.swift */,
+				30FBB437E62374B22511D8BA /* ModelCatalog.swift */,
 				71F5F737682C84F64A50DEBC /* PlumBlossomCaster.swift */,
 				E76BD427B1F6A299DC266CFC /* TokenUsage.swift */,
 				4B6588595EAC8D6149B530A0 /* TokenUsageStore.swift */,
@@ -359,6 +368,7 @@
 				2E98FD475DBAB1BE4DDE486D /* DivinationTopicTests.swift */,
 				192DD225A6CC0CC3299C3F04 /* HexagramDataTests.swift */,
 				11B94CD0249D55A78A498A86 /* LLMClientTests.swift */,
+				1339F4121474F9D76B39C4B8 /* ModelCatalogTests.swift */,
 				9A1818089970E588725225B7 /* PlumBlossomCasterTests.swift */,
 				59992E835C94E05FF0F54FBC /* SSEChunkParserTests.swift */,
 				F663B601BA15BB515BF7C624 /* TokenUsageTests.swift */,
@@ -418,6 +428,7 @@
 			isa = PBXGroup;
 			children = (
 				C9F7BA416C024218F142A964 /* AboutTabView.swift */,
+				3A11E15EF8AA43F9AD0E811A /* ModelPickerView.swift */,
 			);
 			path = About;
 			sourceTree = "<group>";
@@ -589,6 +600,7 @@
 				E98AB85BEE537349E3D22522 /* DivinationTopicTests.swift in Sources */,
 				42267A0C459A89D63577B96D /* HexagramDataTests.swift in Sources */,
 				9E1B408B20BAF3F7A44CFDA9 /* LLMClientTests.swift in Sources */,
+				D0729C8856C4F663323CEF60 /* ModelCatalogTests.swift in Sources */,
 				9FD98B3869AEE6DE6E02AB68 /* PlumBlossomCasterTests.swift in Sources */,
 				D8253759651E597D3D1F9151 /* SSEChunkParserTests.swift in Sources */,
 				9A41F75BD443FB13FFFB46FA /* TokenUsageTests.swift in Sources */,
@@ -612,6 +624,7 @@
 				A68253F630C667A0FC02E075 /* LLMClient.swift in Sources */,
 				85E56E887E1146B8CB6535EB /* LLMSettings.swift in Sources */,
 				1FF758BA9097B13617B68315 /* LineType.swift in Sources */,
+				E742F7963543AD64569B00D1 /* ModelCatalog.swift in Sources */,
 				8DCBD4A0F8489DBA3722FFD9 /* Palace.swift in Sources */,
 				D82D1BCFD3D419E2DDEAF9E2 /* PlumBlossomCaster.swift in Sources */,
 				702EE8E031B106D67E77A315 /* TokenUsage.swift in Sources */,
@@ -636,6 +649,7 @@
 				D7C5DCA4F48175880C2FCA90 /* HistoryTabView.swift in Sources */,
 				F27AD1C4AC31A26748F1E7E2 /* LibraryTabView.swift in Sources */,
 				F22713DFCEFADF5DB455E4DA /* ManualCastTabView.swift in Sources */,
+				51090F88A9123D1ADE6E3E23 /* ModelPickerView.swift in Sources */,
 				E0F6F0A0E63E08D881C77284 /* PlatformCompat.swift in Sources */,
 				B5B17D40E29788A7A27E103E /* RootTabView.swift in Sources */,
 				1047B77B76C9EB6D6C49C723 /* Yijing64App.swift in Sources */,
@@ -658,6 +672,7 @@
 				13AE69CEBEEA5665D618F97A /* HistoryTabView.swift in Sources */,
 				5382E99B9697B6EDC0075CFC /* LibraryTabView.swift in Sources */,
 				ED1DCFC749E9080491856133 /* ManualCastTabView.swift in Sources */,
+				4F595058E4CF4208D5412B3C /* ModelPickerView.swift in Sources */,
 				B8D2D739F31FC0D75EB7BB9E /* PlatformCompat.swift in Sources */,
 				1C41A21BE60868D9A4F88E68 /* RootTabView.swift in Sources */,
 				3CAABB51C1A0C2935A92DD62 /* Yijing64App.swift in Sources */,
@@ -681,6 +696,7 @@
 				069DA99958E02803CA56FC21 /* LLMClient.swift in Sources */,
 				6DCBB966C7BD4582A652E6C0 /* LLMSettings.swift in Sources */,
 				9333D09ED69ED89EDB7FEA98 /* LineType.swift in Sources */,
+				5031835222CAEDE9C878F4E5 /* ModelCatalog.swift in Sources */,
 				FD6CB66F152479B4313B2BB5 /* Palace.swift in Sources */,
 				EAAD9803CC429EB175419FEC /* PlumBlossomCaster.swift in Sources */,
 				DA0F551545EC65734F40CCF6 /* TokenUsage.swift in Sources */,
@@ -717,7 +733,7 @@
 				CODE_SIGNING_ALLOWED = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -726,7 +742,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 2.6.0;
+				MARKETING_VERSION = 2.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64Mac;
 				PRODUCT_NAME = Yijing64;
 				SDKROOT = macosx;
@@ -741,7 +757,7 @@
 				CODE_SIGNING_ALLOWED = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -750,7 +766,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 2.6.0;
+				MARKETING_VERSION = 2.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64Mac;
 				PRODUCT_NAME = Yijing64;
 				SDKROOT = macosx;
@@ -1020,7 +1036,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1029,7 +1045,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6.0;
+				MARKETING_VERSION = 2.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64;
 				PRODUCT_NAME = Yijing64;
 				SDKROOT = iphoneos;
@@ -1043,7 +1059,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1052,7 +1068,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6.0;
+				MARKETING_VERSION = 2.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64;
 				PRODUCT_NAME = Yijing64;
 				SDKROOT = iphoneos;

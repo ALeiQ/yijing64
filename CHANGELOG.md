@@ -4,6 +4,15 @@
 
 说明：1.0.0–1.2.0 为回溯整理；自 **2.0.0** 起正式版本化，每个版本均打 Git 标签 `vX.Y.Z`。
 
+## [2.7.0] - 2026-09-21
+
+### Added
+- 模型改为从服务商自动拉取（`/models` 接口），弹出可搜索列表选择，支持刷新与手动输入；结果缓存 24 小时
+- opencode 网关自动过滤非 `chat/completions` 端点的模型（如 GPT/Claude/Gemini 系）
+
+### Notes
+- 智谱无模型列表接口，展示预设列表并支持手动输入
+
 ## [2.6.0] - 2026-09-20
 
 ### Added
@@ -106,6 +115,7 @@
 ### Added
 - 初版：六十四卦模型、八卦 / 八宫、三枚铜钱与梅花易数起卦、卦库浏览
 
+[2.7.0]: https://github.com/ALeiQ/yijing64/releases/tag/v2.7.0
 [2.6.0]: https://github.com/ALeiQ/yijing64/releases/tag/v2.6.0
 [2.5.0]: https://github.com/ALeiQ/yijing64/releases/tag/v2.5.0
 [2.4.4]: https://github.com/ALeiQ/yijing64/releases/tag/v2.4.4
