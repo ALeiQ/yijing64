@@ -16,6 +16,7 @@ xcodebuild -project "$PROJECT" -scheme "$SCHEME" \
   -destination "id=$SIM_UDID" -derivedDataPath .build/dd build
 
 echo "==> [1/2] 模拟器安装并启动"
+xcrun simctl bootstatus "$SIM_UDID" -b >/dev/null
 xcrun simctl terminate "$SIM_UDID" "$BUNDLE_ID" 2>/dev/null || true
 xcrun simctl install "$SIM_UDID" ".build/dd/Build/Products/Debug-iphonesimulator/Yijing64.app"
 xcrun simctl launch "$SIM_UDID" "$BUNDLE_ID"
