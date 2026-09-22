@@ -4,6 +4,16 @@
 
 SwiftUI 编写的《周易》六十四卦 App，含线下排卦、多种起卦方式、卦辞白话查询，以及基于大模型的 AI 解卦；同时提供 iOS 与原生 macOS 版本。
 
+## 演示
+
+| 线下排卦 | 起卦 | 卦库 |
+| --- | --- | --- |
+| ![线下排卦](docs/gifs/manual-cast.gif) | ![起卦](docs/gifs/cast-plum.gif) | ![卦库](docs/gifs/library.gif) |
+
+| AI 解卦 | 起卦记录 | 模型 / Token 用量 |
+| --- | --- | --- |
+| ![AI 解卦](docs/gifs/ai-interpretation.gif) | ![起卦记录](docs/gifs/history.gif) | ![模型与用量](docs/gifs/models-usage.gif) |
+
 ## 功能
 
 - **线下排卦**：手动录入线下摇卦结果，逐爻点击设置阴阳，可勾选动爻（存在则四态循环切换，否则仅在少阴/少阳间切换）；实时推断本卦/变卦/互卦/动爻/体用并展示卦辞。
