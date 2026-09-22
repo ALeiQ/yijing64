@@ -7,8 +7,14 @@ public enum CastMethod: String, CaseIterable, Sendable, Hashable, Identifiable, 
     case plumTime = "梅花·时间起卦"
     case plumNumbers = "梅花·报数起卦"
     case plumRandom = "梅花·随机起卦"
+    case hexagramLibrary = "卦库·单卦解读"
 
     public var id: Self { self }
+
+    /// 可用于「起卦」页选择的方式（排除手动录入与卦库解读）。
+    public static var castableMethods: [CastMethod] {
+        allCases.filter { $0 != .manual && $0 != .hexagramLibrary }
+    }
 
     public var subtitle: String {
         switch self {
@@ -17,6 +23,7 @@ public enum CastMethod: String, CaseIterable, Sendable, Hashable, Identifiable, 
         case .plumTime: return "以时间取上下卦与动爻"
         case .plumNumbers: return "以两个数字取卦"
         case .plumRandom: return "梅花易数 · 随机取卦"
+        case .hexagramLibrary: return "卦库单卦的直接解读"
         }
     }
 }

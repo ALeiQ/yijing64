@@ -67,7 +67,7 @@ struct DivinationTabView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("起卦方式")
                 .font(.headline)
-            ForEach(CastMethod.allCases.filter { $0 != .manual }) { m in
+            ForEach(CastMethod.castableMethods) { m in
                 Button {
                     viewModel.method = m
                 } label: {
