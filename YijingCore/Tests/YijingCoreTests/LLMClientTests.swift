@@ -162,11 +162,33 @@ final class LLMClientTests: XCTestCase {
         XCTAssertNil(captured?.value(forHTTPHeaderField: "x-opencode-session"), "非 opencode 端点不应带会话头")
     }
 
+    func testFetchModelsParsesList() async throws {
+        var captured: URLRequest?
+        let session = LLMClientTests.session(expecting: .modelsList, status: 200) { captured = $0 }
+        let client = LLMClient(config: LLMConfig(baseURL: "https://api.deepseek.com", apiKey: "sk-test"), session: session)
+        let models = try await client.fetchModels()
+        XCTAssertEqual(models.map(\.id), ["deepseek-flash", "deepseek-reasoner"])
+        XCTAssertEqual(captured?.httpMethod, "GET")
+        XCTAssertEqual(captured?.url?.absoluteString, "https://api.deepseek.com/models")
+    }
+
+    func testFetchModelsThrowsOnServerError() async throws {
+        let session = LLMClientTests.session(expecting: .modelsList, status: 401)
+        let client = LLMClient(config: LLMConfig(baseURL: "https://api.deepseek.com", apiKey: "sk-bad"), session: session)
+        do {
+            _ = try await client.fetchModels()
+            XCTFail("应抛出获取失败")
+        } catch let error as LLMClient.Error {
+            XCTAssertTrue(error.message.contains("401"))
+        }
+    }
+
     // MARK: - 模拟 URLSession
 
     private enum StubKind {
         case singleComplete
         case errorBody
+        case modelsList
     }
 
     private static func session(expecting stub: StubKind, status: Int, onRequest: ((URLRequest) -> Void)? = nil) -> URLSession {
@@ -179,10 +201,15 @@ final class LLMClientTests: XCTestCase {
                 body = #"{"error":{"message":"Rate limit exceeded"}}"#
             } else {
                 statusCode = 200
-                body = #"""
-                {"choices":[{"index":0,"message":{"role":"assistant","content":"你好"},"finish_reason":"stop"}],
-                 "usage":{"prompt_tokens":120,"completion_tokens":60,"total_tokens":180,"prompt_cache_hit_tokens":40,"prompt_cache_miss_tokens":80}}
-                """#
+                switch stub {
+                case .modelsList:
+                    body = #"{"object":"list","data":[{"id":"deepseek-flash","object":"model"},{"id":"deepseek-reasoner","object":"model"}]}"#
+                default:
+                    body = #"""
+                    {"choices":[{"index":0,"message":{"role":"assistant","content":"你好"},"finish_reason":"stop"}],
+                     "usage":{"prompt_tokens":120,"completion_tokens":60,"total_tokens":180,"prompt_cache_hit_tokens":40,"prompt_cache_miss_tokens":80}}
+                    """#
+                }
             }
             let response = HTTPURLResponse(
                 url: request.url!,

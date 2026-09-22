@@ -127,6 +127,44 @@ public final class LLMSettings {
         value(for: .apiKey, provider: provider)
     }
 
+    // MARK: - 模型列表缓存
+
+    /// 模型列表缓存有效期。
+    public static let modelsCacheTTL: TimeInterval = 24 * 3600
+
+    private func modelsKey(_ provider: LLMProvider) -> String { "llm.\(provider.rawValue).models" }
+    private func modelsBaseURLKey(_ provider: LLMProvider) -> String { "llm.\(provider.rawValue).models.baseURL" }
+    private func modelsDateKey(_ provider: LLMProvider) -> String { "llm.\(provider.rawValue).models.fetchedAt" }
+
+    /// 读取缓存的模型列表；Base URL 变化或没有缓存时返回 nil。
+    public func cachedModels(for provider: LLMProvider, baseURL: String) -> [LLMModel]? {
+        guard defaults.string(forKey: modelsBaseURLKey(provider)) == baseURL,
+              let json = defaults.string(forKey: modelsKey(provider)),
+              let data = json.data(using: .utf8),
+              let ids = try? JSONDecoder().decode([String].self, from: data),
+              !ids.isEmpty else {
+            return nil
+        }
+        return ids.map(LLMModel.init)
+    }
+
+    /// 缓存是否已过期（无缓存视为过期）。
+    public func isModelsCacheStale(for provider: LLMProvider) -> Bool {
+        guard let date = defaults.object(forKey: modelsDateKey(provider)) as? Date else { return true }
+        return Date().timeIntervalSince(date) > Self.modelsCacheTTL
+    }
+
+    /// 写入模型列表缓存。
+    public func saveModels(_ models: [LLMModel], for provider: LLMProvider, baseURL: String) {
+        guard !models.isEmpty else { return }
+        if let data = try? JSONEncoder().encode(models.map(\.id)),
+           let json = String(data: data, encoding: .utf8) {
+            defaults.set(json, forKey: modelsKey(provider))
+        }
+        defaults.set(baseURL, forKey: modelsBaseURLKey(provider))
+        defaults.set(Date(), forKey: modelsDateKey(provider))
+    }
+
     // MARK: - 存储
 
     private enum Field: String {

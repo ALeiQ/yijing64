@@ -7,6 +7,7 @@ struct AboutTabView: View {
     @State private var model = LLMSettings.shared.model
     @State private var baseURL = LLMSettings.shared.baseURL
     @State private var savedHint: SaveHint?
+    @State private var showingModelPicker = false
     @State private var usageSummary = TokenUsageStore.Summary()
     @State private var modelSummaries: [TokenUsageStore.ModelUsageSummary] = []
 
@@ -46,13 +47,24 @@ struct AboutTabView: View {
                             LLMSettings.shared.apiKey = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                             flash(.key)
                         }
-                    TextField("模型", text: $model)
-                        .noTextAutocapitalization()
-                        .autocorrectionDisabled()
-                        .onChange(of: model) { _, newValue in
-                            LLMSettings.shared.model = newValue
-                            flash(.model)
+                    Button {
+                        showingModelPicker = true
+                    } label: {
+                        HStack {
+                            Text("模型")
+                                .foregroundColor(.primary)
+                            Spacer()
+                            Text(model.isEmpty ? "选择" : model)
+                                .foregroundColor(.secondary)
                         }
+                    }
+                    .sheet(isPresented: $showingModelPicker) {
+                        ModelPickerView(provider: provider, baseURL: baseURL, apiKey: apiKey, selected: $model)
+                    }
+                    .onChange(of: model) { _, newValue in
+                        LLMSettings.shared.model = newValue
+                        flash(.model)
+                    }
                     TextField("Base URL", text: $baseURL)
                         .noTextAutocapitalization()
                         .autocorrectionDisabled()

@@ -206,10 +206,39 @@ public final class LLMClient: Sendable {
         return stream
     }
 
+    /// 拉取服务端可用模型列表（OpenAI 兼容 `GET {base}/models`）。
+    /// 不强制要求 API Key：opencode 的模型目录公开可读。
+    public func fetchModels() async throws -> [LLMModel] {
+        guard let url = ModelCatalog.modelsURL(baseURL: config.baseURL) else {
+            throw Error("Base URL 无效。")
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.timeoutInterval = 20
+        Self.applyStandardHeaders(to: &request, config: config, sessionID: sessionID)
+
+        let (data, response) = try await session.data(for: request)
+        guard let http = response as? HTTPURLResponse else {
+            throw Error("网络响应异常。")
+        }
+        guard (200..<300).contains(http.statusCode) else {
+            let detail = String(data: data, encoding: .utf8) ?? ""
+            throw Error("获取模型列表失败（\(http.statusCode)）。\(Self.friendlyDetail(detail))")
+        }
+        let models = ModelCatalog.parseModels(data)
+        guard !models.isEmpty else {
+            throw Error("未获取到模型列表。")
+        }
+        return models
+    }
+
     /// 统一设置请求头。opencode 网关（Zen/Go）要求带上 `x-opencode-session` 才能路由。
     static func applyStandardHeaders(to request: inout URLRequest, config: LLMConfig, sessionID: String) {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(config.apiKey)", forHTTPHeaderField: "Authorization")
+        if !config.apiKey.isEmpty {
+            request.setValue("Bearer \(config.apiKey)", forHTTPHeaderField: "Authorization")
+        }
         request.setValue("Yijing64/1.0", forHTTPHeaderField: "User-Agent")
         if config.baseURL.lowercased().contains("opencode.ai") {
             request.setValue(sessionID, forHTTPHeaderField: "x-opencode-session")
