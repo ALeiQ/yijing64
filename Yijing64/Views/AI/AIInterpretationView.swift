@@ -273,52 +273,45 @@ struct AIInterpretationView: View {
         let original = result.original
         let hasMoving = !result.movingLineTitles.isEmpty
         return VStack(alignment: .leading, spacing: 10) {
-            HStack(alignment: .top) {
-                NavigationLink {
-                    HexagramDetailView(hexagram: original)
-                } label: {
-                    HexagramDrawingView(lines: result.originalLines)
-                }
-                .buttonStyle(.plain)
-
+            HStack(alignment: .top, spacing: 16) {
                 Spacer()
 
-                VStack(alignment: .trailing, spacing: 4) {
-                    NavigationLink {
-                        HexagramDetailView(hexagram: original)
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text(original.fullName)
-                                .font(.title3.bold())
-                            Image(systemName: "chevron.right")
-                                .font(.caption2)
-                        }
-                        .foregroundColor(.primary)
-                    }
-                    .buttonStyle(.plain)
-
-                    if hasMoving {
-                        Text("动爻：\(result.movingLineTitles.joined(separator: "、"))")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        NavigationLink {
-                            HexagramDetailView(hexagram: result.changed)
-                        } label: {
-                            HStack(spacing: 4) {
-                                Text("变卦：\(result.changed.fullName)")
-                                    .font(.caption)
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 9))
-                            }
-                            .foregroundColor(.secondary)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    Text(viewModel.methodLabel)
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+                hexagramTile(name: original.fullName, lines: result.originalLines) {
+                    HexagramDetailView(hexagram: original)
                 }
+
+                if hasMoving {
+                    VStack(spacing: 2) {
+                        Image(systemName: "arrow.right")
+                            .font(.body.bold())
+                            .foregroundColor(.orange)
+                        Text("变")
+                            .font(.caption2)
+                            .foregroundColor(.orange)
+                    }
+                    .padding(.top, 20)
+
+                    hexagramTile(name: result.changed.fullName, lines: result.originalLines.map { $0.changed }) {
+                        HexagramDetailView(hexagram: result.changed)
+                    }
+                }
+
+                Spacer()
             }
+            .frame(maxWidth: .infinity)
+
+            HStack(spacing: 6) {
+                if hasMoving {
+                    Label("动爻 \(result.movingLineTitles.joined(separator: "、"))", systemImage: "sparkles")
+                } else {
+                    Label("静卦 · 无动爻", systemImage: "moon.stars")
+                }
+                Spacer()
+                Text(viewModel.methodLabel)
+            }
+            .font(.caption2)
+            .foregroundColor(.secondary)
+
             if viewModel.isReplay {
                 Label("回放历史会话 · \(viewModel.recordDate.formatted(date: .abbreviated, time: .shortened))", systemImage: "clock.arrow.circlepath")
                     .font(.caption)
@@ -331,6 +324,23 @@ struct AIInterpretationView: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color.systemBackground)
         }
+    }
+
+    private func hexagramTile(
+        name: String,
+        lines: [LineType],
+        @ViewBuilder destination: @escaping () -> HexagramDetailView
+    ) -> some View {
+        NavigationLink {
+            destination()
+        } label: {
+            VStack(spacing: 6) {
+                HexagramDrawingView(lines: lines)
+                Text(name)
+                    .font(.subheadline.bold())
+            }
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - 消息气泡
