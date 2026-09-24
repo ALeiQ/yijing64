@@ -11,19 +11,21 @@ public enum HexagramInterpretation {
 
     /// 生成完整对话消息序列：system + 卦象上下文始终在首，随后按历史追加 user/assistant，
     /// 最后追加本轮提问。
+    /// **空白提问（默认解卦）严格只看卦象**：忽略全部历史上下文，避免与先前对话结合。
     public static func buildConversation(
         result: CastResult,
         question: String,
         history: [DialogueTurn]
     ) -> [ChatMessage] {
         let trimmed = question.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            return messages(for: result, question: "")
+        }
         var messages: [ChatMessage] = [.system(systemPrompt), .user(buildContext(result))]
         for turn in history {
             messages.append(.init(role: turn.role.rawValue, content: turn.content))
         }
-        if !trimmed.isEmpty {
-            messages.append(.user(trimmed))
-        }
+        messages.append(.user(trimmed))
         return messages
     }
 

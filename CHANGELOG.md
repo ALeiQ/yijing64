@@ -4,6 +4,14 @@
 
 说明：1.0.0–1.2.0 为回溯整理；自 **2.0.0** 起正式版本化，每个版本均打 Git 标签 `vX.Y.Z`。
 
+## [2.8.0] - 2026-09-21
+
+### Added
+- AI 解卦页的卦象/卦名、变卦可点击，跳转卦库对应卦详情
+
+### Changed
+- 空白发送的默认解卦严格只看卦象，不再结合历史对话上下文
+
 ## [2.7.1] - 2026-09-21
 
 ### Fixed
@@ -120,6 +128,7 @@
 ### Added
 - 初版：六十四卦模型、八卦 / 八宫、三枚铜钱与梅花易数起卦、卦库浏览
 
+[2.8.0]: https://github.com/ALeiQ/yijing64/releases/tag/v2.8.0
 [2.7.1]: https://github.com/ALeiQ/yijing64/releases/tag/v2.7.1
 [2.7.0]: https://github.com/ALeiQ/yijing64/releases/tag/v2.7.0
 [2.6.0]: https://github.com/ALeiQ/yijing64/releases/tag/v2.6.0

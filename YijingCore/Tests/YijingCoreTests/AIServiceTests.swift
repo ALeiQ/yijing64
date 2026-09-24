@@ -69,6 +69,20 @@ final class AIServiceTests: XCTestCase {
         XCTAssertEqual(messages[1].role, "user")
     }
 
+    func testBuildConversationEmptyQuestionIgnoresHistory() {
+        let result = CastResult(method: .manual, originalLines: Array(repeating: .youngYang, count: 6))
+        let history = [
+            DialogueTurn.user("上次问事业"),
+            DialogueTurn.assistant("上次的回答"),
+        ]
+        // 空白（默认解卦）严格只看卦象：忽略任何历史上下文。
+        let messages = HexagramInterpretation.buildConversation(result: result, question: "   ", history: history)
+        XCTAssertEqual(messages.count, 2, "空白默认解卦不应携带历史消息")
+        XCTAssertEqual(messages[0].role, "system")
+        XCTAssertFalse(messages.contains { $0.content.contains("上次问事业") })
+        XCTAssertFalse(messages.contains { $0.content.contains("上次的回答") })
+    }
+
     func testDuplicateQuestionsNotMerged() {
         let result = CastResult(method: .manual, originalLines: Array(repeating: .youngYang, count: 6))
         let history = [DialogueTurn.user("求财")]

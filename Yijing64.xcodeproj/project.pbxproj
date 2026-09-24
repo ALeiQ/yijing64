@@ -55,6 +55,7 @@
 		9E1B408B20BAF3F7A44CFDA9 /* LLMClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B94CD0249D55A78A498A86 /* LLMClientTests.swift */; };
 		9F690DA890BF44D6FE8FEE6C /* TokenUsageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6588595EAC8D6149B530A0 /* TokenUsageStore.swift */; };
 		9FD98B3869AEE6DE6E02AB68 /* PlumBlossomCasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1818089970E588725225B7 /* PlumBlossomCasterTests.swift */; };
+		A2428291EA55064E9D56F516 /* CastMethodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16EAFD01410232DCE0FEB4EB /* CastMethodTests.swift */; };
 		A2861F6A636F34C35F08AC7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA9FF24DDA23017CDE923B8A /* Assets.xcassets */; };
 		A37B778F5AADCE7BB2B9E865 /* DivinationTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4730CBF8C0CE6BD17718467 /* DivinationTabView.swift */; };
 		A5A04DD6133F1CACEEDDC261 /* HexagramSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A597031D10465B1EA4E933D /* HexagramSearch.swift */; };
@@ -164,6 +165,7 @@
 		0658E927118FBC6AF248C84A /* LLMSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMSettings.swift; sourceTree = "<group>"; };
 		11B94CD0249D55A78A498A86 /* LLMClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMClientTests.swift; sourceTree = "<group>"; };
 		1339F4121474F9D76B39C4B8 /* ModelCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelCatalogTests.swift; sourceTree = "<group>"; };
+		16EAFD01410232DCE0FEB4EB /* CastMethodTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastMethodTests.swift; sourceTree = "<group>"; };
 		192DD225A6CC0CC3299C3F04 /* HexagramDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagramDataTests.swift; sourceTree = "<group>"; };
 		19B38EA3FC32DF7DAD628F05 /* Yijing64.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Yijing64.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E54E988C1001F09879CB9F0 /* AIInterpretationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIInterpretationViewModel.swift; sourceTree = "<group>"; };
@@ -364,6 +366,7 @@
 			isa = PBXGroup;
 			children = (
 				8EAC53C6B46D430977592A9E /* AIServiceTests.swift */,
+				16EAFD01410232DCE0FEB4EB /* CastMethodTests.swift */,
 				F5FEEACC49E3FCCA65408BD0 /* CoinCasterTests.swift */,
 				2E98FD475DBAB1BE4DDE486D /* DivinationTopicTests.swift */,
 				192DD225A6CC0CC3299C3F04 /* HexagramDataTests.swift */,
@@ -596,6 +599,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3CD4DF0ACD32ECA64E1AE866 /* AIServiceTests.swift in Sources */,
+				A2428291EA55064E9D56F516 /* CastMethodTests.swift in Sources */,
 				A7DA1C6F81A7EBBC35B5CE81 /* CoinCasterTests.swift in Sources */,
 				E98AB85BEE537349E3D22522 /* DivinationTopicTests.swift in Sources */,
 				42267A0C459A89D63577B96D /* HexagramDataTests.swift in Sources */,
@@ -733,7 +737,7 @@
 				CODE_SIGNING_ALLOWED = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -742,7 +746,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 2.7.1;
+				MARKETING_VERSION = 2.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64Mac;
 				PRODUCT_NAME = Yijing64;
 				SDKROOT = macosx;
@@ -757,7 +761,7 @@
 				CODE_SIGNING_ALLOWED = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -766,7 +770,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 2.7.1;
+				MARKETING_VERSION = 2.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64Mac;
 				PRODUCT_NAME = Yijing64;
 				SDKROOT = macosx;
@@ -1036,7 +1040,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1045,7 +1049,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.7.1;
+				MARKETING_VERSION = 2.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64;
 				PRODUCT_NAME = Yijing64;
 				SDKROOT = iphoneos;
@@ -1059,7 +1063,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				INFOPLIST_KEY_CFBundleDisplayName = "易经六十四卦";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1068,7 +1072,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.7.1;
+				MARKETING_VERSION = 2.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.liuzixiang.Yijing64;
 				PRODUCT_NAME = Yijing64;
 				SDKROOT = iphoneos;

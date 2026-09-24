@@ -270,20 +270,49 @@ struct AIInterpretationView: View {
 
     private var summaryCard: some View {
         let result = viewModel.result
+        let original = result.original
+        let hasMoving = !result.movingLineTitles.isEmpty
         return VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .top) {
-                HexagramDrawingView(lines: result.originalLines)
+                NavigationLink {
+                    HexagramDetailView(hexagram: original)
+                } label: {
+                    HexagramDrawingView(lines: result.originalLines)
+                }
+                .buttonStyle(.plain)
+
                 Spacer()
+
                 VStack(alignment: .trailing, spacing: 4) {
-                    Text(result.original.fullName)
-                        .font(.title3.bold())
-                    if !result.movingLineTitles.isEmpty {
+                    NavigationLink {
+                        HexagramDetailView(hexagram: original)
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text(original.fullName)
+                                .font(.title3.bold())
+                            Image(systemName: "chevron.right")
+                                .font(.caption2)
+                        }
+                        .foregroundColor(.primary)
+                    }
+                    .buttonStyle(.plain)
+
+                    if hasMoving {
                         Text("动爻：\(result.movingLineTitles.joined(separator: "、"))")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Text("变卦：\(result.changed.fullName)")
-                            .font(.caption)
+                        NavigationLink {
+                            HexagramDetailView(hexagram: result.changed)
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text("变卦：\(result.changed.fullName)")
+                                    .font(.caption)
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 9))
+                            }
                             .foregroundColor(.secondary)
+                        }
+                        .buttonStyle(.plain)
                     }
                     Text(viewModel.methodLabel)
                         .font(.caption2)

@@ -127,8 +127,6 @@ final class AIInterpretationViewModel: ObservableObject {
     func interpret() {
         guard canSend else { return }
         let trimmed = question.trimmingCharacters(in: .whitespacesAndNewlines)
-        // 留空发送 = 默认解卦：请模型基于当前卦象重新解读。
-        let request = trimmed.isEmpty ? "请重新解读本卦卦象。" : trimmed
 
         let userTurn = DialogueTurn.user(trimmed.isEmpty ? "请解卦" : trimmed)
         turns.append(AITurn(role: .user, content: userTurn.content))
@@ -150,7 +148,7 @@ final class AIInterpretationViewModel: ObservableObject {
 
         let conversation = HexagramInterpretation.buildConversation(
             result: result,
-            question: request,
+            question: trimmed,
             history: committed
         )
 
